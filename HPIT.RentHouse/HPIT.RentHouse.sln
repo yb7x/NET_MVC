@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.33214.272
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HPIT.RentHouse.Web", "HPIT.RentHouse.Web\HPIT.RentHouse.Web.csproj", "{D44CC67B-D13B-48A3-8A7A-E688C39EC54E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HPIT.RentHouse.DTO", "HPIT.RentHouse.DTO\HPIT.RentHouse.DTO.csproj", "{2AFE92A3-8F7B-4D7D-94EA-B4F02702D440}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HPIT.RentHouse.IService", "HPIT.RentHouse.IService\HPIT.RentHouse.IService.csproj", "{07AD4972-FECA-4E4E-B4AC-ACB056FBA09B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HPIT.RentHouse.Service", "HPIT.RentHouse.Service\HPIT.RentHouse.Service.csproj", "{886FACA8-654F-4B50-A05E-4033BAFCEED2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HPIT.RentHouse.Common", "HPIT.RentHouse.Common\HPIT.RentHouse.Common.csproj", "{F564D8F4-0C4C-4C94-8745-496BD9E21AF0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HPIT.RentHouse.Admin", "HPIT.RentHouse.Admin\HPIT.RentHouse.Admin.csproj", "{4F502A86-6DD8-47EA-8DA0-3066622359DB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D44CC67B-D13B-48A3-8A7A-E688C39EC54E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D44CC67B-D13B-48A3-8A7A-E688C39EC54E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D44CC67B-D13B-48A3-8A7A-E688C39EC54E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D44CC67B-D13B-48A3-8A7A-E688C39EC54E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AFE92A3-8F7B-4D7D-94EA-B4F02702D440}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AFE92A3-8F7B-4D7D-94EA-B4F02702D440}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AFE92A3-8F7B-4D7D-94EA-B4F02702D440}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AFE92A3-8F7B-4D7D-94EA-B4F02702D440}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07AD4972-FECA-4E4E-B4AC-ACB056FBA09B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07AD4972-FECA-4E4E-B4AC-ACB056FBA09B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07AD4972-FECA-4E4E-B4AC-ACB056FBA09B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07AD4972-FECA-4E4E-B4AC-ACB056FBA09B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{886FACA8-654F-4B50-A05E-4033BAFCEED2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{886FACA8-654F-4B50-A05E-4033BAFCEED2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{886FACA8-654F-4B50-A05E-4033BAFCEED2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{886FACA8-654F-4B50-A05E-4033BAFCEED2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F564D8F4-0C4C-4C94-8745-496BD9E21AF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F564D8F4-0C4C-4C94-8745-496BD9E21AF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F564D8F4-0C4C-4C94-8745-496BD9E21AF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F564D8F4-0C4C-4C94-8745-496BD9E21AF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F502A86-6DD8-47EA-8DA0-3066622359DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F502A86-6DD8-47EA-8DA0-3066622359DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F502A86-6DD8-47EA-8DA0-3066622359DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F502A86-6DD8-47EA-8DA0-3066622359DB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3E5185D4-44B6-4CD8-9636-70A1B6B64FDD}
+	EndGlobalSection
+EndGlobal

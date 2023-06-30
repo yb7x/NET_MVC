@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - 掌上租项目</title>
+    <link href="~/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/H-ui.login.css" rel="stylesheet" />
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/lib/Hui-iconfont/1.0.1/iconfont.css" rel="stylesheet" type="text/css" />
+    <link href="~/lib/icheck/icheck.css" rel="stylesheet" type="text/css" />
+    <link href="~/lib/webuploader/0.1.5/webuploader.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+    @RenderBody()
+    <script type="text/javascript" src="~/lib/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="~/lib/layer/1.9.3/layer.js"></script>
+    <script type="text/javascript" src="~/lib/Validform/5.3.2/Validform.min.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+    <script type="text/javascript" src="~/lib/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="~/js/H-ui.js"></script>
+    <script type="text/javascript" src="~/js/H-ui.admin.js"></script>
+
+    <script type="text/javascript" src="~/lib/ueditor/1.4.3/ueditor.config.js"></script>
+    <script type="text/javascript" src="~/lib/ueditor/1.4.3/ueditor.all.min.js"></script>
+    <script type="text/javascript" src="~/lib/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script>
+    @*房源图片上传*@
+    <script type="text/javascript" src="~/lib/icheck/jquery.icheck.min.js"></script>
+    <script type="text/javascript" src="~/lib/webuploader/0.1.5/webuploader.min.js"></script>
+    <script src="~/js/jquery.livequery.js"></script>
+    @RenderSection("footScript", required: false)
+</body>
+</html>

@@ -1,0 +1,12 @@
+C:\Users\BB\Documents\GitHub\NET\HPIT.RentHouse\HPIT.RentHouse.DTO\bin\Debug\HPIT.RentHouse.DTO.dll
+C:\Users\BB\Documents\GitHub\NET\HPIT.RentHouse\HPIT.RentHouse.DTO\bin\Debug\HPIT.RentHouse.DTO.pdb
+C:\Users\BB\Documents\GitHub\NET\HPIT.RentHouse\HPIT.RentHouse.DTO\obj\Debug\HPIT.RentHouse.DTO.csproj.AssemblyReference.cache
+C:\Users\BB\Documents\GitHub\NET\HPIT.RentHouse\HPIT.RentHouse.DTO\obj\Debug\HPIT.RentHouse.DTO.csproj.CoreCompileInputs.cache
+C:\Users\BB\Documents\GitHub\NET\HPIT.RentHouse\HPIT.RentHouse.DTO\obj\Debug\HPIT.RentHouse.DTO.dll
+C:\Users\BB\Documents\GitHub\NET\HPIT.RentHouse\HPIT.RentHouse.DTO\obj\Debug\HPIT.RentHouse.DTO.pdb
+D:\HPIT.RentHouse\HPIT.RentHouse.DTO\bin\Debug\HPIT.RentHouse.DTO.dll
+D:\HPIT.RentHouse\HPIT.RentHouse.DTO\bin\Debug\HPIT.RentHouse.DTO.pdb
+D:\HPIT.RentHouse\HPIT.RentHouse.DTO\obj\Debug\HPIT.RentHouse.DTO.csproj.AssemblyReference.cache
+D:\HPIT.RentHouse\HPIT.RentHouse.DTO\obj\Debug\HPIT.RentHouse.DTO.csproj.CoreCompileInputs.cache
+D:\HPIT.RentHouse\HPIT.RentHouse.DTO\obj\Debug\HPIT.RentHouse.DTO.dll
+D:\HPIT.RentHouse\HPIT.RentHouse.DTO\obj\Debug\HPIT.RentHouse.DTO.pdb

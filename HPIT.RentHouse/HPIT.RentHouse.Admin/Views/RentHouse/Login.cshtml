@@ -1,0 +1,85 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+}
+
+<div class="header"></div>
+<div class="loginWraper">
+    <div id="loginform" class="loginBox">
+        <form class="form form-horizontal" id="formLogin" autocomplete="off">
+            <input type="hidden" id="TenantId" name="TenantId" value="" />
+            <div class="row cl">
+                <label class="form-label col-3"><i class="Hui-iconfont">&#xe60d;</i></label>
+                <div class="formControls col-5">
+                    <input name="PhoneNum" type="text" placeholder="手机号码" class="input-text size-L" datatype="*2-16" nullmsg="手机不能为空">
+                </div>
+                <div class="col-4"> </div>
+            </div>
+
+
+            <div class="row cl">
+                <label class="form-label col-3"><i class="Hui-iconfont">&#xe60e;</i></label>
+                <div class="formControls col-5">
+                    <input name="Password" type="password" placeholder="密码" class="input-text size-L" datatype="*2-16" nullmsg="密码不能为空">
+                </div>
+                <div class="col-4"> </div>
+            </div>
+            <div class="row cl">
+                <div class="formControls col-8 col-offset-3">
+                    <input name="VerCode" class="input-text size-L" type="text" placeholder="验证码" onblur="if(this.value==''){this.value='验证码:'}" onclick="if(this.value=='验证码:'){this.value='';}" value="验证码:" style="width:150px;">
+                    <img src="/RentHouse/Getvc" id="imgVerifyCode"> <a id="btn_ChangeImg" href="javascript:void(0);">看不清，换一张</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="formControls col-8 col-offset-3">
+                    <label for="online">
+                        <input type="checkbox" name="IsRemember" id="IsRemember" value="true">
+                        使我保持登录状态
+                    </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="formControls col-8 col-offset-3">
+                    <input id="btn_Login" type="button" class="btn btn-success radius size-L" value="&nbsp;登&nbsp;&nbsp;&nbsp;&nbsp;录&nbsp;">
+                    <input type="button" class="btn btn-default radius size-L" value="&nbsp;取&nbsp;&nbsp;&nbsp;&nbsp;消&nbsp;">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section footScript{
+    <script type="text/javascript">
+        // 验证码
+        $("#imgVerifyCode, #btn_ChangeImg").click(function () {
+            $("#imgVerifyCode").attr("src", "/RentHouse/Getvc?i=" + Math.random());
+        })
+
+        // 使用 Validform 方式验证页面表单
+        var vf = $("#formLogin").Validform({ tiptype: 2 });
+        // 注册单击事件
+        $("#btn_Login").click(function () {
+            // 验证表单
+            if (vf.check(false)) {
+                $.ajax({
+                    type: "post",
+                    url: "/RentHouse/Login",
+                    data: $("#formLogin").serializeArray(),
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.State == 1) {
+                            location.href = "/RentHouse/Index"
+                        } else {
+                            // 错误
+                            alert(result.Message);
+                        }
+                    },
+                    error: function () {
+                        // 错误
+                        alert(result.Message);
+                    }
+                })
+            }
+        })
+    </script>    
+}
