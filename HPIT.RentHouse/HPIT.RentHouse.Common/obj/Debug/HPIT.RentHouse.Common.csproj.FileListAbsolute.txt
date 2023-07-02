@@ -66,3 +66,37 @@ D:\HPIT.RentHouse\HPIT.RentHouse.Common\obj\Debug\HPIT.RentHouse.Common.csproj.C
 D:\HPIT.RentHouse\HPIT.RentHouse.Common\obj\Debug\HPIT.RentHouse.Common.csproj.CopyComplete
 D:\HPIT.RentHouse\HPIT.RentHouse.Common\obj\Debug\HPIT.RentHouse.Common.dll
 D:\HPIT.RentHouse\HPIT.RentHouse.Common\obj\Debug\HPIT.RentHouse.Common.pdb
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Common\bin\Debug\HPIT.RentHouse.Common.dll
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Common\bin\Debug\HPIT.RentHouse.Common.pdb
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Common\bin\Debug\Microsoft.Web.Infrastructure.dll
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Common\bin\Debug\System.Configuration.ConfigurationManager.dll
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Common\bin\Debug\System.Security.AccessControl.dll
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Common\bin\Debug\System.Security.Permissions.dll
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Common\bin\Debug\System.Security.Principal.Windows.dll
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Common\bin\Debug\System.Web.Helpers.dll
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Common\bin\Debug\System.Web.Mvc.dll
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Common\bin\Debug\System.Web.Razor.dll
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Common\bin\Debug\System.Web.WebPages.Deployment.dll
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Common\bin\Debug\System.Web.WebPages.dll
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Common\bin\Debug\System.Web.WebPages.Razor.dll
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Common\bin\Debug\System.Configuration.ConfigurationManager.xml
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Common\bin\Debug\System.Security.AccessControl.xml
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Common\bin\Debug\System.Security.Permissions.xml
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Common\bin\Debug\System.Security.Principal.Windows.xml
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Common\bin\Debug\System.Web.Helpers.xml
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Common\bin\Debug\System.Web.Mvc.xml
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Common\bin\Debug\System.Web.Razor.xml
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Common\bin\Debug\System.Web.WebPages.xml
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Common\bin\Debug\System.Web.WebPages.Deployment.xml
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Common\bin\Debug\System.Web.WebPages.Razor.xml
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Common\bin\Debug\zh-Hans\System.Web.Helpers.resources.dll
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Common\bin\Debug\zh-Hans\System.Web.Mvc.resources.dll
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Common\bin\Debug\zh-Hans\System.Web.Razor.resources.dll
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Common\bin\Debug\zh-Hans\System.Web.WebPages.resources.dll
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Common\bin\Debug\zh-Hans\System.Web.WebPages.Deployment.resources.dll
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Common\bin\Debug\zh-Hans\System.Web.WebPages.Razor.resources.dll
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Common\obj\Debug\HPIT.RentHouse.Common.csproj.AssemblyReference.cache
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Common\obj\Debug\HPIT.RentHouse.Common.csproj.CoreCompileInputs.cache
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Common\obj\Debug\HPIT.RentHouse.Common.csproj.CopyComplete
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Common\obj\Debug\HPIT.RentHouse.Common.dll
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Common\obj\Debug\HPIT.RentHouse.Common.pdb

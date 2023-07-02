@@ -25,3 +25,12 @@ D:\HPIT.RentHouse\HPIT.RentHouse.IService\obj\Debug\HPIT.RentHouse.IService.cspr
 D:\HPIT.RentHouse\HPIT.RentHouse.IService\obj\Debug\HPIT.RentHouse.IService.csproj.CopyComplete
 D:\HPIT.RentHouse\HPIT.RentHouse.IService\obj\Debug\HPIT.RentHouse.IService.dll
 D:\HPIT.RentHouse\HPIT.RentHouse.IService\obj\Debug\HPIT.RentHouse.IService.pdb
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\bin\Debug\HPIT.RentHouse.IService.dll
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\bin\Debug\HPIT.RentHouse.IService.pdb
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\bin\Debug\HPIT.RentHouse.DTO.dll
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\bin\Debug\HPIT.RentHouse.DTO.pdb
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\obj\Debug\HPIT.RentHouse.IService.csproj.AssemblyReference.cache
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\obj\Debug\HPIT.RentHouse.IService.csproj.CoreCompileInputs.cache
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\obj\Debug\HPIT.RentHouse.IService.csproj.CopyComplete
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\obj\Debug\HPIT.RentHouse.IService.dll
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\obj\Debug\HPIT.RentHouse.IService.pdb

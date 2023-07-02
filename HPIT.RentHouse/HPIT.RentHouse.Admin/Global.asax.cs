@@ -1,6 +1,8 @@
 using Autofac;
 using Autofac.Integration.Mvc;
+using HPIT.RentHouse.DTO;
 using HPIT.RentHouse.IService;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +11,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using System.Web.Security;
 
 namespace HPIT.RentHouse.Admin
 {
@@ -43,6 +46,34 @@ namespace HPIT.RentHouse.Admin
             //5、注册系统级别的DependencyResolver，这样当MVC框架创建Controller等对象的时候都是管Autofac要对象。
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
             #endregion
+        }
+
+        /// <summary>
+        /// 配置获取信息
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void Application_AuthenticateRequest(object sender, EventArgs e)
+        {
+            // 首先
+            HttpApplication application = sender as HttpApplication;
+            // 获取当前上下文 Http 请求
+            HttpContext context = application.Context;
+            // 返回当前上下文对象获取要使用的 cookie 
+            HttpCookie cookie = context.Request.Cookies[FormsAuthentication.FormsCookieName];
+            if (cookie != null)
+            {
+                // 取出 Value 值
+                if(cookie.Value != null)
+                {
+                    // 解密
+                    FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(cookie.Value);
+                    // 取出信息，以内储存的 JSON 格式，所以要反序列化
+                    AdminLoginDataDTO dto = JsonConvert.DeserializeObject<AdminLoginDataDTO>(ticket.UserData);
+                    // 将用户数据和票据保存在当前用户对象中
+                    context.User = new MyFormsPrincipal<AdminLoginDataDTO>(ticket, dto);
+                }
+            }
         }
     }
 }

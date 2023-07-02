@@ -4,6 +4,7 @@
 @using HPIT.RentHouse.DTO
 @{
     Layout = null;
+
 }
 
 <!DOCTYPE HTML>
@@ -35,13 +36,18 @@
 <body>
     <header class="Hui-header cl">
         <a class="Hui-logo l" title="H-ui.admin v2.3" href="/">掌上租后台管理系统</a> <a class="Hui-logo-m l" href="/" title="H-ui.admin">H-ui</a> <span class="Hui-subtitle l">V2.3</span>
-
+        @{ 
+            string userName = "";
+            string RoleName = "";
+            var user = User as MyFormsPrincipal<AdminLoginDataDTO>;
+            userName = user.userData.Name;
+            RoleName = user.userData.RoleName;
+        }
 
         <ul class="Hui-userbar">
+            <li> @RoleName</li>
             <li class="dropDown dropDown_hover">
-            <li>管理员</li>
-            <li class="dropDown dropDown_hover">
-                <a href="#" class="dropDown_A">张三三 <i class="Hui-iconfont">&#xe6d5;</i></a>
+                <a href="#" class="dropDown_A">@userName <i class="Hui-iconfont">&#xe6d5;</i></a>
                 <ul class="dropDown-menu radius box-shadow">
                     <li><a href="#">个人信息</a></li>
                     <li><a href="#">切换账户</a></li>

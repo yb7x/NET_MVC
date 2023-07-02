@@ -15,6 +15,6 @@ namespace HPIT.RentHouse.DTO
         public string Password { get; set; }
         [Required(ErrorMessage = "请输入验证码")]
         public string VerCode { get; set; }
-        public string IsRemember { get; set; }
+        public bool IsRemember { get; set; }
     }
 }

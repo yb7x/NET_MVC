@@ -10,3 +10,9 @@ D:\HPIT.RentHouse\HPIT.RentHouse.DTO\obj\Debug\HPIT.RentHouse.DTO.csproj.Assembl
 D:\HPIT.RentHouse\HPIT.RentHouse.DTO\obj\Debug\HPIT.RentHouse.DTO.csproj.CoreCompileInputs.cache
 D:\HPIT.RentHouse\HPIT.RentHouse.DTO\obj\Debug\HPIT.RentHouse.DTO.dll
 D:\HPIT.RentHouse\HPIT.RentHouse.DTO\obj\Debug\HPIT.RentHouse.DTO.pdb
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.DTO\bin\Debug\HPIT.RentHouse.DTO.dll
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.DTO\bin\Debug\HPIT.RentHouse.DTO.pdb
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.DTO\obj\Debug\HPIT.RentHouse.DTO.csproj.AssemblyReference.cache
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.DTO\obj\Debug\HPIT.RentHouse.DTO.csproj.CoreCompileInputs.cache
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.DTO\obj\Debug\HPIT.RentHouse.DTO.dll
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.DTO\obj\Debug\HPIT.RentHouse.DTO.pdb
