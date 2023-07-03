@@ -72,6 +72,7 @@
     <Compile Include="Entities\T_Roles.cs" />
     <Compile Include="Entities\T_Settings.cs" />
     <Compile Include="Entities\T_Users.cs" />
+    <Compile Include="PermissionsService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

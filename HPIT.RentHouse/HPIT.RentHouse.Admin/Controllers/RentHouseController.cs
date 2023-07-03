@@ -74,6 +74,7 @@ namespace HPIT.RentHouse.Admin.Controllers
             }
         }
 
+        [Authorize]
         public ActionResult Index()
         {
             return View();

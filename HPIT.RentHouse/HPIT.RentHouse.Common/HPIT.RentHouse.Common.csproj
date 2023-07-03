@@ -84,6 +84,7 @@
     <Compile Include="AjaxResult.cs" />
     <Compile Include="CommonHelper.cs" />
     <Compile Include="MVCHelper.cs" />
+    <Compile Include="PredicateExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

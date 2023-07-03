@@ -49,7 +49,7 @@ namespace HPIT.RentHouse.Admin
         }
 
         /// <summary>
-        /// 配置获取信息
+        /// 配置 forms 身份验证获取信息
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -66,7 +66,7 @@ namespace HPIT.RentHouse.Admin
                 // 取出 Value 值
                 if(cookie.Value != null)
                 {
-                    // 解密
+                    // 解密票据
                     FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(cookie.Value);
                     // 取出信息，以内储存的 JSON 格式，所以要反序列化
                     AdminLoginDataDTO dto = JsonConvert.DeserializeObject<AdminLoginDataDTO>(ticket.UserData);

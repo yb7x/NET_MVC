@@ -1,0 +1,120 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<nav class="breadcrumb">
+    <i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>
+    管理员管理 <span class="c-gray en">&gt;</span> 权限管理
+    <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="Hui-iconfont">&#xe68f;</i>
+    </a>
+</nav>
+<div class="pd-20">
+    <div class="text-c">
+        <input type="text" class="input-text" style="width:250px" placeholder="输入权限名称" id="pname" name="">
+        <button type="button" class="btn btn-success" id="btn_Search" name=""><i class="Hui-iconfont">&#xe665;</i> 搜索权限</button>
+    </div>
+    <div class="cl pd-5 bg-1 bk-gray">
+        <span class="l">
+            <a href="javascript:;" id="deleteBatch" class="btn btn-danger radius">
+                <i class="Hui-iconfont">&#xe6e2;</i> 批量删除
+            </a>
+            <a class="btn btn-primary radius" href="javascript:;" id="per_Add">
+                <i class="Hui-iconfont">&#xe600;</i> 添加权限
+            </a>
+        </span>
+        <span class="r">共有数据：<strong>54</strong> 条</span>
+    </div>
+    <table id="tb_PermissionList" class="table table-border table-bordered table-hover table-bg">
+        <thead>
+            <tr>
+                <th scope="col" colspan="6">权限管理</th>
+            </tr>
+            <tr class="text-c">
+                <th width="25"><input type="checkbox" value="" name=""></th>
+                <th width="40">权限姓名</th>
+                <th width="200">权限描述</th>
+                <th width="70">操作</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+@section footScript{
+    <script src="~/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var param = {};//初始化查询参数
+
+            //通过DataTable渲染列表
+            var table = $("#tb_PermissionList").DataTable({
+                // 是否显示情报 就是"当前显示1/100记录"这个信息
+                info: false,//设置分页
+                pagingType: "full_numbers",//分页样式效果  当前列表未启用分页，所以写什么格式都可以
+                // 是否表示 "processing" 加载中的信息，这个信息可以修改
+                processing: true,//显示加载中……的样式效果
+                // 是否允许排序
+                ordering: false,//是否启用列表排序 false：不启用
+                // 是否允许检索
+                searching: false,//我们自己实现的搜索功能，dataTable自带的设置了false
+                // 列定义
+                columns: [
+                    {
+                        // data 可以是属性名，或嵌套属性（WORKTM1.ID）,数组ArrOne[,] 用中括号中的字符连接数组后返回。
+                        "data": "Id"
+                    },
+                    { "data": "Description" },
+                    { "data": "Name" },
+                    {
+                        data: 'Id', render: function (data, type, full, callback) {
+                            return (' <a title="编辑" onclick="edits(this)" href="javascript:;"  data-id=' + data + ' class="ml-5 edit" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除"  data-id=' + data + ' onclick="del(this)" href="javascript:;"   class="ml-5 delete" style="text-decoration:none"> <i class="Hui-iconfont">&#xe6e2;</i></a>   ')
+                        }
+                    }],
+                // 每一行创建完调用的函数
+                createdRow: function (row, data, dataIndex) {
+                    $('td', row).attr('class', "text-c");
+                },
+                serverSide: true,//启用服务器模式
+                // ajax选项 可以直接简单指定成请求的文件
+                //"ajax": "data.json",
+                // 也可以用对象来配置，更加灵活
+                ajax: {
+                    type: 'POST',
+                    // url可以直接指定远程的json文件，或是MVC的请求地址 /Controller/Action
+                    url: "/Permissions/GetPermissionsList",
+
+                    // 传给服务器的数据，可以添加我们自己的查询参数
+                    data: function (d) {//参数
+                        return param;
+                    }
+
+                },
+                //自定义列
+                columnDefs: [
+                    {
+                        targets: 0,//在第一列的位置输出自定义的列
+                        //列中输出的内容
+                        render: function (data, type, row, meta) {
+                            //显示复选框
+                            return '<input type="checkbox" value="' + row.Id + '" name="selectIDs">';
+                        },
+                    }]
+            });
+            // 查询方法
+            $("#btn_Search").click(function () {
+                var description = $("#pname").val();
+                param.Description = description;
+                // 重新加载数据
+                table.ajax.reload();
+            })
+        })
+
+        
+    </script>
+}
+
