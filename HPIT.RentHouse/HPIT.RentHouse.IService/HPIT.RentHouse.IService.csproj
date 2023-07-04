@@ -47,6 +47,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\HPIT.RentHouse.Common\HPIT.RentHouse.Common.csproj">
+      <Project>{f564d8f4-0c4c-4c94-8745-496bd9e21af0}</Project>
+      <Name>HPIT.RentHouse.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HPIT.RentHouse.DTO\HPIT.RentHouse.DTO.csproj">
       <Project>{2afe92a3-8f7b-4d7d-94ea-b4f02702d440}</Project>
       <Name>HPIT.RentHouse.DTO</Name>

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using HPIT.RentHouse.Common;
 
 namespace HPIT.RentHouse.Admin.Controllers
 {
@@ -34,6 +35,27 @@ namespace HPIT.RentHouse.Admin.Controllers
         {
             List<PermissionsDTO> List =  _permissionsService.GetPermissionsList(Description);
             return Json(new { recordsTotal = List.Count, recordsFiltered  = List.Count, data = List});
+        }
+
+        public ActionResult Add()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Add(PermissionsDTO dto)
+        {
+            // 返回AjaxResult类型
+            return Json(_permissionsService.AddPermissions(dto));
+        }
+
+        /// <summary>
+        /// 修改前查询
+        /// </summary>
+        /// <param name="id">Id</param>
+        /// <returns></returns>
+        public ActionResult Edit(long id)
+        {
+            return View(_permissionsService.EditGetPermissions(id));
         }
     }
 }

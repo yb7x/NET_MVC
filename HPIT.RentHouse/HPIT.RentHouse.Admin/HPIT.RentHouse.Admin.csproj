@@ -1466,6 +1466,8 @@
     <Content Include="Views\RentHouse\Login.cshtml" />
     <Content Include="Views\RentHouse\Index.cshtml" />
     <Content Include="Views\Permissions\Index.cshtml" />
+    <Content Include="Views\Permissions\Add.cshtml" />
+    <Content Include="Views\Permissions\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,7 +1,5 @@
 ﻿
-@{
-    ViewBag.Title = "Index";
-}
+
 
 @{
     ViewBag.Title = "Index";
@@ -112,8 +110,19 @@
                 // 重新加载数据
                 table.ajax.reload();
             })
-        })
 
+            // 弹出添加框
+            $("#per_Add").click(function () {
+                layer_show("添加权限", "/Permissions/Add", 500, 300);
+            })
+
+            
+        })
+        // 修改
+        function edits(t) {
+            var id = $(t).attr("data-id");
+            layer_show("修改权限", "/Permissions/Edit/" + id, 500, 300)
+        }
         
     </script>
 }
