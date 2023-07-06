@@ -49,6 +49,8 @@
     <Compile Include="MyFormsPrincipal.cs" />
     <Compile Include="PermissionsDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RolesAddDTO.cs" />
+    <Compile Include="RolesListDTO.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -164,6 +164,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\PermissionsController.cs" />
     <Compile Include="Controllers\RentHouseController.cs" />
+    <Compile Include="Controllers\RolesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -1468,6 +1469,8 @@
     <Content Include="Views\Permissions\Index.cshtml" />
     <Content Include="Views\Permissions\Add.cshtml" />
     <Content Include="Views\Permissions\Edit.cshtml" />
+    <Content Include="Views\Roles\Index.cshtml" />
+    <Content Include="Views\Roles\Add.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

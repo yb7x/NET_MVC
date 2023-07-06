@@ -74,6 +74,7 @@
     <Compile Include="Entities\T_Users.cs" />
     <Compile Include="PermissionsService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RolesService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
