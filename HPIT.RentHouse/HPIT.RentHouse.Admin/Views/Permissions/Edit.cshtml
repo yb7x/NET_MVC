@@ -6,7 +6,7 @@
 <div class="pd-20">
 
     <form class="form form-horizontal" id="editfrm">
-        <input type="hidden" value="@Model.Id" />
+        @Html.HiddenFor(a => a.Id, Model.Id)
         <div class="row cl">
             <label class="form-label col-3"><span class="c-red">*</span>权限描述：</label>
             <div class="formControls col-5">
@@ -17,7 +17,7 @@
         <div class="row cl">
             <label class="form-label col-3"><span class="c-red">*</span>权限名字：</label>
             <div class="formControls col-5">
-                <input type="text" placeholder="权限名字" autocomplete="off" value="@Model.Name" class="input-text" datatype="*6-20" nullmsg="权限名字不能为空" name="Name" id="name">
+                <input type="text" placeholder="权限名字" autocomplete="off" value="@Model.Name" class="input-text" datatype="*2-20" nullmsg="权限名字不能为空" name="Name" id="name">
             </div>
             <div class="col-4"> </div>
         </div>
@@ -40,7 +40,7 @@
             // 判断表单验证是否通过
             if (vf.check(false)) {
                 $.ajax({
-                    type: "put",
+                    type: "post",
                     url: "/Permissions/Edit",
                     data: $("#editfrm").serializeArray(),
                     dataType: "json",

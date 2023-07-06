@@ -116,13 +116,79 @@
                 layer_show("添加权限", "/Permissions/Add", 500, 300);
             })
 
+            // 批量删除
+            $("#deleteBatch").click(function () {
+                // 创建数组用来存储数据
+                var ar = [];
+                // 获取用户选中的复选框 的value值
+                $(":checkbox[name=selectIDs]:checked").each((index, item) => {
+                    ar.push($(item).val());
+                });
+
+                if (ar.length == 0) {
+                    layer.msg("请选择要批量删除的权限！", { icon: 2 })
+                } else {
+                    layer.confirm('你确定要删除这些项吗？', { icon: 3, title: '提示' }, function (index) {
+                        $.ajax({
+                            type: "post",
+                            url: "/Permissions/DeleteBatch",
+                            data: {
+                                "b": ar
+                            },
+                            dataType: "json",
+                            success: function (r) {
+                                if (r.State == 1) {
+                                    layer.msg(r.Message, { icon: 1, time: 1000 }, function () {
+                                        // 刷新，关闭当前窗体
+                                        location.reload();
+                                    })
+                                } else {
+                                    layer.msg(r.Message, { icon: 2 })
+                                }
+                            },
+                            error: function () {
+                                layer.msg("操作异常", { icon: 2 })
+                            }
+                        })
+                        layer.close(index);
+                    });
+                }
+            })
             
         })
         // 修改
         function edits(t) {
             var id = $(t).attr("data-id");
-            layer_show("修改权限", "/Permissions/Edit/" + id, 500, 300)
+            layer_show("修改权限", "/Permissions/Edit/" + id, 500, 300);
         }
+
+        // 删除
+        function del(t) {
+            layer.confirm('你确定删除吗？', { icon: 3, title: '提示' }, function (index) {
+                    var id = $(t).attr("data-id");
+                    $.ajax({
+                        type: "post",
+                        url: "/Permissions/Delete/" + id,
+                        dataType: "json",
+                        success: function (r) {
+                            if (r.State == 1) {
+                                layer.msg(r.Message, { icon: 1, time: 1000 }, function () {
+                                    // 刷新，关闭当前窗体
+                                    location.reload();
+                                })
+                            } else {
+                                layer.msg(r.Message, { icon: 2 })
+                            }
+                        },
+                        error: function () {
+                            layer.msg("操作异常", { icon: 2 })
+                        }
+                    })
+                    layer.close(index);
+            });
+        }
+
+        
         
     </script>
 }

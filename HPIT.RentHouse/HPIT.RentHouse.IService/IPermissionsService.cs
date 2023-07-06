@@ -24,10 +24,31 @@ namespace HPIT.RentHouse.IService
         AjaxResult AddPermissions(PermissionsDTO dto);
 
         /// <summary>
-        /// 修改权限
+        /// 修改前查询权限
         /// </summary>
         /// <param name="id">编号</param>
         /// <returns></returns>
         PermissionsDTO EditGetPermissions(long id);
+
+        /// <summary>
+        /// 修改权限信息
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        AjaxResult EditPermissions(PermissionsDTO dto);
+
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="id">页面Id</param>
+        /// <returns></returns>
+        AjaxResult DeletePermissions(long id);
+
+        /// <summary>
+        /// 删除 多个
+        /// </summary>
+        /// <param name="b">数组</param>
+        /// <returns></returns>
+        AjaxResult DeleteBatchPermissions(long[] b);
     }
 }

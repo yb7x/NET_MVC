@@ -117,7 +117,7 @@ namespace HPIT.RentHouse.Service
         /// <param name="whereLambda">Lambda 表达式查询条件</param>
         /// <param name="orderBy">排序字段</param>
         /// <param name="isAsc">排序方式 true：升序 false：降序</param>
-        /// <returns></returns>
+        /// <returns>返回排序过的对象集合</returns>
         public IQueryable<T> GetOrderBy<Tkey>(Expression<Func<T, bool>> whereLambda, Expression<Func<T, Tkey>> orderBy, bool isAsc)
         {
             // 升序：asc   降序：desc

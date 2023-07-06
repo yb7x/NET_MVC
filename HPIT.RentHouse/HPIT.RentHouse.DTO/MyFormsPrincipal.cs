@@ -16,7 +16,7 @@ namespace HPIT.RentHouse.DTO
 
         public MyFormsPrincipal(FormsAuthenticationTicket tickt, T UserData) 
         {
-            Identity = new FormsIdentity(tickt);
+            Identity = new FormsIdentity(tickt); // 票据
             userData = UserData;
         }
 

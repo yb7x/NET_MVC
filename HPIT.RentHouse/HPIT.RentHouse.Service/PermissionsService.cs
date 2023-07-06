@@ -44,7 +44,61 @@ namespace HPIT.RentHouse.Service
         }
 
         /// <summary>
-        /// 查询要修改权限信息，
+        /// 批量删除
+        /// </summary>
+        /// <param name="b">数组</param>
+        /// <returns></returns>
+        public AjaxResult DeleteBatchPermissions(long[] b)
+        {
+            // 创还能上下文对象
+            using (RentHouseEntity db = new RentHouseEntity())
+            {
+                // 创建数据库操作对象
+                BaseService<T_Permissions> bs = new BaseService<T_Permissions> (db);
+                // 循环遍历数组，依次删除
+                for (int i = 0; i < b.Length; i++)
+                {
+                    var id = b[i];
+                    bs.Delete(bs.Get(a => a.Id ==id));
+                }
+                return new AjaxResult(ResultState.Success, "批量删除成功");
+            }
+        }
+
+        /// <summary>
+        /// 删除权限信息
+        /// </summary>
+        /// <param name="id">编号</param>
+        /// <returns></returns>
+        public AjaxResult DeletePermissions(long id)
+        {
+            using(RentHouseEntity db = new RentHouseEntity())
+            {
+                // 创建查询对象，根据条件查询数据
+                BaseService<T_Permissions> bs = new BaseService<T_Permissions> (db);
+                T_Permissions model = bs.Get(a =>a.Id == id);
+                // 判断是否存在
+                if (model != null)
+                {
+                    // 判断删除是否成功
+                    if (bs.Delete(model))
+                    {
+                        return new AjaxResult(ResultState.Success, "删除成功");
+                    }
+                    else
+                    {
+                        return new AjaxResult(ResultState.Success, "删除失败");
+                    }
+                }
+                else
+                {
+                    return new AjaxResult(ResultState.Error, "已删除该权限");
+                }
+            }
+        }
+
+        /// <summary>
+        /// 查询要修改权限信息
         /// </summary>
         /// <param name="id">编号</param>
         /// <returns>PermissionsDTO 类型</returns>
@@ -66,7 +120,32 @@ namespace HPIT.RentHouse.Service
         }
 
         /// <summary>
-        /// 查询所有权限信息，若为空条件，则查询所有的
+        /// 查询后修改权限信息
+        /// </summary>
+        /// <param name="dto">实体对象</param>
+        /// <returns></returns>
+        public AjaxResult EditPermissions(PermissionsDTO dto)
+        {
+            using(RentHouseEntity db = new RentHouseEntity())
+            {
+                BaseService<T_Permissions> bs = new BaseService<T_Permissions> (db);
+                T_Permissions model = bs.Get(a => a.Id == dto.Id);
+                model.Name = dto.Name;
+                model.Description = dto.Description;
+                // 调用修改方法
+                if (bs.Update(model))
+                {
+                    return new AjaxResult(ResultState.Success, "修改成功");
+                }
+                else
+                {
+                    return new AjaxResult(ResultState.Error, "修改失败");
+                }
+            }
+        }
+
+        /// <summary>
+        /// 查询所有权限信息，若为空条件，则查询所有的，并且降序排列
         /// </summary>
         /// <param name="Description">查询条件</param>
         /// <returns></returns>
@@ -83,7 +162,7 @@ namespace HPIT.RentHouse.Service
                 {
                     lambda = lambda.And(a => a.Description.Contains(Description));
                 }
-                return bs.GetList(lambda).Select(a => new PermissionsDTO()
+                return bs.GetOrderBy(lambda, a => a.Id, false).Select(a => new PermissionsDTO()
                 {
                     Id = a.Id,
                     Description = a.Description,

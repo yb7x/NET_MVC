@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace HPIT.RentHouse.Common
 {
     /// <summary>
-    /// 枚举
+    /// 枚举，默认赋值从0开始
     /// </summary>
     public enum ResultState
     {

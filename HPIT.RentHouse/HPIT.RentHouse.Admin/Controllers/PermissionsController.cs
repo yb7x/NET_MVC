@@ -57,5 +57,40 @@ namespace HPIT.RentHouse.Admin.Controllers
         {
             return View(_permissionsService.EditGetPermissions(id));
         }
+
+        /// <summary>
+        /// 查询后修改
+        /// </summary>
+        /// <param name="dto">实体对象</param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult Edit(PermissionsDTO dto)
+        {
+            // 使用接口调用修改方法
+            return Json(_permissionsService.EditPermissions(dto));
+        }
+
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="id">编号</param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult Delete(long id)
+        {
+            // 使用接口调用修改方法
+            return Json(_permissionsService.DeletePermissions(id));
+        }
+
+        /// <summary>
+        /// 批量删除
+        /// </summary>
+        /// <param name="b">数组</param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult DeleteBatch(long[] b)
+        {
+            return Json(_permissionsService.DeleteBatchPermissions(b));
+        }
     }
 }
