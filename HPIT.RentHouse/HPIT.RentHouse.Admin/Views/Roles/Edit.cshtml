@@ -1,0 +1,68 @@
+﻿@model HPIT.RentHouse.DTO.GetRolesEditDTO
+
+@{
+    ViewBag.Title = "添加角色";
+}
+<div class="pd-20">
+
+    <form class="form form-horizontal" id="Editfrm">
+        @Html.HiddenFor(a => a.Id, Model.Id)
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>角色名字：</label>
+            <div class="formControls col-5">
+                <input type="text" placeholder="角色名字" autocomplete="off" value="@Model.Name" class="input-text" datatype="*2-20" nullmsg="角色名字不能为空" name="Name" id="name">
+            </div>
+            <div class="col-4"> </div>
+        </div>
+        <div class="row cl">
+            @{
+                foreach (var item in Model.PermissionsId)
+                {
+                    <div class="col-3">
+                        <input type="checkbox" name="PermissionsID" value="@item.Id" checked="@item.isChecked" /> @item.Description
+                    </div>
+                }
+
+            }
+        </div>
+        <div class="row cl">
+            <div class="col-9 col-offset-3">
+                <input class="btn btn-primary radius" type="button" id="btn_Add" value="&nbsp;&nbsp;更新&nbsp;&nbsp;">
+            </div>
+        </div>
+    </form>
+</div>
+
+@section footScript{
+    <script src="~/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+    <script>
+        // 使用 Validform 方式验证页面表单
+        var vf = $("#Editfrm").Validform({ tiptype: 2 });
+
+        // 单击按钮发送请求
+        $("#btn_Add").click(function () {
+            // 判断表单验证是否通过
+            if (vf.check(false)) {
+                $.ajax({
+                    type: "post",
+                    url: "/Roles/Edit",
+                    data: $("#Editfrm").serializeArray(),
+                    dataType: "json",
+                    success: function (r) {
+                        if (r.State == 1) {
+                            layer.msg(r.Message, { icon: 1, time: 2000 }, function () {
+                                // 刷新
+                                parent.location.reload();
+                            })
+                        } else {
+                            layer.msg(r.Message, { icon: 2 })
+                        }
+                    },
+                    error: function () {
+                        layer.msg("操作异常", { icon: 2 })
+                    }
+                })
+            }
+        })
+    </script>
+}

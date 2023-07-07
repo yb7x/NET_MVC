@@ -1,9 +1,5 @@
 ﻿using HPIT.RentHouse.DTO;
 using HPIT.RentHouse.IService;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace HPIT.RentHouse.Admin.Controllers
@@ -57,6 +53,48 @@ namespace HPIT.RentHouse.Admin.Controllers
         public ActionResult Add(RolesAddDTO dto)
         {
             return Json(_rolesService.RolesAdd(dto));
+        }
+
+        /// <summary>
+        /// 修改页面，显示要修改的信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult Edit(long id)
+        {
+            return View(_rolesService.RolesGetEdit(id));
+        }
+
+        /// <summary>
+        /// 修改
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult Edit(RolesEditDTO dto)
+        {
+            return Json(_rolesService.RolesEdit(dto));
+        }
+
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult Delete(long id)
+        {
+            return Json(_rolesService.RolesDelete(id));
+        }
+
+
+        /// <summary>
+        /// 批量删除
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        public ActionResult DeleteBatch(long[] ids)
+        {
+            return Json(_rolesService.RolesDelete(ids));
         }
     }
 }

@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace HPIT.RentHouse.DTO
 {
+    /// <summary>
+    /// 列表显示需要的字段
+    /// </summary>
     public class RolesListDTO
     {
         public long Id { get; set; }

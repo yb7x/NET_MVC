@@ -1,61 +1,60 @@
-# 分层(管理、公共、DTO、IService、服务、Web)
+# 分层（Admin、Common、DTO、IService、Service、Web）
 
 ```
-管理员:后台管理
+Admin：后台管理
 
-常见:公共类
+Common：公共类
 
-DTO:数据访问,传递数据
+DTO：数据访问，传递数据
 
-IService:接口服务
+IService：接口服务
 
-服务:服务
+Service：服务
 
-网页:前台页面
-
-拉尤伊框架
-http://layui.org.cn/docs/docs.html
+Web：前台页面
 ```
 
-# 相关内容（使用到的部分功能解释)
+# 相关内容（使用到的部分功能解释）
 
-## 控制反转(控制反转，IoC)与 依赖注入(依赖倒置，DI)
+## 控制反转（Inversion of Control，IoC） 与 依赖注入（Dependency Inversion，DI）
 
 ```
-控制反转指的是将控制权从应用程序代码转移到框架或容器中,
+控制反转指的是将控制权从应用程序代码转移到框架或容器中，
 这样框架或容器可以管理对象的生命周期和依赖关系。
-它将应用程序从直接管理对象之间的依赖解耦,使得应用程序更容易扩展和测试。
+它将应用程序从直接管理对象之间的依赖解耦，使得应用程序更容易扩展和测试。
 ```
 
 ```
-依赖反转是控制反转的一种实现方式,
+依赖反转是控制反转的一种实现方式，
 它强调要依赖于抽象接口而不是具体实现。
-通过使用接口或抽象类来定义依赖关系,
-应用程序可以更容易地替换其中的具体实现,
+通过使用接口或抽象类来定义依赖关系，
+应用程序可以更容易地替换其中的具体实现，
 从而达到松耦合的效果。
 ```
 
-**控制反转是一种思想,而依赖注入是这种思想的实现**
+**控制反转是一种思想，而依赖注入是这种思想的实现**
 
-## 讯息摘要 5加盐加密（注册、登录服务使用到)
+```
+本项目中依赖注入采用的是构造方法实现的
+```
 
-**代码在普通的层普通助手类 中**
+## MD5加盐加密（注册、登录服务使用到）
 
-
+**代码在 common层 CommonHelper类 中**
 
 ## 前端使用框架
 
 ```
 文档地址：
 
-valid form:https://www . cn blogs . com/zeran/p/10795375 . html
+Validform ：https://www.cnblogs.com/zeran/p/10795375.html
 
 layUI：http://layui.apixx.net/layer/index.html
+
+H-UI：http://www.h-ui.net/lib/datatables.js.shtml
+
+layer.js官方传送门：https://layui.11dz.cn/layer/index.html
 ```
-
-
-
-
 
 # Service 功能实现
 
@@ -587,4 +586,1096 @@ IService:
         })
 ```
 
+### 这里有一个 Forms 身份验证
+
+#### 在 Admin 中配置
+
+```
+首先在 Web.config 中配置
+
+      <!--forms验证-->
+      <authentication mode="Forms">
+          <forms name="LoginName" loginUrl="/RentHouse/Login" path="/" defaultUrl="/RentHouse/Index"></forms>
+      </authentication>
+```
+
+#### 在 DTO 层中创建 AdminLoginDateDTO 用来传递数据
+
+```
+    public class AdminLoginDataDTO
+    {
+        public long Id { get; set; }
+        public string Name { get; set; }
+
+        public string PhoneNum { get; set; }
+
+        public string Email { get; set; }
+
+        public string RoleName { get; set; }
+
+    }
+```
+
+#### 在 Service层 AdminUsersService 中，需要安装 Newtonsoft.Json12.0.2 版本
+
+**先把用户数据转化为 JSON 格式，创建 cookie 对象**
+
+```
+        /// <summary>
+        /// 用户数据保存到Cookie中，用于Forms身份验证和授权
+        /// </summary>
+        /// <param name="dto">实体对象</param>
+        /// <param name="isRemember">是否长时间验证</param>
+        public void SaveUserData(AdminLoginDataDTO dto, bool isRemember)
+        {
+            // 把用户数据转化为  JSON 格式
+            string userData = JsonConvert.SerializeObject(dto);
+            FormsAuthenticationTicket tickt = new FormsAuthenticationTicket(2, "LoginName", DateTime.Now, DateTime.Now.AddDays(1), false, userData);
+            // 加密
+            string cookieEncrypt = FormsAuthentication.Encrypt(tickt);
+            // 创建 cookie
+            HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, cookieEncrypt);
+            cookie.Path = FormsAuthentication.FormsCookiePath;
+            // 设置 cookie 是否为长时间验证
+            if (isRemember)
+            {
+                cookie.Expires = DateTime.Now.AddHours(6);
+            }
+            // 获取当前上下文对象来保存 cookies
+            HttpContext context = HttpContext.Current;
+            // 把现有的储存的 cookie 移除
+            context.Response.Cookies.Remove(FormsAuthentication.FormsCookieName);
+            // 响应到客户端
+            context.Response.Cookies.Add(cookie);
+        }
+```
+
+**在登录密码验证中**
+
+```
+                        // 添加 Cook 信息
+                        //var role = model.T_Roles.FirstOrDefault();
+                        //AdminLoginDataDTO dataDto = new AdminLoginDataDTO()
+                        //{
+                        //    Email = model.Email,
+                        //    Id = model.Id,
+                        //    Name = model.Name,
+                        //    RoleName = role.Name,
+                        //    PhoneNum = model.PhoneNum,
+                        //};
+                        // 把数据加密储存在 cookie 中
+                        //SaveUserData(dataDto, dto.IsRemember);       
+        
+        
+        /// <summary>
+        /// 登录密码验证
+        /// </summary>
+        /// <param name="dto">用户输入的账户密码</param>
+        /// <returns>true false</returns>
+        public bool AdminLogin(AdminLoginDTO dto)
+        {
+            using (RentHouseEntity db = new RentHouseEntity())
+            {
+                BaseService<T_AdminUsers> bs = new BaseService<T_AdminUsers>(db);
+                var model = bs.Get(a => a.PhoneNum == dto.PhoneNum);
+                if (model != null)
+                {
+                    // 验证密码
+                    // 用户输入的密码加盐加密后再对比表中数据
+                    // 使用 Common 中的 CalcMD5()方法对输入的数据进行 MD5加密加盐 后对比表中加密加盐的数据
+                    if (CommonHelper.CalcMD5(dto.Password + model.PasswordSalt) == model.PasswordHash)
+                    {
+                        // 添加 Cook 信息
+                        var role = model.T_Roles.FirstOrDefault();
+                        AdminLoginDataDTO dataDto = new AdminLoginDataDTO()
+                        {
+                            Email = model.Email,
+                            Id = model.Id,
+                            Name = model.Name,
+                            RoleName = role.Name,
+                            PhoneNum = model.PhoneNum,
+                        };
+                        // 把数据加密储存在 cookie 中
+                        SaveUserData(dataDto, dto.IsRemember);
+
+                        // 成功
+                        return true;
+                    }
+                    else
+                    {
+                        // 失败
+                        return false;
+                    }
+                }
+                else
+                {
+                    // 失败
+                    return false;
+                }
+            }
+        }
+```
+
 **至此，登录模块完成 测试账号信息：电话号：15538568732 密码：123456**
+
+## 首页显示登录人，身份信息
+
+### 在 Global.asax 全局配置文件中配置获取信息
+
+```
+        /// <summary>
+        /// 配置获取信息
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void Application_AuthenticateRequest(object sender, EventArgs e)
+        {
+            // 首先
+            HttpApplication application = sender as HttpApplication;
+            // 获取当前上下文 Http 请求
+            HttpContext context = application.Context;
+            // 返回当前上下文对象获取要使用的 cookie 
+            HttpCookie cookie = context.Request.Cookies[FormsAuthentication.FormsCookieName];
+            if (cookie != null)
+            {
+                // 取出 Value 值
+                if(cookie.Value != null)
+                {
+                    // 解密
+                    FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(cookie.Value);
+                    // 取出信息，以内储存的 JSON 格式，所以要反序列化
+                    AdminLoginDataDTO dto = JsonConvert.DeserializeObject<AdminLoginDataDTO>(ticket.UserData);
+                    // 将用户数据和票据保存在当前用户对象中
+                    context.User = new MyformsPrincipal<AdminLoginDataDTO>(ticket, dto);
+                }
+            }
+        }
+```
+
+### 在 DTO 层  添加一个新类 MyformsPrincipal 用来保存 Forms 身份验证信息
+
+```
+    public class MyFormsPrincipal<T> : IPrincipal where T : class,new() // 要求只能接收包含无参构造器的类
+    {
+        public IIdentity Identity { get; set; }
+
+        public T userData { get; set; }
+
+        public MyFormsPrincipal(FormsAuthenticationTicket tickt, T UserData) 
+        {
+            Identity = new FormsIdentity(tickt);
+            userData = UserData;
+        }
+
+        public bool IsInRole(string role)
+        {
+            throw new NotImplementedException();
+        }
+    }
+```
+
+### 前台 Index 页面显示数据
+
+```
+首先定义两个字段，用来接收数据
+在需要显示数据的地方使用语法 @命名
+如：@userName 
+
+@{
+    string userName = "";
+    string RoleName = "";
+    var user = User as MyFormsPrincipal<AdminLoginDataDTO>;
+    userName = user.userData.Name;
+    RoleName = user.userData.RoleName;
+}
+```
+
+### 添加特性，完善Forms验证
+
+```
+[Authorize]：只有满足授权的才能通过
+```
+
+# 权限管理页面搭建（显示、删除、添加、修改）
+
+## 在 Z权限管理需要用到的材料 中找到文件 PredicateExtensions.cs 把他复制入 Common 层中，查看命名空间是否正确
+
+## 在 DTO 层中创建页面显示需要的类文件 PermissionsDTO 其中有以下字段
+
+```
+namespace HPIT.RentHouse.DTO
+{
+    public class PermissionsDTO
+    {
+        public long Id { get; set; }
+
+        public string Description { get; set; }
+
+        public string Name { get; set; }
+    }
+}
+```
+
+## 然后去 IService 层创建接口 IPermissionsService 并继承 IServiceSupport 以保证可以使用依赖注入
+
+```
+namespace HPIT.RentHouse.IService
+{
+    public interface IPermissionsService:IServiceSupport
+    {
+        /// <summary>
+        /// 查询权限
+        /// </summary>
+        /// <returns></returns>
+        List<PermissionsDTO> GetPermissionsList(string Description);
+    }
+}
+```
+
+## 然后去 Service 层创建 PermissionsService 类文件，用来完成该模块逻辑，要继承 : IPermissionsServi 接口，以约束其内部方法、方便使用依赖注入
+
+```
+namespace HPIT.RentHouse.Service
+{
+    public class PermissionsService : IPermissionsService
+    {
+        /// <summary>
+        /// 查询所有权限信息，若为空条件，则查询所有的，并且降序排列
+        /// </summary>
+        /// <param name="Description">查询条件</param>
+        /// <returns></returns>eturns>
+        public List<PermissionsDTO> GetPermissionsList(string Description)
+        {
+            // 1、创建上下文对象
+            using (RentHouseEntity db = new RentHouseEntity())
+            {
+                // 2、创建查询对象
+                BaseService<T_Permissions> bs = new BaseService<T_Permissions>(db);
+                // 3、查询(使用 Common 中的 ParameterExpression 类中的 Lambda 扩展方法)
+                var lambda = PredicateExtensions.True<T_Permissions>(); // 返回所有数据
+                if (!string.IsNullOrWhiteSpace(Description))
+                {
+                    lambda = lambda.And(a => a.Description.Contains(Description));
+                }
+                return bs.GetOrderBy(lambda, a => a.Id, false).Select(a => new PermissionsDTO()
+                {
+                    Id = a.Id,
+                    Description = a.Description,
+                    Name = a.Name
+                }).ToList();
+            }
+        }
+    }
+}
+```
+
+## 前台页面显示时，创建一个单独的控制器，在Admin 中 创建 PermissionsController 控制器，用来完成页面显示操作
+
+```
+namespace HPIT.RentHouse.Admin.Controllers
+{
+    public class PermissionsController : Controller
+    {
+        #region 依赖注入
+
+        private IPermissionsService _permissionsService;
+
+        public PermissionsController(IPermissionsService permissionsService)
+        {
+            _permissionsService = permissionsService;
+        }
+
+        #endregion
+        public ActionResult Index()
+        {
+            return View();
+        }
+        /// <summary>
+        /// 查询所有数据显示
+        /// </summary>
+        /// <param name="Description"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult GetPermissionsList(string Description)
+        {
+            List<PermissionsDTO> List =  _permissionsService.GetPermissionsList(Description);
+            return Json(new { recordsTotal = List.Count, recordsFiltered  = List.Count, data = List});
+        }
+    }
+}
+```
+
+### 注意
+
+```
+使用到：H-UI
+前台页面需要修改 AJAX 中 URL 的地址
+
+
+后台需要三个字段返回
+使用了匿名类型对象来创建一个包含三个属性的JSON对象，属性包括 recordsTotal （总记录数）、 recordsFiltered （过滤后的记录数）和 data （实际的数据列表）
+return Json(new { recordsTotal = List.Count, recordsFiltered  = List.Count, data = List});
+```
+
+## 实现查询功能
+
+### 只有查询权限信息
+
+```
+前台页面 若有文档就绪函数则需要放在文档就绪函数中
+
+
+            // 查询方法
+            $("#btn_Search").click(function () {
+                var description = $("#pname").val();
+                param.Description = description;
+                // 重新加载数据
+                table.ajax.reload();
+            })
+```
+
+## 实现添加权限功能
+
+### 这里直接使用 PermissionsDTO 类文件作为参数，因为有添加所需的两个字段，在 IService层 IPermissionsService 中写一个接口，规范添加方法，返回AjaxResult 类型
+
+```
+        /// <summary>
+        /// 添加权限
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        AjaxResult AddPermissions(PermissionsDTO dto);
+```
+
+### 在 Service 层 PermissionsService 类文件中书写 Add 添加权限方法
+
+```
+        /// <summary>
+        /// 添加权限信息
+        /// </summary>
+        /// <param name="dto">实体对象</param>
+        /// <returns>Ajax true:1 false:0</returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public AjaxResult AddPermissions(PermissionsDTO dto)
+        {
+            using (RentHouseEntity db = new RentHouseEntity())
+            {
+                // 创建查询对象
+                BaseService<T_Permissions> bs = new BaseService<T_Permissions>(db);
+                // 创建添加对象
+                T_Permissions model = new T_Permissions()
+                {
+                    Description = dto.Description,
+                    CreateDateTime = DateTime.Now,
+                    IsDeleted = false,
+                    Name = dto.Name
+                };
+                if (bs.Add(model) > 0)
+                {
+                    return new AjaxResult(ResultState.Success, "添加成功");
+                }
+                else
+                {
+                    return new AjaxResult(ResultState.Error, "添加失败");
+                }
+            }
+        }
+```
+
+### 在控制器 PermissionsController 中写两个 Add 方法，第二个[HttpPost]标记的方法被页面调用来执行添加操作
+
+```
+        public ActionResult Add()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Add(PermissionsDTO dto)
+        {
+            // 返回AjaxResult类型
+            return Json(_permissionsService.AddPermissions(dto));
+        }
+```
+
+### 前台 Add 页面使用到了 layer.js
+
+```
+@section footScript{
+    // 引入这个 JS 组件
+    <script src="~/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+    <script>
+        // 使用 Validform 方式验证页面表单
+        var vf = $("#addfrm").Validform({ tiptype: 2 });
+
+        // 单击按钮发送请求
+        $("#btn_Add").click(function () {
+            // 判断表单验证是否通过
+            if (vf.check(false)) {
+                $.ajax({
+                    type: "post",
+                    url: "/Permissions/Add",
+                    data: $("#addfrm").serializeArray(),
+                    dataType: "json",
+                    success: function (r) {
+                        if (r.State == 1) {
+                            layer.msg(r.Message, { icon: 1, time: 2000 }, function () {
+                                // 刷新
+                                parent.location.reload();
+                            })
+                        } else {
+                            layer.msg(r.Message, { icon: 2 })
+                        }
+                    },
+                    error: function () {
+                        layer.msg("操作异常", { icon: 2 })
+                    }
+                })
+            }
+        })
+    </script>
+}
+```
+
+## 实现修改权限信息功能
+
+### 修改前查找数据
+
+#### 首先去 IService 层 IPermissionsService 接口中写修改前查询方法
+
+```
+        /// <summary>
+        /// 修改前查询权限
+        /// </summary>
+        /// <param name="id">编号</param>
+        /// <returns></returns>
+        PermissionsDTO EditGetPermissions(long id);
+```
+
+#### 然后 Service 层 PermissionsService 类中实现接口
+
+```
+        /// <summary>
+        /// 查询要修改权限信息，
+        /// </summary>
+        /// <param name="id">编号</param>
+        /// <returns>PermissionsDTO 类型</returns>
+        public PermissionsDTO EditGetPermissions(long id)
+        {
+            // 1、创建上下文对象
+            using (RentHouseEntity db = new RentHouseEntity())
+            {
+                // 2、创建查询对象
+                BaseService<T_Permissions> bs = new BaseService<T_Permissions>(db);
+                // 执行操作，投射
+                return bs.GetList(a => a.Id == id).Select(a => new PermissionsDTO()
+                {
+                    Description = a.Description,
+                    Id = a.Id,
+                    Name = a.Name
+                }).FirstOrDefault();
+            }
+        }
+```
+
+#### 在前台控制器先调用这个查询方法
+
+```
+        /// <summary>
+        /// 修改前查询
+        /// </summary>
+        /// <param name="id">Id</param>
+        /// <returns></returns>
+        public ActionResult Edit(long id)
+        {
+            return View(_permissionsService.EditPermissions(id));
+        }
+```
+
+**页面中添加 @model HPIT.RentHouse.DTO.PermissionsDTO 强类型试图需要引入类型**
+
+### 查询到数据后修改
+
+##### 首先在 IService 层 IPermissionsService 接口添加查询后修改方法
+
+```
+        /// <summary>
+        /// 修改权限信息
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        AjaxResult EditPermissions(PermissionsDTO dto);
+```
+
+##### 然后 Service 层 PermissionsService 类中实现接口
+
+```
+         /// <summary>
+        /// 查询后修改权限信息
+        /// </summary>
+        /// <param name="dto">实体对象</param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public AjaxResult EditPermissions(PermissionsDTO dto)
+        {
+            using(RentHouseEntity db = new RentHouseEntity())
+            {
+                BaseService<T_Permissions> bs = new BaseService<T_Permissions> (db);
+                T_Permissions model = bs.Get(a => a.Id == dto.Id);
+                model.Name = dto.Name;
+                model.Description = dto.Description;
+                // 调用修改方法
+                if (bs.Update(model))
+                {
+                    return new AjaxResult(ResultState.Success, "修改成功");
+                }
+                else
+                {
+                    return new AjaxResult(ResultState.Error, "修改失败");
+                }
+            }
+        }
+```
+
+##### 前台页面需要调用这个方法实现修改
+
+```
+        /// <summary>
+        /// 查询后修改
+        /// </summary>
+        /// <param name="dto">实体对象</param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult Edit(PermissionsDTO dto)
+        {
+            // 使用接口调用修改方法
+            return Json(_permissionsService.EditPermissions(dto));
+        }
+```
+
+#### 前台页面添加 AJAX 调用
+
+**注意，前台 Id 键**
+
+```
+@Html.HiddenFor(a => a.Id, Model.Id)
+```
+
+```
+@section footScript{
+    <script src="~/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+    <script>
+        // 使用 Validform 方式验证页面表单
+        var vf = $("#editfrm").Validform({ tiptype: 2 });
+
+        // 单击按钮发送请求
+        $("#btn_Edit").click(function () {
+            // 判断表单验证是否通过
+            if (vf.check(false)) {
+                $.ajax({
+                    type: "post",
+                    url: "/Permissions/Edit",
+                    data: $("#editfrm").serializeArray(),
+                    dataType: "json",
+                    success: function (r) {
+                        if (r.State == 1) {
+                            layer.msg(r.Message, { icon: 1, time: 2000 }, function () {
+                                // 刷新
+                                parent.location.reload();
+                            })
+                        } else {
+                            layer.msg(r.Message, { icon: 2 })
+                        }
+                    },
+                    error: function () {
+                        layer.msg("操作异常", { icon: 2 })
+                    }
+                })
+            }
+        })
+    </script>
+}
+```
+
+## 实现软删除操作
+
+### 首先在 IService 层 IPermissionsService 接口添加查询后修改方法
+
+```
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="id">页面Id</param>
+        /// <returns></returns>
+        AjaxResult Delete(int id);
+```
+
+### 然后 Service 层 PermissionsService 类中实现接口
+
+```
+        /// <summary>
+        /// 删除权限信息
+        /// </summary>
+        /// <param name="id">编号</param>
+        /// <returns></returns>
+        public AjaxResult Delete(int id)
+        {
+            using(RentHouseEntity db = new RentHouseEntity())
+            {
+                // 创建查询对象，根据条件查询数据
+                BaseService<T_Permissions> bs = new BaseService<T_Permissions> (db);
+                T_Permissions model = bs.Get(a =>a.Id == id);
+                // 判断是否存在
+                if (model != null)
+                {
+                    // 判断删除是否成功
+                    if (bs.Delete(model))
+                    {
+                        return new AjaxResult(ResultState.Success, "删除成功");
+                    }
+                    else
+                    {
+                        return new AjaxResult(ResultState.Success, "删除失败");
+                    }
+                }
+                else
+                {
+                    return new AjaxResult(ResultState.Error, "已删除该权限");
+                }
+            }
+        }
+```
+
+### 页面删除操作 AJAX
+
+```
+// 删除
+        function del(t) {
+            layer.confirm('你确定删除吗？', { icon: 3, title: '提示' }, function (index) {
+                    var id = $(t).attr("data-id");
+                    $.ajax({
+                        type: "post",
+                        url: "/Permissions/Delete/" + id,
+                        dataType: "json",
+                        success: function (r) {
+                            if (r.State == 1) {
+                                layer.msg(r.Message, { icon: 1, time: 1000 }, function () {
+                                    // 刷新，关闭当前窗体
+                                    location.reload();
+                                })
+                            } else {
+                                layer.msg(r.Message, { icon: 2 })
+                            }
+                        },
+                        error: function () {
+                            layer.msg("操作异常", { icon: 2 })
+                        }
+                    })
+                    layer.close(index);
+            });
+        }
+```
+
+**控制器中**
+
+```
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="id">编号</param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult Delete(int id)
+        {
+            // 使用接口调用修改方法
+            return Json(_permissionsService.DeletePermissions(id));
+        }
+```
+
+### 实现多个删除
+
+#### 首先在 IService 层 IPermissionsService 接口添加查询后修改方法
+
+```
+        /// <summary>
+        /// 删除 多个
+        /// </summary>
+        /// <param name="b">数组</param>
+        /// <returns></returns>
+        AjaxResult DeleteBatchPermissions(long[] b);
+```
+
+#### 然后 Service 层 PermissionsService 类中实现接口
+
+```
+        /// <summary>
+        /// 批量删除
+        /// </summary>
+        /// <param name="b">数组</param>
+        /// <returns></returns>
+        public AjaxResult DeleteBatchPermissions(long[] b)
+        {
+            // 创还能上下文对象
+            using (RentHouseEntity db = new RentHouseEntity())
+            {
+                // 创建数据库操作对象
+                BaseService<T_Permissions> bs = new BaseService<T_Permissions> (db);
+                // 循环遍历数组，依次删除
+                for (int i = 0; i < b.Length; i++)
+                {
+                    var id = b[i];
+                    bs.Delete(bs.Get(a => a.Id ==id));
+                }
+                return new AjaxResult(ResultState.Success, "批量删除成功");
+            }
+        }
+```
+
+#### 页面批量删除
+
+##### 首先控制器
+
+```
+        /// <summary>
+        /// 批量删除
+        /// </summary>
+        /// <param name="b">数组</param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult DeleteBatch(long[] b)
+        {
+            return Json(_permissionsService.DeleteBatchPermissions(b));
+        }
+```
+
+##### 然后 AJAX
+
+**页面上的删除操作**
+
+```
+        // 删除
+        function del(t) {
+            layer.confirm('你确定删除吗？', { icon: 3, title: '提示' }, function (index) {
+                    var id = $(t).attr("data-id");
+                    $.ajax({
+                        type: "post",
+                        url: "/Permissions/Delete/" + id,
+                        dataType: "json",
+                        success: function (r) {
+                            if (r.State == 1) {
+                                layer.msg(r.Message, { icon: 1, time: 1000 }, function () {
+                                    // 刷新，关闭当前窗体
+                                    location.reload();
+                                })
+                            } else {
+                                layer.msg(r.Message, { icon: 2 })
+                            }
+                        },
+                        error: function () {
+                            layer.msg("操作异常", { icon: 2 })
+                        }
+                    })
+                    layer.close(index);
+            });
+        }
+```
+
+
+
+# 角色列表页面搭载
+
+## 实现列表显示，以及搜索操作
+
+### DTO创建页面所需字段类
+
+```
+namespace HPIT.RentHouse.DTO
+{
+    public class RolesListDTO
+    {
+        public long Id { get; set; }
+        public string Name { get; set; }
+    }
+}
+```
+
+
+
+### IService 层添加新的接口 IRolesServic 继承 IServiceSupport
+
+```
+namespace HPIT.RentHouse.IService
+{
+    public interface IRolesService : IServiceSupport
+    {
+        /// <summary>
+        /// 显示列表数据，附加搜索
+        /// </summary>
+        /// <param name="Name"></param>
+        /// <returns></returns>
+        List<RolesListDTO> GetRolesList(string Name);
+    }
+}
+```
+
+
+
+### Service 层继承并实现这个接口
+
+```
+namespace HPIT.RentHouse.Service
+{
+    public class RolesService : IRolesService
+    {
+        /// <summary>
+        /// 查询，显示列表信息
+        /// </summary>
+        /// <param name="Name"></param>
+        /// <returns></returns>
+        public List<RolesListDTO> GetRolesList(string Name)
+        {
+            using(RentHouseEntity db = new RentHouseEntity())
+            {
+                BaseService<T_Roles> bs = new BaseService<T_Roles> (db);
+                // 参数为空则查询所有的数据
+                var model = PredicateExtensions.True<T_Roles> ();
+                // 判断如果参数不为空
+                if(!string.IsNullOrWhiteSpace(Name))
+                {
+                    model = model.And(a => a.Name.Contains(Name));
+                }
+                // 返回DTO数据
+                return bs.GetOrderBy(model, a => a.Id, false).Select(a => new  RolesListDTO()
+                {
+                    Name = a.Name,
+                    Id = a.Id
+                }).ToList();
+            }
+        }
+    }
+}
+```
+
+
+
+### 页面显示，去复制之前的Index页面，修改部分代码即可，先创建控制器 RolesController ，完成依赖注入页面创建
+
+```
+namespace HPIT.RentHouse.Admin.Controllers
+{
+    public class RolesController : Controller
+    {
+        #region 依赖注入
+
+        public IRolesService _rolesService;
+
+        public RolesController(IRolesService rolesService)
+        {
+            _rolesService = rolesService;
+        }
+
+        #endregion
+        // GET: Roles
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        public ActionResult GetRolesList(string Name)
+        {
+            var list = _rolesService.GetRolesList(Name);
+            return Json(new { recordsTotal = list.Count, recordsFiltered = list.Count, data = list });
+        }
+    }
+}
+```
+
+
+
+## 实现添加角色功能
+
+### 首先在控制器中添加新的依赖注入 IPermissionsService
+
+```
+#region 依赖注入
+
+        public IRolesService _rolesService;
+        public IPermissionsService _permissionsService;
+
+        public RolesController(IRolesService rolesService, IPermissionsService permissionsService)
+        {
+            _rolesService = rolesService;
+            _permissionsService = permissionsService;
+        }
+
+        #endregion
+```
+
+
+
+### 然后在 Add 中直接查询所有权限信息并返回视图，由视图接收并显示
+
+```
+        /// <summary>
+        /// 添加视图并显示所有权限信息
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Add()
+        {
+            return View(_permissionsService.GetPermissionsList(null));
+        }
+```
+
+
+
+### 视图中
+
+```
+@model IEnumerable<HPIT.RentHouse.DTO.PermissionsDTO>
+
+
+
+             @{
+                    foreach (var item in Model)
+                    {
+                        <div class="col-3">
+                            <input type="checkbox" name="Permissions" value="@item.Id" /> @item.Description
+                        </div>
+                    }
+                }
+```
+
+
+
+### 页面上需要显示多个复选框，需要引用另一个表的数据
+
+```
+@model IEnumerable<HPIT.RentHouse.DTO.PermissionsDTO>
+```
+
+
+
+### DTO 层创建 RolesAddDTO 类保存所需要的字段
+
+```
+namespace HPIT.RentHouse.DTO
+{
+    /// <summary>
+    /// 保存着添加需要的两个字段
+    /// </summary>
+    public class RolesAddDTO
+    {
+        public string Name { get; set; }
+        public long[] PermissionsID { get; set; }
+    }
+}
+```
+
+
+
+### IService 层的 IRolesServic  接口中写添加
+
+```
+        /// <summary>
+        /// 添加方法
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        AjaxResult RolesAdd(RolesAddDTO dto);
+```
+
+
+
+### Service 层 RolesServic 中实现该方法
+
+```
+        /// <summary>
+        /// 添加方法
+        /// </summary>
+        /// <param name="dto">实体对象</param>
+        /// <returns></returns>
+        public AjaxResult RolesAdd(RolesAddDTO dto)
+        {
+            using (RentHouseEntity db = new RentHouseEntity())
+            {
+                // 创建两个所需要的表对象
+                BaseService<T_Roles> bs = new BaseService<T_Roles> (db);
+                BaseService<T_Permissions> pbs = new BaseService<T_Permissions> (db);
+                // 角色表添加字段，需要转换类型
+                T_Roles rs = new T_Roles()
+                {
+                    IsDeleted = false,
+                    Name = dto.Name,
+                    CreateDateTime = DateTime.Now,
+                };
+                // 判断是否添加上角色信息
+                if (bs.Add(rs) > 0)
+                {
+                    // 成功则继续为这个角色添加权限信息
+                    for (int i = 0; i < dto.PermissionsID.Length; i++)
+                    {
+                        // 先存储权限编号
+                        var b = dto.PermissionsID[i];
+                        // 根据编号查询权限信息
+                        var s = pbs.Get(a => a.Id == b);
+                        // 添加权限
+                        rs.T_Permissions.Add(s);
+                    }
+                    db.SaveChanges();
+                    return new AjaxResult(ResultState.Success, "添加成功");
+                }
+                else
+                {
+                    return new AjaxResult(ResultState.Error, "添加失败");
+                }
+            }
+        }
+```
+
+
+
+### 控制器写添加方法
+
+```
+        /// <summary>
+        /// 添加方法
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult Add(RolesAddDTO dto)
+        {
+            return Json(_rolesService.RolesAdd(dto));
+        }
+```
+
+
+
+### 页面调用方法
+
+```
+// 单击按钮发送请求
+        $("#btn_Add").click(function () {
+            // 判断表单验证是否通过
+            if (vf.check(false)) {
+                $.ajax({
+                    type: "post",
+                    url: "/Roles/Add",
+                    data: $("#addfrm").serializeArray(),
+                    dataType: "json",
+                    success: function (r) {
+                        if (r.State == 1) {
+                            layer.msg(r.Message, { icon: 1, time: 2000 }, function () {
+                                // 刷新
+                                parent.location.reload();
+                            })
+                        } else {
+                            layer.msg(r.Message, { icon: 2 })
+                        }
+                    },
+                    error: function () {
+                        layer.msg("操作异常", { icon: 2 })
+                    }
+                })
+            }
+        })
+```
