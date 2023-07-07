@@ -1379,8 +1379,6 @@ return Json(new { recordsTotal = List.Count, recordsFiltered  = List.Count, data
         }
 ```
 
-
-
 # 角色列表页面搭载
 
 ## 实现列表显示，以及搜索操作
@@ -1398,8 +1396,6 @@ namespace HPIT.RentHouse.DTO
 }
 ```
 
-
-
 ### IService 层添加新的接口 IRolesServic 继承 IServiceSupport
 
 ```
@@ -1416,8 +1412,6 @@ namespace HPIT.RentHouse.IService
     }
 }
 ```
-
-
 
 ### Service 层继承并实现这个接口
 
@@ -1455,8 +1449,6 @@ namespace HPIT.RentHouse.Service
 }
 ```
 
-
-
 ### 页面显示，去复制之前的Index页面，修改部分代码即可，先创建控制器 RolesController ，完成依赖注入页面创建
 
 ```
@@ -1489,8 +1481,6 @@ namespace HPIT.RentHouse.Admin.Controllers
 }
 ```
 
-
-
 ## 实现添加角色功能
 
 ### 首先在控制器中添加新的依赖注入 IPermissionsService
@@ -1510,8 +1500,6 @@ namespace HPIT.RentHouse.Admin.Controllers
         #endregion
 ```
 
-
-
 ### 然后在 Add 中直接查询所有权限信息并返回视图，由视图接收并显示
 
 ```
@@ -1524,8 +1512,6 @@ namespace HPIT.RentHouse.Admin.Controllers
             return View(_permissionsService.GetPermissionsList(null));
         }
 ```
-
-
 
 ### 视图中
 
@@ -1544,15 +1530,11 @@ namespace HPIT.RentHouse.Admin.Controllers
                 }
 ```
 
-
-
 ### 页面上需要显示多个复选框，需要引用另一个表的数据
 
 ```
 @model IEnumerable<HPIT.RentHouse.DTO.PermissionsDTO>
 ```
-
-
 
 ### DTO 层创建 RolesAddDTO 类保存所需要的字段
 
@@ -1570,8 +1552,6 @@ namespace HPIT.RentHouse.DTO
 }
 ```
 
-
-
 ### IService 层的 IRolesServic  接口中写添加
 
 ```
@@ -1582,8 +1562,6 @@ namespace HPIT.RentHouse.DTO
         /// <returns></returns>
         AjaxResult RolesAdd(RolesAddDTO dto);
 ```
-
-
 
 ### Service 层 RolesServic 中实现该方法
 
@@ -1631,8 +1609,6 @@ namespace HPIT.RentHouse.DTO
         }
 ```
 
-
-
 ### 控制器写添加方法
 
 ```
@@ -1648,12 +1624,10 @@ namespace HPIT.RentHouse.DTO
         }
 ```
 
-
-
 ### 页面调用方法
 
 ```
-// 单击按钮发送请求
+        // 单击按钮发送请求
         $("#btn_Add").click(function () {
             // 判断表单验证是否通过
             if (vf.check(false)) {
@@ -1678,4 +1652,535 @@ namespace HPIT.RentHouse.DTO
                 })
             }
         })
+```
+
+## 实现修改角色功能
+
+### DTO 层
+
+#### 创建修改前查询方法需要用到的 GetRolesEditPermissionDTO GetRolesEditDTO 类，包含以下字段
+
+```
+GetRolesEditPermissionDTO:存储需要修改的复选框数据，在类中以泛型类型存储
+
+
+namespace HPIT.RentHouse.DTO
+{
+    /// <summary>
+    /// 存储 permission 对象
+    /// </summary>
+    public class GetRolesEditPermissionDTO
+    {
+        public long Id { get; set; }
+
+        public string Name { get; set; }
+
+        public string Description { get; set; }
+
+        public bool isChecked { get; set; }
+    }
+}
+```
+
+```
+GetRolesEditDTO:存储需要修改的信息
+
+
+namespace HPIT.RentHouse.DTO
+{
+    /// <summary>
+    /// 这里是修改前查询到的字段
+    /// </summary>
+    public class GetRolesEditDTO
+    {
+        public long Id { get; set; }
+
+        public string Name { get; set; }
+
+        public List<GetRolesEditPermissionDTO> PermissionsId { get; set; }
+    }
+}
+```
+
+---
+
+### IService 层创建接口方法
+
+```
+        /// <summary>
+        /// 修改前查询
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        GetRolesEditDTO RolesGetEdit(long id);    
+```
+
+### Service 层实现该方法
+
+```
+        /// <summary>
+        /// 修改前查询
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public GetRolesEditDTO RolesGetEdit(long id)
+        {
+            // 创建上下文对象
+            using (RentHouseEntity db = new RentHouseEntity())
+            {
+                // 创建要操作的表的实例
+                BaseService<T_Roles> bs = new BaseService<T_Roles>(db);
+                BaseService<T_Permissions> pbs = new BaseService<T_Permissions>(db);
+                // 获取要修改的角色信息
+                var model = bs.Get(a => a.Id == id);
+                // 创建返回值类型保存数据
+                GetRolesEditDTO dto = new GetRolesEditDTO()
+                {
+                    Id = model.Id,
+                    Name = model.Name
+                };
+                // 获取所有权限信息
+                List<T_Permissions> permissionsList = pbs.GetList(b => true).ToList();
+                // 获取 roles 表中所有权限信息,T_Permissions:代表外键
+                var rolesPermissions = model.T_Permissions;
+                // 为 GetRolesEditDTO 中的 PermissionsId 字段赋值
+                dto.PermissionsId = new List<GetRolesEditPermissionDTO>();
+                // 循环遍历出所有的权限数据
+                foreach (var item in permissionsList)
+                {
+                    GetRolesEditPermissionDTO getPermission = new GetRolesEditPermissionDTO()
+                    {
+                        Description = item.Description,
+                        Id = item.Id,
+                        Name = item.Name,
+                        // 如果当前的ID 与 权限 ID匹配那么说明被选中
+                        isChecked = rolesPermissions.Any(x => x.Id == item.Id)
+                    };
+                    dto.PermissionsId.Add(getPermission);
+                }
+                return dto;
+            }
+        }
+```
+
+### 页面显示数据
+
+#### 控制器调用方法
+
+```
+        /// <summary>
+        /// 修改页面，显示要修改的信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult Edit(long id)
+        {
+            return View(_rolesService.RolesGetEdit(id));
+        }
+```
+
+### 页面 显示 以及 AJAX
+
+#### 显示
+
+```
+@model HPIT.RentHouse.DTO.GetRolesEditDTO  //实体对象引用
+
+@Html.HiddenFor(a => a.Id, Model.Id) // 隐藏 Id 键
+
+            // 显示权限信息，并绑定 checked
+          @{
+                foreach (var item in Model.PermissionsId)
+                {
+                    <div class="col-3">
+                        <input type="checkbox" name="PermissionsId" value="@item.Id" checked="@item.isChecked" /> @item.Description
+                    </div>
+                }
+
+            }
+```
+
+#### Ajax
+
+```
+// 修改Ajax
+
+
+@section footScript{
+    <script src="~/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+    <script>
+        // 使用 Validform 方式验证页面表单
+        var vf = $("#Editfrm").Validform({ tiptype: 2 });
+
+        // 单击按钮发送请求
+        $("#btn_Add").click(function () {
+            // 判断表单验证是否通过
+            if (vf.check(false)) {
+                $.ajax({
+                    type: "post",
+                    url: "/Roles/Edit",
+                    data: $("#Editfrm").serializeArray(),
+                    dataType: "json",
+                    success: function (r) {
+                        if (r.State == 1) {
+                            layer.msg(r.Message, { icon: 1, time: 2000 }, function () {
+                                // 刷新
+                                parent.location.reload();
+                            })
+                        } else {
+                            layer.msg(r.Message, { icon: 2 })
+                        }
+                    },
+                    error: function () {
+                        layer.msg("操作异常", { icon: 2 })
+                    }
+                })
+            }
+        })
+    </script>
+}
+```
+
+
+
+### 实现修改功能
+
+**要修改两个表，需要先清除另一张表中的外键**
+
+#### DTO 中要用到的字段
+
+```
+namespace HPIT.RentHouse.DTO
+{
+    /// <summary>
+    /// 修改功能实现需要的字段
+    /// </summary>
+    public class RolesEditDTO
+    {
+        public long Id { get; set; }
+
+        public string Name { get; set; }
+
+        public long[] PermissionsID { get; set; }
+    }
+}
+```
+
+#### Iservice 中
+
+```
+        /// <summary>
+        /// 修改
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        AjaxResult RolesEdit(RolesEditDTO dto);
+```
+
+#### Service 中
+
+```
+        /// <summary>
+        /// 修改功能
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public AjaxResult RolesEdit(RolesEditDTO dto)
+        {
+            using (RentHouseEntity db = new RentHouseEntity())
+            {
+                // 创建要修改表的实例
+                BaseService<T_Roles> bs = new BaseService<T_Roles> (db);
+                BaseService<T_Permissions> pbs = new BaseService<T_Permissions>(db);
+                // 查询外键，删除它 Clear():清除
+                var model = bs.Get(a => a.Id == dto.Id) ;
+                // 清除外键（清除当前所拥有的的权限）
+                model.T_Permissions.Clear();
+                // 修改这一项
+                model.Name = dto.Name;
+                // 先修改这个关系表
+                if (bs.Update(model))
+                {
+                    // 向角色权限关系表添加 权限信息
+                    for (int i = 0; i < dto.PermissionsID.Length; i++)
+                    {
+                        // 通过编号查询到权限信息
+                        var id = dto.PermissionsID[i];
+                        // 添加到表中
+                        model.T_Permissions.Add(pbs.Get(a => a.Id == id));
+                    }
+                    db.SaveChanges() ;
+                    return new AjaxResult(ResultState.Success, "修改成功");
+                }
+                else
+                {
+                    return new AjaxResult(ResultState.Error, "修改失败！");
+                }
+            }
+        }
+```
+
+#### 页面使用 Ajax 实现修改
+
+##### 控制器
+
+```
+        /// <summary>
+        /// 修改
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult Edit(RolesEditDTO dto)
+        {
+            return Json(_rolesService.RolesEdit(dto));
+        }
+```
+
+##### Ajax
+
+```
+@section footScript{
+    <script src="~/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+    <script>
+        // 使用 Validform 方式验证页面表单
+        var vf = $("#Editfrm").Validform({ tiptype: 2 });
+
+        // 单击按钮发送请求
+        $("#btn_Add").click(function () {
+            // 判断表单验证是否通过
+            if (vf.check(false)) {
+                $.ajax({
+                    type: "post",
+                    url: "/Roles/Edit",
+                    data: $("#Editfrm").serializeArray(),
+                    dataType: "json",
+                    success: function (r) {
+                        if (r.State == 1) {
+                            layer.msg(r.Message, { icon: 1, time: 2000 }, function () {
+                                // 刷新
+                                parent.location.reload();
+                            })
+                        } else {
+                            layer.msg(r.Message, { icon: 2 })
+                        }
+                    },
+                    error: function () {
+                        layer.msg("操作异常", { icon: 2 })
+                    }
+                })
+            }
+        })
+    </script>
+}
+```
+
+
+
+
+
+## 实现删除角色功能
+
+### IService 层
+
+```
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        AjaxResult RolesDelete(long id);
+```
+
+### Service 层
+
+```
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public AjaxResult RolesDelete(long id)
+        {
+            using (RentHouseEntity db = new RentHouseEntity())
+            {
+                // 创建数据库连接
+                BaseService<T_Roles> bs = new BaseService<T_Roles>(db);
+                // 查询要删除的数据
+                T_Roles model = bs.Get(a => a.Id == id);
+                // 判断 ,如果存在则清除对应表数据
+                if (model != null)
+                {
+                    // 清除 对应的角色权限关系表中的数据
+                    model.T_Permissions.Clear();
+                    // 删除，并判断状态
+                    if (bs.Delete(model))
+                    {
+                        return new AjaxResult(ResultState.Success, "角色删除成功！");
+                    }
+                    else
+                    {
+                        return new AjaxResult(ResultState.Error, "删除失败！");
+                    }
+                }
+                else
+                {
+                    return new AjaxResult(ResultState.Error, "该角色已删除！");
+                }
+            }
+        }
+```
+
+### 页面显示
+
+#### 控制器
+
+```
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult Delete(long id)
+        {
+            return Json(_rolesService.RolesDelete(id));
+        }
+```
+
+#### 页面Ajax
+
+```
+         // 删除
+        function del(t) {
+            layer.confirm('你确定删除吗？', { icon: 3, title: '提示' }, function (index) {
+                    var id = $(t).attr("data-id");
+                    $.ajax({
+                        type: "post",
+                        url: "/Roles/Delete/" + id,
+                        dataType: "json",
+                        success: function (r) {
+                            if (r.State == 1) {
+                                layer.msg(r.Message, { icon: 1, time: 1000 }, function () {
+                                    // 刷新，关闭当前窗体
+                                    location.reload();
+                                })
+                            } else {
+                                layer.msg(r.Message, { icon: 2 })
+                            }
+                        },
+                        error: function () {
+                            layer.msg("操作异常", { icon: 2 })
+                        }
+                    })
+                    layer.close(index);
+            });
+        }
+```
+
+
+
+## 批量删除
+
+### IService 层
+
+```
+         /// <summary>
+        /// 批量删除
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        AjaxResult RolesDelete(long[] ids);
+```
+
+### Sercvice 层
+
+```
+        /// <summary>
+        /// 批量删除
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public AjaxResult RolesDelete(long[] ids)
+        {
+            using (RentHouseEntity db = new RentHouseEntity())
+            {
+                // 创建操作数据
+                BaseService<T_Roles> bs = new BaseService<T_Roles>(db);
+                // 首先循环遍历 删除 外键表（角色权限关系表）
+                for (int i = 0; i < ids.Length; i++)
+                {
+                    // 把 Id 遍历出来
+                    var id = ids[i];
+                    // 通过遍历出来的 Id 来找到要删除的数据
+                    var model = bs.Get(a => a.Id == id);
+                    // 清除外键表
+                    model.T_Permissions.Clear();
+                    // 删除并判断状态
+                    bs.Delete(model);
+                }
+                return new AjaxResult(ResultState.Success, "批量删除成功！");
+            }
+        }
+```
+
+### 页面
+
+#### 控制器
+
+```
+        /// <summary>
+        /// 批量删除
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        public ActionResult DeleteBatch(long[] ids)
+        {
+            return Json(_rolesService.RolesDelete(ids));
+        }
+```
+
+#### Ajax
+
+```
+// 批量删除
+            $("#deleteBatch").click(function () {
+                // 创建数组用来存储数据
+                var ar = [];
+                // 获取用户选中的复选框 的value值
+                $(":checkbox[name=selectIDs]:checked").each((index, item) => {
+                    ar.push($(item).val());
+                });
+
+                if (ar.length == 0) {
+                    layer.msg("请选择要批量删除的角色！", { icon: 2 })
+                } else {
+                    layer.confirm('你确定要删除这些项吗？', { icon: 3, title: '提示' }, function (index) {
+                        $.ajax({
+                            type: "post",
+                            url: "/Roles/DeleteBatch",
+                            data: {
+                                "ids": ar
+                            },
+                            dataType: "json",
+                            success: function (r) {
+                                if (r.State == 1) {
+                                    layer.msg(r.Message, { icon: 1, time: 1000 }, function () {
+                                        // 刷新，关闭当前窗体
+                                        location.reload();
+                                    })
+                                } else {
+                                    layer.msg(r.Message, { icon: 2 })
+                                }
+                            },
+                            error: function () {
+                                layer.msg("操作异常", { icon: 2 })
+                            }
+                        })
+                        layer.close(index);
+                    });
+                }
+            })
 ```
