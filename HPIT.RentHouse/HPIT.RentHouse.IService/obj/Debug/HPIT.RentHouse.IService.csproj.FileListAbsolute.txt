@@ -27,14 +27,8 @@ D:\HPIT.RentHouse\HPIT.RentHouse.IService\obj\Debug\HPIT.RentHouse.IService.dll
 D:\HPIT.RentHouse\HPIT.RentHouse.IService\obj\Debug\HPIT.RentHouse.IService.pdb
 D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\bin\Debug\HPIT.RentHouse.IService.dll
 D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\bin\Debug\HPIT.RentHouse.IService.pdb
-D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\bin\Debug\HPIT.RentHouse.DTO.dll
-D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\bin\Debug\HPIT.RentHouse.DTO.pdb
-D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\obj\Debug\HPIT.RentHouse.IService.csproj.AssemblyReference.cache
-D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\obj\Debug\HPIT.RentHouse.IService.csproj.CoreCompileInputs.cache
-D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\obj\Debug\HPIT.RentHouse.IService.csproj.CopyComplete
-D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\obj\Debug\HPIT.RentHouse.IService.dll
-D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\obj\Debug\HPIT.RentHouse.IService.pdb
 D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\bin\Debug\HPIT.RentHouse.Common.dll
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\bin\Debug\HPIT.RentHouse.DTO.dll
 D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\bin\Debug\System.Web.Mvc.dll
 D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\bin\Debug\System.Web.WebPages.dll
 D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\bin\Debug\System.Web.WebPages.Razor.dll
@@ -42,6 +36,7 @@ D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\bin\Debug
 D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\bin\Debug\Microsoft.Web.Infrastructure.dll
 D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\bin\Debug\System.Web.WebPages.Deployment.dll
 D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\bin\Debug\HPIT.RentHouse.Common.pdb
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\bin\Debug\HPIT.RentHouse.DTO.pdb
 D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\bin\Debug\System.Web.Mvc.xml
 D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\bin\Debug\System.Web.WebPages.xml
 D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\bin\Debug\System.Web.WebPages.Razor.xml
@@ -52,3 +47,8 @@ D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\bin\Debug
 D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\bin\Debug\zh-Hans\System.Web.WebPages.Razor.resources.dll
 D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\bin\Debug\zh-Hans\System.Web.Razor.resources.dll
 D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\bin\Debug\zh-Hans\System.Web.WebPages.Deployment.resources.dll
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\obj\Debug\HPIT.RentHouse.IService.csproj.AssemblyReference.cache
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\obj\Debug\HPIT.RentHouse.IService.csproj.CoreCompileInputs.cache
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\obj\Debug\HPIT.RentHouse.IService.csproj.CopyComplete
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\obj\Debug\HPIT.RentHouse.IService.dll
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.IService\obj\Debug\HPIT.RentHouse.IService.pdb

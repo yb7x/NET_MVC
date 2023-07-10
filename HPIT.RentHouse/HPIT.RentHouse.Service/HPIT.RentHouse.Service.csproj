@@ -56,6 +56,7 @@
   <ItemGroup>
     <Compile Include="AdminUsersService.cs" />
     <Compile Include="BaseService.cs" />
+    <Compile Include="CitysService.cs" />
     <Compile Include="Entities\BaseEntity.cs" />
     <Compile Include="Entities\RentHouseEntity.cs" />
     <Compile Include="Entities\T_AdminLogs.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="PermissionsService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RolesService.cs" />
+    <Compile Include="UserAdminService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

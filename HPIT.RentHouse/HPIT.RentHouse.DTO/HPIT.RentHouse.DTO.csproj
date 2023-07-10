@@ -46,6 +46,7 @@
     <Compile Include="AdminListDTO.cs" />
     <Compile Include="AdminLoginDataDTO.cs" />
     <Compile Include="AdminLoginDTO.cs" />
+    <Compile Include="CitylistDTO.cs" />
     <Compile Include="GetRolesEditDTO.cs" />
     <Compile Include="GetRolesEditPermissionDTO.cs" />
     <Compile Include="MyFormsPrincipal.cs" />
@@ -54,6 +55,11 @@
     <Compile Include="RolesAddDTO.cs" />
     <Compile Include="RolesEditDTO.cs" />
     <Compile Include="RolesListDTO.cs" />
+    <Compile Include="UserAdminAddDTO.cs" />
+    <Compile Include="UserAdminEditDTO.cs" />
+    <Compile Include="UserAdminGetEditDTO.cs" />
+    <Compile Include="UserAdminListDTO.cs" />
+    <Compile Include="UserAdminRolesDTO.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

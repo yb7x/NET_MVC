@@ -1,0 +1,114 @@
+﻿@model IEnumerable<HPIT.RentHouse.DTO.RolesListDTO>
+@*后台返回的是集合*@
+
+@{
+    ViewBag.Title = "添加角色";
+}
+<div class="pd-20">
+
+    <form class="form form-horizontal" id="addfrm">
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>手机：</label>
+            <div class="formControls col-5">
+                <input type="text" placeholder="手机" autocomplete="off" value="" class="input-text" datatype="*2-11" nullmsg="手机号不能为空" name="PhoneNum" id="PhoneNum">
+            </div>
+            <div class="col-4"> </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>管理员：</label>
+            <div class="formControls col-5">
+                <input type="text" placeholder="管理员" autocomplete="off" value="" class="input-text" datatype="*2-11" nullmsg="手用户名不能为空" name="Name" id="Name">
+            </div>
+            <div class="col-4"> </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>初始密码：</label>
+            <div class="formControls col-5">
+                <input type="password" placeholder="密码" autocomplete="off" value="" class="input-text" datatype="*2-11" nullmsg="密码不能为空" name="Password" id="Password">
+            </div>
+            <div class="col-4"> </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>确认密码：</label>
+            <div class="formControls col-5">
+                <input type="password" placeholder="确认密码" recheck="Password" autocomplete="off" value="" class="input-text" datatype="*2-11" nullmsg="密码不能为空" name="Passwords" id="Passwords">
+            </div>
+            <div class="col-4"> </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>邮箱：</label>
+            <div class="formControls col-5">
+                <input type="email" placeholder="邮箱" autocomplete="off" value="" class="input-text" datatype="*2-20" nullmsg="手用户名不能为空" name="Email" id="Email">
+            </div>
+            <div class="col-4"> </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>城市：</label>
+            <div class="formControls col-5">
+                @Html.DropDownList("CityId", ViewBag.DDL as List<SelectListItem>, new { @class = "select" })
+            </div>
+            <div class="col-4"> </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>角色：</label>
+            <div class="formControls col-5">
+                @{
+                    foreach (var item in Model)
+                    {
+                        <div class="formControls col-6">
+                            <input type="checkbox" name="RolesId" value="@item.Id" /> @item.Name
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="col-9 col-offset-3">
+                <input class="btn btn-primary radius" type="button" id="btn_Add" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+            </div>
+        </div>
+
+    </form>
+</div>
+
+@section footScript{
+    <script src="~/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+    <script>
+
+        // 使用 Validform 方式验证页面表单
+        var vf = $("#addfrm").Validform({ tiptype: 2 });
+
+        // 单击按钮发送请求
+        $("#btn_Add").click(function () {
+            console.log($("#addfrm").serializeArray())
+            // 判断表单验证是否通过
+            if (vf.check(false)) {
+                $.ajax({
+                    type: "post",
+                    url: "/UsersAdmin/Add",
+                    data: $("#addfrm").serializeArray(),
+                    dataType: "json",
+                    success: function (r) {
+                        if (r.State == 1) {
+                            layer.msg(r.Message, { icon: 1, time: 2000 }, function () {
+                                // 刷新
+                                parent.location.reload();
+                            })
+                        } else {
+                            layer.msg(r.Message, { icon: 2 })
+                        }
+                    },
+                    error: function () {
+                        layer.msg("操作异常", { icon: 2 })
+                    }
+                })
+            }
+        })
+    </script>
+}

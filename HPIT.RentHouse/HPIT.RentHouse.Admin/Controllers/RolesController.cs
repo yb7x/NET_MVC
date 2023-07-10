@@ -18,7 +18,10 @@ namespace HPIT.RentHouse.Admin.Controllers
         }
 
         #endregion
-        // GET: Roles
+        /// <summary>
+        /// 主页面
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Index()
         {
             return View();

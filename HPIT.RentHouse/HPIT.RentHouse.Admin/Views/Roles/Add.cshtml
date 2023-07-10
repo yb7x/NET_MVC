@@ -37,9 +37,10 @@
     <script>
         // 使用 Validform 方式验证页面表单
         var vf = $("#addfrm").Validform({ tiptype: 2 });
-
+        
         // 单击按钮发送请求
         $("#btn_Add").click(function () {
+            console.log($("#addfrm").serializeArray());
             // 判断表单验证是否通过
             if (vf.check(false)) {
                 $.ajax({

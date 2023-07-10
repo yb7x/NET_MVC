@@ -162,6 +162,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\UsersAdminController.cs" />
     <Compile Include="Controllers\PermissionsController.cs" />
     <Compile Include="Controllers\RentHouseController.cs" />
     <Compile Include="Controllers\RolesController.cs" />
@@ -1472,6 +1473,9 @@
     <Content Include="Views\Roles\Index.cshtml" />
     <Content Include="Views\Roles\Add.cshtml" />
     <Content Include="Views\Roles\Edit.cshtml" />
+    <Content Include="Views\UsersAdmin\Index.cshtml" />
+    <Content Include="Views\UsersAdmin\Add.cshtml" />
+    <Content Include="Views\UsersAdmin\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
