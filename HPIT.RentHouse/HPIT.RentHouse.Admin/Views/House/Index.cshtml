@@ -1,0 +1,206 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<nav class="breadcrumb">
+    <i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>
+    管理员管理 <span class="c-gray en">&gt;</span> 房源管理
+    <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="Hui-iconfont">&#xe68f;</i>
+    </a>
+</nav>
+<div class="pd-20">
+    <div class="text-c">
+        <input type="text" class="input-text" style="width:250px" placeholder="输入房源名称" id="rname" name="">
+        <button type="button" class="btn btn-success" id="btn_Search" name=""><i class="Hui-iconfont">&#xe665;</i> 搜索房源</button>
+    </div>
+    <div class="cl pd-5 bg-1 bk-gray">
+        <span class="l">
+            <a href="javascript:;" id="deleteBatch" class="btn btn-danger radius">
+                <i class="Hui-iconfont">&#xe6e2;</i> 批量删除
+            </a>
+            <a class="btn btn-primary radius" href="javascript:;" id="House_Add">
+                <i class="Hui-iconfont">&#xe600;</i> 添加房源
+            </a>
+        </span>
+        <span class="r">共有数据：<strong>54</strong> 条</span>
+    </div>
+    <table id="tb_HouseList" class="table table-border table-bordered table-hover table-bg">
+        <thead>
+            <tr>
+                <th scope="col" colspan="7">房源管理</th>
+            </tr>
+            <tr class="text-c">
+                <th width="25"><input type="checkbox" value="" name=""></th>
+                <th width="200">区域</th>
+                <th width="200">小区名</th>
+                <th width="200">地段</th>
+                <th width="200">租金</th>
+                <th width="200">房型</th>
+                <th width="200">装修</th>
+                <th width="200">房屋面积</th>
+                <th width="70">操作</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+@section footScript{
+    <script src="~/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var param = {};//初始化查询参数
+
+            //通过DataTable渲染列表
+            var table = $("#tb_HouseList").DataTable({
+                // 是否显示情报 就是"当前显示1/100记录"这个信息
+                info: false,//设置分页
+                pagingType: "full_numbers",//分页样式效果  当前列表未启用分页，所以写什么格式都可以
+                // 是否表示 "processing" 加载中的信息，这个信息可以修改
+                paging: true, // 分页
+                processing: true,//显示加载中……的样式效果
+                // 是否允许排序
+                ordering: false,//是否启用列表排序 false：不启用
+                // 是否允许检索
+                searching: false,//我们自己实现的搜索功能，dataTable自带的设置了false
+                // 列定义
+                columns: [
+                    {
+                        // data 可以是属性名，或嵌套属性（WORKTM1.ID）,数组ArrOne[,] 用中括号中的字符连接数组后返回。
+                        "data": "Id"
+                    },
+                    { "data": "RegionsName" },
+                    { "data": "Community" },
+                    { "data": "Address" },
+                    { "data": "MonthRent" },
+                    { "data": "RoomTypeName" },
+                    { "data": "DecorateStatusName" },
+                    { "data": "Area" },
+                    {
+                        data: 'Id', render: function (data, type, full, callback) {
+                            return (' <a title="编辑" onclick="edits(this)" href="javascript:;"  data-id=' + data + ' class="ml-5 edit" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除"  data-id=' + data + ' onclick="del(this)" href="javascript:;"   class="ml-5 delete" style="text-decoration:none"> <i class="Hui-iconfont">&#xe6e2;</i></a>   ')
+                        }
+                    }],
+                // 每一行创建完调用的函数
+                createdRow: function (row, data, dataIndex) {
+                    $('td', row).attr('class', "text-c");
+                },
+                serverSide: true,//启用服务器模式
+                // ajax选项 可以直接简单指定成请求的文件
+                //"ajax": "data.json",
+                // 也可以用对象来配置，更加灵活
+                ajax: {
+                    type: 'POST',
+                    // url可以直接指定远程的json文件，或是MVC的请求地址 /Controller/Action
+                    url: "/House/GetHouseList",
+
+                    // 传给服务器的数据，可以添加我们自己的查询参数
+                    data: function (d) {//参数
+                        // 这里需要传递分页的数据
+                        param.start = d.start;
+                        param.length = d.length;
+                        return param;
+                    }
+
+                },
+                //自定义列
+                columnDefs: [
+                    {
+                        targets: 0,//在第一列的位置输出自定义的列
+                        //列中输出的内容
+                        render: function (data, type, row, meta) {
+                            //显示复选框
+                            return '<input type="checkbox" value="' + row.Id + '" name="selectIDs">';
+                        },
+                    }]
+            });
+            // 查询方法
+            $("#btn_Search").click(function () {
+                var Community = $("#rname").val();
+                param.Community = Community;
+                // 重新加载数据
+                table.ajax.reload();
+            })
+
+            // 弹出添加框
+            $("#House_Add").click(function () {
+                layer_show("添加房源", "/House/Add", 600, 500);
+            })
+
+            // 批量删除
+            $("#deleteBatch").click(function () {
+                // 创建数组用来存储数据
+                var ar = [];
+                // 获取房源选中的复选框 的value值
+                $(":checkbox[name=selectIDs]:checked").each((index, item) => {
+                    ar.push($(item).val());
+                });
+
+                if (ar.length == 0) {
+                    layer.msg("请选择要批量删除的房源！", { icon: 2 })
+                } else {
+                    layer.confirm('你确定要删除这些项吗？', { icon: 3, title: '提示' }, function (index) {
+                        $.ajax({
+                            type: "post",
+                            url: "/House/DeleteBatch",
+                            data: {
+                                "ids": ar
+                            },
+                            dataType: "json",
+                            success: function (r) {
+                                if (r.State == 1) {
+                                    layer.msg(r.Message, { icon: 1, time: 1000 }, function () {
+                                        // 刷新，关闭当前窗体
+                                        location.reload();
+                                    })
+                                } else {
+                                    layer.msg(r.Message, { icon: 2 })
+                                }
+                            },
+                            error: function () {
+                                layer.msg("操作异常", { icon: 2 })
+                            }
+                        })
+                        layer.close(index);
+                    });
+                }
+            })
+
+        })
+        // 修改
+        function edits(t) {
+            var id = $(t).attr("data-id");
+            layer_show("修改房源", "/House/Edit/" + id, 600, 500);
+        }
+
+        // 删除
+        function del(t) {
+            layer.confirm('你确定删除吗？', { icon: 3, title: '提示' }, function (index) {
+                var id = $(t).attr("data-id");
+                $.ajax({
+                    type: "post",
+                    url: "/House/Delete/" + id,
+                    dataType: "json",
+                    success: function (r) {
+                        if (r.State == 1) {
+                            layer.msg(r.Message, { icon: 1, time: 1000 }, function () {
+                                // 刷新，关闭当前窗体
+                                location.reload();
+                            })
+                        } else {
+                            layer.msg(r.Message, { icon: 2 })
+                        }
+                    },
+                    error: function () {
+                        layer.msg("操作异常", { icon: 2 })
+                    }
+                })
+                layer.close(index);
+            });
+        }
+
+
+
+    </script>
+}
+

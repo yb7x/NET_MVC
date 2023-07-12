@@ -149,13 +149,16 @@ namespace HPIT.RentHouse.Service
         public IQueryable<T> GetPageList<Tkey>(int PageIndex, int PageSize, ref int rowCount, Expression<Func<T, bool>> whereLambda, Expression<Func<T, Tkey>> orderBy, bool isAsc)
         {
             rowCount = GetList(whereLambda).Count() ;
+            // 保障 PageIndex 不为负数
+            PageIndex = PageIndex < 0 ? 1 : PageIndex;
             if (isAsc)
             {
-                return GetList(whereLambda).Skip(PageIndex * PageSize).Take(PageSize).OrderBy(orderBy); // 升序分页
+                // *分页需要注意，先排序后跳过数据进行分页*，这里选择跳过 PageIndex 是因为 Layui 不需要具体跳过多少数据，他会根据索引以及页面上你的选择进行调整
+                return GetList(whereLambda).OrderBy(orderBy).Skip(PageIndex).Take(PageSize); // 升序分页
             }
             else
             {
-                return GetList(whereLambda).Skip(PageIndex * PageSize).Take(PageSize).OrderByDescending(orderBy); // 降序分页
+                return GetList(whereLambda).OrderByDescending(orderBy).Skip(PageIndex).Take(PageSize); // 降序分页
             }
         }
 

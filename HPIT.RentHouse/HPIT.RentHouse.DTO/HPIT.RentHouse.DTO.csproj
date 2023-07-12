@@ -49,6 +49,7 @@
     <Compile Include="CitylistDTO.cs" />
     <Compile Include="GetRolesEditDTO.cs" />
     <Compile Include="GetRolesEditPermissionDTO.cs" />
+    <Compile Include="HouseListDTO.cs" />
     <Compile Include="MyFormsPrincipal.cs" />
     <Compile Include="PermissionsDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

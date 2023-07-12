@@ -37,6 +37,9 @@ namespace HPIT.RentHouse.Admin.Controllers
             return Json(new { recordsTotal = List.Count, recordsFiltered  = List.Count, data = List});
         }
 
+
+        
+
         public ActionResult Add()
         {
             return View();

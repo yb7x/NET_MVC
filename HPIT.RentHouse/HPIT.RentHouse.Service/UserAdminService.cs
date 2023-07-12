@@ -25,6 +25,11 @@ namespace HPIT.RentHouse.Service
         {
             using (RentHouseEntity db = new RentHouseEntity())
             {
+                // 判断是否添加了身份
+                if(dto.RolesId.Length == 0)
+                {
+                    return new AjaxResult(ResultState.Error, "至少选择一个身份");
+                }
                 // 创建需要操作的表对象
                 BaseService<T_AdminUsers> bs = new BaseService<T_AdminUsers> (db);
                 BaseService<T_Roles> rbs = new BaseService<T_Roles> (db);

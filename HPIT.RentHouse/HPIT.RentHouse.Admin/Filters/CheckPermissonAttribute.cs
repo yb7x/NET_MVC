@@ -16,7 +16,7 @@ namespace HPIT.RentHouse.Admin.Filters
     public class CheckPermissonAttribute : AuthorizeAttribute
     {
         private string permissionName { get; set; }
-
+        
         public CheckPermissonAttribute(string _permissionName)
         {
             permissionName = _permissionName;
