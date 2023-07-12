@@ -278,6 +278,19 @@ public T GetT(Expression<Func<T, bool>> whereLambda)
 
 # 在 Admin.MVC 项目中配置 相关
 
+## 在Admin 层 Web.config 配置数据库连接字符串，以及创建 EF 框架，EF框架创建数据库连接后删除Web.config 中多出来的除了以下内容的即可
+
+```
+  <configSections>
+    <!-- For more information on Entity Framework configuration, visit http://go.microsoft.com/fwlink/?LinkID=237468 -->
+    <section name="entityFramework" type="System.Data.Entity.Internal.ConfigFile.EntityFrameworkSection, EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" requirePermission="false" />
+  </configSections>
+
+    <connectionStrings>
+        <add name="HouseEntity" connectionString="data source=.;initial catalog=RentHouse;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework" providerName="System.Data.SqlClient" />
+    </connectionStrings>
+```
+
 ## 安装 Autofac.MVC5 配置 在 Global 中（依赖注入【IOC】）
 
 **引入各部分命名空间，然后在 IService 中写命名为 IServiceSupport 的接口，所有接口都要继承这个接口！**
@@ -329,7 +342,7 @@ _命名.方法名();
 
 **替换项目文件至 Admin 项目，所需文件在材料文件夹中**
 
-1. 添加 Common 引用
+1. 添加 Common 引用 
 
 2. 替换 CommonHelper、MVCHelper类文件，放在 Common 项目中
 
@@ -1841,8 +1854,6 @@ namespace HPIT.RentHouse.DTO
 }
 ```
 
-
-
 ### 实现修改功能
 
 **要修改两个表，需要先清除另一张表中的外键**
@@ -1976,10 +1987,6 @@ namespace HPIT.RentHouse.DTO
 }
 ```
 
-
-
-
-
 ## 实现删除角色功能
 
 ### IService 层
@@ -2078,8 +2085,6 @@ namespace HPIT.RentHouse.DTO
             });
         }
 ```
-
-
 
 ## 批量删除
 
@@ -2184,3 +2189,689 @@ namespace HPIT.RentHouse.DTO
                 }
             })
 ```
+
+# 用户管理页面
+
+## 列表显示，以及搜索
+
+### DTO 层创建所需要显示的字段
+
+```
+namespace HPIT.RentHouse.DTO
+{
+    /// <summary>
+    /// 用户管理页面显示所需字段
+    /// </summary>
+    public class UserAdminListDTO
+    {
+        public long Id { get; set; }
+        public string PhoneNum { get; set; }
+        public string Email { get; set; }
+        public string Name { get; set; }
+        public int LoginErrorTimes { get; set; }
+        public string CityName { get; set; }
+    }
+}
+```
+
+### IService 层创建接口
+
+```
+namespace HPIT.RentHouse.IService
+{
+    /// <summary>
+    /// 用户管理接口
+    /// </summary>
+    public interface IUserAdminService:IServiceSupport
+    {
+        /// <summary>
+        /// 列表显示
+        /// </summary>
+        /// <returns></returns>
+        List<UserAdminListDTO> GetList(string Name);
+    }
+}
+```
+
+### Service 层创建 UserAdminService 类实现接口
+
+```
+namespace HPIT.RentHouse.Service
+{
+    /// <summary>
+    /// 用户管理=实现接口
+    /// </summary>
+    public class UserAdminService : IUserAdminService
+    {
+        /// <summary>
+        /// 列表显示，带查询
+        /// </summary>
+        /// <param name="Name">用户名</param>
+        /// <returns></returns>
+        public List<UserAdminListDTO> GetList(string Name)
+        {
+            using(RentHouseEntity db = new RentHouseEntity())
+            {
+                BaseService<T_AdminUsers> bs = new BaseService<T_AdminUsers>(db);
+                // 查询所有的数据
+                var where = PredicateExtensions.True<T_AdminUsers>();
+                // 条件
+                if (!string.IsNullOrWhiteSpace(Name))
+                {
+                    where = where.And(a => a.Name.Contains(Name));
+                }
+                return bs.GetOrderBy(where, a => a.Id, false).Select(a => new UserAdminListDTO()
+                {
+                    CityName = a.T_Cities.Name,
+                    Email = a.Email,
+                    Id = a.Id,
+                    LoginErrorTimes = a.LoginErrorTimes,
+                    Name = a.Name,
+                    PhoneNum = a.PhoneNum,
+                }).ToList();
+            }
+        }
+    }
+}
+```
+
+### 页面显示
+
+```
+                    {
+                        // data 可以是属性名，或嵌套属性（WORKTM1.ID）,数组ArrOne[,] 用中括号中的字符连接数组后返回。
+                        "data": "Id"
+                    },
+                    { "data": "PhoneNum" },
+                    { "data": "Email" },
+                    { "data": "Name" },
+                    { "data": "LoginErrorTimes" },
+                    { "data": "CityName" },
+```
+
+## 添加功能实现
+
+### 先创建页面需要显示的城市下拉框
+
+#### DTO 创建需要使用的类包含字段
+
+```
+namespace HPIT.RentHouse.DTO
+{
+    /// <summary>
+    /// 所有城市列表
+    /// </summary>
+    public class CitylistDTO
+    {
+        public long Id { get; set; }
+        public string Name { get; set; }
+    }
+}
+```
+
+#### IService 创建接口 ICitysService
+
+```
+namespace HPIT.RentHouse.IService
+{
+    /// <summary>
+    /// 所有城市接口
+    /// </summary>
+    public interface ICitysService:IServiceSupport
+    {
+        /// <summary>
+        /// 获取所有城市信息
+        /// </summary>
+        /// <returns></returns>
+        List<CitylistDTO> GetCityList();
+    }
+}
+```
+
+#### Service 创建新类 CitysService
+
+```
+namespace HPIT.RentHouse.Service
+{
+    /// <summary>
+    /// 所有城市
+    /// </summary>
+    public class CitysService : ICitysService
+    {
+        /// <summary>
+        /// 查询所有城市信息，可能用于下拉城市列表
+        /// </summary>
+        /// <returns></returns>
+        public List<CitylistDTO> GetCityList()
+        {
+            using(RentHouseEntity db = new RentHouseEntity())
+            {
+                BaseService<T_Cities> bs = new BaseService<T_Cities>(db);
+                // 查询所有数据
+                return bs.GetOrderBy(a => true, b => b.Id, false).Select(a => new CitylistDTO()
+                {
+                    Id = a.Id,
+                    Name = a.Name
+                }).ToList();
+            }
+        }
+    }
+}
+```
+
+### 创建 页面需要的权限信息显示
+
+#### 添加页面需要显示城市信息（下拉框）
+
+```
+        /// <summary>
+        /// 城市信息下拉框
+        /// </summary>
+        public void GetDdl()
+        {
+            ViewBag.DDL = _citysService.GetCityList().Select(a => new SelectListItem()
+            {
+                Value = a.Id.ToString(),
+                Text = a.Name,
+            }).ToList();
+        }
+```
+
+#### Service 层创建 UserAdminService
+
+```
+        /// <summary>
+        /// 添加管理员用户
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        public AjaxResult Add(UserAdminAddDTO dto)
+        {
+            using (RentHouseEntity db = new RentHouseEntity())
+            {
+                // 创建需要操作的表对象
+                BaseService<T_AdminUsers> bs = new BaseService<T_AdminUsers> (db);
+                BaseService<T_Roles> rbs = new BaseService<T_Roles> (db);
+                // 要保存的数据转化类型
+                // 这里要保存加密加盐后的密码，需要调用 Common 层的 CreateVerifyCode 来产生随机的 5 位数盐码，使用 CalcMD5 方法来加密密码并储存
+                // 获取随机盐码
+                var passwords = CommonHelper.CreateVerifyCode(5);
+                // 密码结合盐码一起加密
+                var password = CommonHelper.CalcMD5((dto.Password + passwords));
+                T_AdminUsers adminUsers = new T_AdminUsers()
+                {
+                    Name = dto.Name,
+                    PasswordSalt = passwords,
+                    CityId = dto.CityId,
+                    Email = dto.Email,
+                    CreateDateTime = DateTime.Now,
+                    IsDeleted = false,
+                    PhoneNum = dto.PhoneNum,
+                    PasswordHash = password
+                };
+                // 添加操作并判断添加状态
+                if (bs.Add(adminUsers) > 0)
+                {
+                    // 继续添加相应的角色表
+                    for (int i = 0; i < dto.RolesId.Length; i++)
+                    {
+                        // 循环遍历出每一个值
+                        var id = dto.RolesId[i];
+                        // 通过这个Id查询到角色信息
+                        T_Roles roles = rbs.Get(a => a.Id == id);
+                        // 添加角色信息到用户表中(通过导航属性向关系表添加数据)
+                        adminUsers.T_Roles.Add(roles);
+                    }
+                    db.SaveChanges();
+                    return new AjaxResult(ResultState.Success, "添加成功");
+                }
+                else
+                {
+                    return new AjaxResult(ResultState.Error, "添加失败！");
+                }
+
+            }
+        }
+```
+
+### 页面显示需要注意 使用recheck="id命名"
+
+#### 页面显示
+
+```
+    <script src="~/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+    <script>
+
+        // 使用 Validform 方式验证页面表单
+        var vf = $("#addfrm").Validform({ tiptype: 2 });
+
+        // 单击按钮发送请求
+        $("#btn_Add").click(function () {
+            console.log($("#addfrm").serializeArray())
+            // 判断表单验证是否通过
+            if (vf.check(false)) {
+                $.ajax({
+                    type: "post",
+                    url: "/UsersAdmin/Add",
+                    data: $("#addfrm").serializeArray(),
+                    dataType: "json",
+                    success: function (r) {
+                        if (r.State == 1) {
+                            layer.msg(r.Message, { icon: 1, time: 2000 }, function () {
+                                // 刷新
+                                parent.location.reload();
+                            })
+                        } else {
+                            layer.msg(r.Message, { icon: 2 })
+                        }
+                    },
+                    error: function () {
+                        layer.msg("操作异常", { icon: 2 })
+                    }
+                })
+            }
+        })
+```
+
+## 修改功能
+
+### 修改前查询
+
+#### DTO 层添加需要修改的字段
+
+```
+namespace HPIT.RentHouse.DTO
+{
+    /// <summary>
+    /// 修改所需字段
+    /// </summary>
+    public class UserAdminEditDTO
+    {
+        public long Id { get; set; }
+
+        [Required]
+        [RegularExpression("^1[3,5,6,7,8,9][0-9]{9}$", ErrorMessage = "电话号码格式不正确！")]
+        public string PhoneNum { get; set; }
+
+        [Required]
+        public string Name { get; set; }
+
+        [Required]
+        [RegularExpression("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", ErrorMessage = "邮箱格式不正确！")]
+        public string Email { get; set; }
+
+        public long? CityId { get; set; }
+
+        [Required]
+        public List<UserAdminRolesDTO> RolesId { get; set; }
+
+    }
+}
+```
+
+```
+namespace HPIT.RentHouse.DTO
+{
+    /// <summary>
+    /// 修改需要的 Roles 对象
+    /// </summary>
+    public class UserAdminRolesDTO
+    {
+        public long Id { get; set; }
+        public string Name { get; set; }
+
+        public bool IsChecked { get; set; }
+    }
+}
+```
+
+#### IService 层修改接口方法
+
+```
+        /// <summary>
+        /// 修改管理员用户=查询信息
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        UserAdminEditDTO Edit(long id);
+```
+
+#### Service 层实现方法
+
+```
+ /// <summary>
+        /// 修改管理员用户
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        public UserAdminEditDTO Edit(long id)
+        {
+            using (RentHouseEntity db = new RentHouseEntity())
+            {
+                // 实例化要操作的表
+                BaseService<T_AdminUsers> bs = new BaseService<T_AdminUsers> (db);
+                BaseService<T_Roles> rbs = new BaseService<T_Roles> (db);
+                // 查询数据
+                T_AdminUsers model = bs.Get(a => a.Id == id);
+                // 与返回类型匹配
+                UserAdminEditDTO dto = new UserAdminEditDTO()
+                {
+                    Id = id,
+                    Name = model.Name,
+                    Email = model.Email,
+                    CityId = model.CityId,
+                    PhoneNum = model.PhoneNum
+                };
+                // 先获取所有 Roles（角色） 信息
+                List<T_Roles> roles = rbs.GetList(a => true).ToList();
+                // 获取当前对象的 Roles
+                var role = model.T_Roles;
+                // 为 dto.RolesId 开辟空间
+                dto.RolesId = new List<UserAdminRolesDTO>();
+                // 循环遍历出所有 选中 的角色信息
+                foreach (var item in roles)
+                {
+                    UserAdminRolesDTO urdto = new UserAdminRolesDTO()
+                    {
+                        Id = item.Id,
+                        Name = item.Name,
+                        IsChecked = role.Any(a => a.Id == item.Id) // 判断当前 Id 是否匹配当前这行数据的 Id ，匹配则返回 true 否则 false
+                    };
+                    // 添加到 需要显示的数据中
+                    dto.RolesId.Add(urdto);
+                }
+                return dto;
+            }
+        }
+```
+
+### 修改功能
+
+#### DTO层创建需要修改的字段，可以继承 Add 页面所需字段
+
+```
+namespace HPIT.RentHouse.DTO
+{
+    public class UserAdminEditDTO : UserAdminAddDTO
+    {
+        public long Id { get; set; }
+    }
+}
+```
+
+#### IService 层
+
+```
+        /// <summary>
+        /// 修改管理员用户==修改
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        AjaxResult Edit(UserAdminEditDTO dto);
+```
+
+#### Service 层
+
+```
+        /// <summary>
+        /// 修改管理员用户信息
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        public AjaxResult Edit(UserAdminEditDTO dto)
+        {
+            using (RentHouseEntity db = new RentHouseEntity())
+            {
+                BaseService<T_AdminUsers> bs = new BaseService<T_AdminUsers>(db);
+                BaseService<T_Roles> rbs = new BaseService<T_Roles>(db);
+                // 查询要修改的数据
+                T_AdminUsers model = bs.Get(a => a.Id == dto.Id);
+                // 这里要注意密码的修改，先加盐，后加密
+                string salt = CommonHelper.CreateVerifyCode(5);
+                string passWord = CommonHelper.CalcMD5((dto.Password + salt));
+                // 修改数据
+                model.Name = dto.Name;
+                model.Email = dto.Email;
+                model.CityId = dto.CityId;
+                model.PhoneNum = dto.PhoneNum;
+                model.PasswordSalt = salt;
+                model.PasswordHash = passWord;
+                // 判断修改状态并修改 Roles 表状态
+                if (bs.Update(model))
+                {
+                    // 先清除角色信息,通过导航属性
+                    model.T_Roles.Clear();
+                    for (int i = 0; i < dto.RolesId.Length; i++)
+                    {
+                        // 查询当前角色信息 编号
+                        long id = dto.RolesId[i];
+                        // 查找信息
+                        T_Roles role = rbs.Get(a => a.Id == id);
+                        // 添加到表中
+                        model.T_Roles.Add(role);
+                    }
+                    db.SaveChanges();
+                    return new AjaxResult(ResultState.Success, "修改成功");
+                }
+                else
+                {
+                    return new AjaxResult(ResultState.Error, "修改失败！");
+                }
+            }
+        }
+```
+
+#### 页面显示
+
+```
+控制器
+        /// <summary>
+        /// 修改
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult Edit(UserAdminEditDTO dto)
+        {
+            GetDdl();
+            return Json(_userAdminService.Edit(dto));
+        }
+```
+
+**AJAX**
+
+```
+@model HPIT.RentHouse.DTO.UserAdminGetEditDTO // 添加类型
+
+
+@section footScript{
+    <script src="~/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+    <script>
+
+        // 使用 Validform 方式验证页面表单
+        var vf = $("#Editfrm").Validform({ tiptype: 2 });
+
+        // 单击按钮发送请求
+        $("#btn_Edit").click(function () {
+            console.log($("#Editfrm").serializeArray())
+            // 判断表单验证是否通过
+            if (vf.check(false)) {
+                $.ajax({
+                    type: "post",
+                    url: "/UsersAdmin/Edit",
+                    data: $("#Editfrm").serializeArray(),
+                    dataType: "json",
+                    success: function (r) {
+                        if (r.State == 1) {
+                            layer.msg(r.Message, { icon: 1, time: 2000 }, function () {
+                                // 刷新
+                                parent.location.reload();
+                            })
+                        } else {
+                            layer.msg(r.Message, { icon: 2 })
+                        }
+                    },
+                    error: function () {
+                        layer.msg("操作异常", { icon: 2 })
+                    }
+                })
+            }
+        })
+    </script>
+}
+```
+
+## 删除功能实现
+
+### 单个删除
+
+#### IService 层创建删除接口
+
+```
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        AjaxResult Delete(long id);
+```
+
+#### Service 层继承并实现
+
+```
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public AjaxResult Delete(long id)
+        {
+            using (RentHouseEntity db = new RentHouseEntity())
+            {
+                BaseService<T_AdminUsers> bs = new BaseService<T_AdminUsers>(db);
+                // 查询要删除的信息
+                T_AdminUsers model = bs.Get(a => a.Id == id);
+                // 调用删除方法，并判断状态
+                if (model != null)
+                {
+                    // 清除 roles 表数据
+                    model.T_Roles.Clear();
+                    if (bs.Delete(model))
+                    {
+                        return new AjaxResult(ResultState.Success, "删除成功！");
+                    }
+                    else
+                    {
+                        return new AjaxResult(ResultState.Error, "删除失败！");
+                    }
+                }
+                else
+                {
+                    return new AjaxResult(ResultState.Error, "该用户已删除！");
+                }
+            }
+        }
+```
+
+#### 页面删除显示
+
+```
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult Delete(long id)
+        {
+            return Json(_userAdminService.Delete(id));
+        }
+```
+
+### 批量删除
+
+#### IService 层
+
+```
+        /// <summary>
+        /// 多个删除
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        AjaxResult DeleteBatch(long[] ids);
+```
+
+#### Service 层
+
+```
+        /// <summary>
+        /// 批量删除
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public AjaxResult DeleteBatch(long[] ids)
+        {
+            using (RentHouseEntity db = new RentHouseEntity())
+            {
+                BaseService<T_AdminUsers> bs = new BaseService<T_AdminUsers>(db);
+                // 循环遍历数据
+                for (int i = 0; i < ids.Length; i++)
+                {
+                    // 依次遍历要删除的数据
+                    long id = ids[i];
+                    T_AdminUsers model = bs.Get(a => a.Id == id);
+                    // 删除这个数据并清除预支对应的关系
+                    model.T_Roles.Clear();
+                    bs.Delete(model);
+                }
+                return new AjaxResult(ResultState.Success, "批量删除成功！");
+            }
+        }
+```
+
+#### 页面显示
+
+```
+            // 批量删除
+            $("#deleteBatch").click(function () {
+                // 创建数组用来存储数据
+                var ar = [];
+                // 获取用户选中的复选框 的value值
+                $(":checkbox[name=selectIDs]:checked").each((index, item) => {
+                    ar.push($(item).val());
+                });
+
+                if (ar.length == 0) {
+                    layer.msg("请选择要批量删除的用户！", { icon: 2 })
+                } else {
+                    layer.confirm('你确定要删除这些项吗？', { icon: 3, title: '提示' }, function (index) {
+                        $.ajax({
+                            type: "post",
+                            url: "/UsersAdmin/DeleteBatch",
+                            data: {
+                                "ids": ar
+                            },
+                            dataType: "json",
+                            success: function (r) {
+                                if (r.State == 1) {
+                                    layer.msg(r.Message, { icon: 1, time: 1000 }, function () {
+                                        // 刷新，关闭当前窗体
+                                        location.reload();
+                                    })
+                                } else {
+                                    layer.msg(r.Message, { icon: 2 })
+                                }
+                            },
+                            error: function () {
+                                layer.msg("操作异常", { icon: 2 })
+                            }
+                        })
+                        layer.close(index);
+                    });
+                }
+            })
+```
+
+
+
+# 新的

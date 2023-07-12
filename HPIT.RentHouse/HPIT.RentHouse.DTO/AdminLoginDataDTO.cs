@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace HPIT.RentHouse.DTO
 {
+    /// <summary>
+    /// 保存的票据信息
+    /// </summary>
     public class AdminLoginDataDTO
     {
         public long Id { get; set; }

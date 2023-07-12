@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace HPIT.RentHouse.DTO
 {
+    /// <summary>
+    /// 登录页面所需的
+    /// </summary>
     public class AdminLoginDTO
     {
         [Required(ErrorMessage = "请输入电话号码")]

@@ -26,7 +26,7 @@ namespace HPIT.RentHouse.DTO
         public string Passwords { get; set; }
 
         [Required]
-        [RegularExpression("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", ErrorMessage = "邮箱格式不正确！")]
+        [RegularExpression("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$", ErrorMessage = "邮箱格式不正确！")]
         public string Email { get; set; }
 
         public long? CityId { get; set; }

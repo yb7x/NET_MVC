@@ -8,6 +8,10 @@ using System.Web.Security;
 
 namespace HPIT.RentHouse.DTO
 {
+    /// <summary>
+    /// 这里是储存用户身份和数据
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class MyFormsPrincipal<T> : IPrincipal where T : class,new() // 要求只能接收包含无参构造器的类
     {
         public IIdentity Identity { get; set; }

@@ -170,5 +170,37 @@ namespace HPIT.RentHouse.Service
                 }).ToList();
             }
         }
+
+        /// <summary>
+        /// 根据 Id 查询当前权限信息
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public List<PermissionsDTO> GetPermissionsList(long userId)
+        {
+            using(RentHouseEntity db = new RentHouseEntity())
+            {
+                BaseService<T_AdminUsers> bs = new BaseService<T_AdminUsers> (db);
+                // 查询当前的用户信息
+                var user = bs.Get(a => a.Id ==  userId);
+                // 暂时让一个用户拥有一个角色（可扩展多角色）找到第一个角色
+                var role = user.T_Roles.FirstOrDefault();
+                // 获取当前角色所拥有的权限
+                var permisssions = role.T_Permissions;
+                // 循环遍历并添加到 List<PermissionsDTO> 中返回结果
+                List<PermissionsDTO> dto = new List<PermissionsDTO>();
+                foreach (var permission in permisssions)
+                {
+                    var permissionDTO = new PermissionsDTO()
+                    {
+                        Id = permission.Id,
+                        Description = permission.Description,
+                        Name = permission.Name
+                    };
+                    dto.Add(permissionDTO);
+                }
+                return dto;
+            }
+        }
     }
 }
