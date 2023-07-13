@@ -32,10 +32,11 @@ namespace HPIT.RentHouse.Admin.Controllers
         /// </summary>
         /// <param name="Name"></param>
         /// <returns></returns>
-        public ActionResult GetRolesList(string Name)
+        public ActionResult GetRolesList(int start, int length, string Name)
         {
-            var list = _rolesService.GetRolesList(Name);
-            return Json(new { recordsTotal = list.Count, recordsFiltered = list.Count, data = list });
+            int count = 0;
+            var list = _rolesService.GetRolesList(start, length, ref count, Name);
+            return Json(new { recordsTotal = count, recordsFiltered = count, data = list });
         }
 
         /// <summary>
@@ -44,7 +45,7 @@ namespace HPIT.RentHouse.Admin.Controllers
         /// <returns></returns>
         public ActionResult Add()
         {
-            return View(_permissionsService.GetPermissionsList(null));
+            return View(_permissionsService.GetPermissionsList());
         }
 
         /// <summary>

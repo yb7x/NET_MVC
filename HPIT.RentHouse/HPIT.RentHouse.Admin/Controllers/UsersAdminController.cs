@@ -40,9 +40,10 @@ namespace HPIT.RentHouse.Admin.Controllers
         /// </summary>
         /// <param name="Name"></param>
         /// <returns></returns>
-        public ActionResult GetList(string Name)
+        public ActionResult GetList(int start, int length, string Name)
         {
-            var list = _userAdminService.GetList(Name);
+            int count = 0;
+            var list = _userAdminService.GetList(start, length, ref count, Name);
             return Json(new { recordsTotal = list.Count, recordsFiltered = list.Count, data = list });
         }
 
@@ -66,7 +67,7 @@ namespace HPIT.RentHouse.Admin.Controllers
         {
             GetDdl();
             // 角色信息返回给前台
-            return View(_rolesService.GetRolesList(null));
+            return View(_rolesService.GetRolesList());
         }
 
         /// <summary>

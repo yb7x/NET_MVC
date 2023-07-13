@@ -17,7 +17,9 @@ namespace HPIT.RentHouse.IService
         /// 列表显示
         /// </summary>
         /// <returns></returns>
-        List<UserAdminListDTO> GetList(string Name);
+        List<UserAdminListDTO> GetList(int start, int length, ref int count, string Name);
+
+
 
         /// <summary>
         /// 添加管理员用户

@@ -172,7 +172,7 @@ namespace HPIT.RentHouse.Service
         /// </summary>
         /// <param name="Name">用户名</param>
         /// <returns></returns>
-        public List<UserAdminListDTO> GetList(string Name)
+        public List<UserAdminListDTO> GetList(int start, int length, ref int count, string Name)
         {
             using(RentHouseEntity db = new RentHouseEntity())
             {
@@ -184,7 +184,7 @@ namespace HPIT.RentHouse.Service
                 {
                     where = where.And(a => a.Name.Contains(Name));
                 }
-                return bs.GetOrderBy(where, a => a.Id, false).Select(a => new UserAdminListDTO()
+                return bs.GetPageList(start,length, ref count, where, a => a.Id, false).Select(a => new UserAdminListDTO()
                 {
                     CityName = a.T_Cities.Name,
                     Email = a.Email,

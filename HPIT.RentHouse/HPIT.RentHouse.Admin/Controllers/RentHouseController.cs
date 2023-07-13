@@ -53,7 +53,6 @@ namespace HPIT.RentHouse.Admin.Controllers
                     // 判断手机号、密码验证是否通过
                     if (_adminUsersService.AdminLogin(dto))
                     {
-
                         return Json(new AjaxResult(ResultState.Success, "登陆成功"));
                     }
                     else

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace HPIT.RentHouse.Service
 {
@@ -17,7 +18,7 @@ namespace HPIT.RentHouse.Service
         /// </summary>
         /// <param name="Name"></param>
         /// <returns></returns>
-        public List<RolesListDTO> GetRolesList(string Name)
+        public List<RolesListDTO> GetRolesList(int start, int length, ref int count, string Name)
         {
             using(RentHouseEntity db = new RentHouseEntity())
             {
@@ -30,7 +31,25 @@ namespace HPIT.RentHouse.Service
                     model = model.And(a => a.Name.Contains(Name));
                 }
                 // 返回DTO数据
-                return bs.GetOrderBy(model, a => a.Id, false).Select(a => new  RolesListDTO()
+                return bs.GetPageList(start, length, ref count, model, a => a.Id, false).Select(a => new  RolesListDTO()
+                {
+                    Name = a.Name,
+                    Id = a.Id
+                }).ToList();
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public List<RolesListDTO> GetRolesList()
+        {
+            using (RentHouseEntity db = new RentHouseEntity())
+            {
+                BaseService<T_Roles> bs = new BaseService<T_Roles>(db);
+                // 查询所有的数据
+                return bs.GetOrderBy(a => true, a => a.Id, false).Select(a => new RolesListDTO()
                 {
                     Name = a.Name,
                     Id = a.Id

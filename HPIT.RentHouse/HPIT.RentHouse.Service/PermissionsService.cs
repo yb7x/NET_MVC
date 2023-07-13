@@ -149,7 +149,7 @@ namespace HPIT.RentHouse.Service
         /// </summary>
         /// <param name="Description">查询条件</param>
         /// <returns></returns>
-        public List<PermissionsDTO> GetPermissionsList(string Description)
+        public List<PermissionsDTO> GetPermissionsList(int start, int length, ref int count, string Description)
         {
             // 1、创建上下文对象
             using (RentHouseEntity db = new RentHouseEntity())
@@ -162,7 +162,7 @@ namespace HPIT.RentHouse.Service
                 {
                     lambda = lambda.And(a => a.Description.Contains(Description));
                 }
-                return bs.GetOrderBy(lambda, a => a.Id, false).Select(a => new PermissionsDTO()
+                return bs.GetPageList(start, length, ref count, lambda, a => a.Id, false).Select(a => new PermissionsDTO()
                 {
                     Id = a.Id,
                     Description = a.Description,
@@ -200,6 +200,27 @@ namespace HPIT.RentHouse.Service
                     dto.Add(permissionDTO);
                 }
                 return dto;
+            }
+        }
+
+        /// <summary>
+        /// 查询所有权限信息，方便 Roles 获取所有权限
+        /// </summary>
+        /// <returns></returns>
+        public List<PermissionsDTO> GetPermissionsList()
+        {
+            // 1、创建上下文对象
+            using (RentHouseEntity db = new RentHouseEntity())
+            {
+                // 2、创建查询对象
+                BaseService<T_Permissions> bs = new BaseService<T_Permissions>(db);
+                // 查询所有数据并排序
+                return bs.GetOrderBy(a => true, a => a.Id, false).Select(a => new PermissionsDTO()
+                {
+                    Id = a.Id,
+                    Description = a.Description,
+                    Name = a.Name
+                }).ToList();
             }
         }
     }

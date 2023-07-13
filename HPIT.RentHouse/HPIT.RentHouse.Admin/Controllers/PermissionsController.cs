@@ -31,10 +31,11 @@ namespace HPIT.RentHouse.Admin.Controllers
         /// <param name="Description"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult GetPermissionsList(string Description)
+        public ActionResult GetPermissionsList(int start, int length, string Description)
         {
-            List<PermissionsDTO> List =  _permissionsService.GetPermissionsList(Description);
-            return Json(new { recordsTotal = List.Count, recordsFiltered  = List.Count, data = List});
+            int count = 0;
+            List<PermissionsDTO> List =  _permissionsService.GetPermissionsList(start, length, ref count, Description);
+            return Json(new { recordsTotal = count, recordsFiltered  = count, data = List});
         }
 
 

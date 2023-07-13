@@ -42,9 +42,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IAdminUsersService.cs" />
+    <Compile Include="IAttachmentsService.cs" />
     <Compile Include="ICitysService.cs" />
+    <Compile Include="ICommunitiesService.cs" />
     <Compile Include="IHouseService.cs" />
     <Compile Include="IPermissionsService.cs" />
+    <Compile Include="IRegionsService.cs" />
     <Compile Include="IRolesService.cs" />
     <Compile Include="IServiceSupport.cs" />
     <Compile Include="IUserAdminService.cs" />

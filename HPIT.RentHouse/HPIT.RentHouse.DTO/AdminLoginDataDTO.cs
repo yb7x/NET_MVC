@@ -21,5 +21,6 @@ namespace HPIT.RentHouse.DTO
 
         public string RoleName { get; set; }
 
+        public long? CityId { get; set; }
     }
 }

@@ -55,6 +55,7 @@
                 info: false,//设置分页
                 pagingType: "full_numbers",//分页样式效果  当前列表未启用分页，所以写什么格式都可以
                 // 是否表示 "processing" 加载中的信息，这个信息可以修改
+                paging: true, // 分页
                 processing: true,//显示加载中……的样式效果
                 // 是否允许排序
                 ordering: false,//是否启用列表排序 false：不启用
@@ -87,6 +88,8 @@
 
                     // 传给服务器的数据，可以添加我们自己的查询参数
                     data: function (d) {//参数
+                        param.start = d.start;
+                        param.length = d.length;
                         return param;
                     }
 

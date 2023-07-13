@@ -42,6 +42,7 @@ namespace HPIT.RentHouse.Service
                             Name = model.Name,
                             RoleName = role.Name,
                             PhoneNum = model.PhoneNum,
+                            CityId = model.CityId
                         };
                         // 把数据加密储存在 cookie 中
                         SaveUserData(dataDto, dto.IsRemember);

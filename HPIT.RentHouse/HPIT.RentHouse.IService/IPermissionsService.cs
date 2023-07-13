@@ -14,7 +14,13 @@ namespace HPIT.RentHouse.IService
         /// 查询权限
         /// </summary>
         /// <returns></returns>
-        List<PermissionsDTO> GetPermissionsList(string Description);
+        List<PermissionsDTO> GetPermissionsList(int start, int length, ref int count, string Description);
+
+        /// <summary>
+        /// 所有权限信息
+        /// </summary>
+        /// <returns></returns>
+        List<PermissionsDTO> GetPermissionsList();
 
         /// <summary>
         /// 添加权限

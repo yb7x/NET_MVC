@@ -11,11 +11,18 @@ namespace HPIT.RentHouse.IService
     public interface IRolesService : IServiceSupport
     {
         /// <summary>
-        /// 显示列表数据，附加搜索
+        /// 显示列表数据（这个带分页带查询）
         /// </summary>
         /// <param name="Name"></param>
         /// <returns></returns>
-        List<RolesListDTO> GetRolesList(string Name);
+        List<RolesListDTO> GetRolesList(int start, int length, ref int count, string Name);
+
+        /// <summary>
+        /// 查询所有的 Roles 信息
+        /// </summary>
+        /// <param name="Name"></param>
+        /// <returns></returns>
+        List<RolesListDTO> GetRolesList();
 
         /// <summary>
         /// 添加方法

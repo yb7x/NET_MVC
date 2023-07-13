@@ -1,5 +1,6 @@
 ﻿@{
     ViewBag.Title = "Index";
+    
 }
 
 <nav class="breadcrumb">
@@ -130,13 +131,13 @@
             // 批量删除
             $("#deleteBatch").click(function () {
                 // 创建数组用来存储数据
-                var ar = [];
+                var id = [];
                 // 获取房源选中的复选框 的value值
                 $(":checkbox[name=selectIDs]:checked").each((index, item) => {
-                    ar.push($(item).val());
+                    id.push($(item).val());
                 });
 
-                if (ar.length == 0) {
+                if (id.length == 0) {
                     layer.msg("请选择要批量删除的房源！", { icon: 2 })
                 } else {
                     layer.confirm('你确定要删除这些项吗？', { icon: 3, title: '提示' }, function (index) {
@@ -144,7 +145,7 @@
                             type: "post",
                             url: "/House/DeleteBatch",
                             data: {
-                                "ids": ar
+                                "ids": id
                             },
                             dataType: "json",
                             success: function (r) {
