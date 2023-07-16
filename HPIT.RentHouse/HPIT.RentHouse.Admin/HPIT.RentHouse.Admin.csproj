@@ -1480,6 +1480,7 @@
     <Content Include="Views\UsersAdmin\Edit.cshtml" />
     <Content Include="Views\House\Index.cshtml" />
     <Content Include="Views\House\Add.cshtml" />
+    <Content Include="Views\House\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

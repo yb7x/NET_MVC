@@ -47,12 +47,16 @@
     <Compile Include="AdminLoginDataDTO.cs" />
     <Compile Include="AdminLoginDTO.cs" />
     <Compile Include="AttachmentsHouseDTO.cs" />
+    <Compile Include="AttachmentsHouseIsCheckedDTO.cs" />
     <Compile Include="CitylistDTO.cs" />
     <Compile Include="GetRolesEditDTO.cs" />
     <Compile Include="GetRolesEditPermissionDTO.cs" />
     <Compile Include="HouseAddDTO.cs" />
+    <Compile Include="HouseEditDTO.cs" />
+    <Compile Include="HouseGetEditDTO.cs" />
     <Compile Include="HouseListDTO.cs" />
     <Compile Include="CommunitiesHouseDTO.cs" />
+    <Compile Include="IdNameListDTO.cs" />
     <Compile Include="MyFormsPrincipal.cs" />
     <Compile Include="PermissionsDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

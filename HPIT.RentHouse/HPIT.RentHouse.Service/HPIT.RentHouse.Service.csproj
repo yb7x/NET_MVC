@@ -76,6 +76,7 @@
     <Compile Include="Entities\T_Settings.cs" />
     <Compile Include="Entities\T_Users.cs" />
     <Compile Include="HouseService.cs" />
+    <Compile Include="IdNameService.cs" />
     <Compile Include="PermissionsService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegionsService.cs" />

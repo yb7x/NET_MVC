@@ -5,13 +5,13 @@
 }
 
 <div class="pd-20">
-    <form class="form form-horizontal" id="houseAddForm" autocomplete="off">
+    <form class="form form-horizontal" id="houseAddfrm" autocomplete="off">
         <div class="row cl">
             <label class="form-label col-2"><span class="c-red">*</span>区域：</label>
             <div class="formControls col-2">
                 @* 区域下拉框*@
                 <span class="select-box">
-                    @Html.DropDownList("RegionsId", ViewBag.RegionsDDL as List<SelectListItem>, new { @class="select" })
+                    @Html.DropDownList("RegionsId", ViewBag.RegionsDDL as List<SelectListItem>, new { @class = "select" })
                 </span>
             </div>
             <label class="form-label col-2">小区：</label>
@@ -25,7 +25,9 @@
             </div>
             <label class="form-label col-2">房型：</label>
             <div class="formControls col-2 skin-minimal">
-
+                <span class="select-box">
+                    @Html.DropDownList("RoomTypeId", ViewBag.RoomTypeId as List<SelectListItem>, new { @class = "select" })
+                </span>
             </div>
         </div>
         <div class="row cl">
@@ -42,9 +44,9 @@
         <div class="row cl">
             <label class="form-label col-2"><span class="c-red">*</span>状态：</label>
             <div class="formControls col-2">
-                @*<span class="select-box">
-
-                    </span>*@
+                <span class="select-box">
+                    @Html.DropDownList("StatusId", ViewBag.StatusId as List<SelectListItem>, new { @class = "select" })
+                </span>
             </div>
             <label class="form-label col-2">面积：</label>
             <div class="formControls col-2">
@@ -52,23 +54,25 @@
             </div>
             <label class="form-label col-2">装修：</label>
             <div class="formControls col-2 skin-minimal">
-
+                <span class="select-box">
+                    @Html.DropDownList("DecorateStatusId", ViewBag.DecorateStatusId as List<SelectListItem>, new { @class = "select" })
+                </span>
             </div>
         </div>
         <div class="row cl">
             <label class="form-label col-2"><span class="c-red">*</span>楼层：</label>
             <div class="formControls col-1">
                 <input type="text" class="input-text" placeholder="所在层" name="FloorIndex" datatype="n" nullmsg="几楼呢">
-
             </div>
             <div class="formControls col-1">
                 <input type="text" class="input-text" placeholder="总层数" name="TotalFloorCount" datatype="n" nullmsg="几楼呢">
-
             </div>
 
             <label class="form-label col-2">类别：</label>
             <div class="formControls col-2 skin-minimal">
-
+                <span class="select-box">
+                    @Html.DropDownList("TypeId", ViewBag.TypeId as List<SelectListItem>, new { @class = "select" })
+                </span>
             </div>
 
             <label class="form-label col-2">朝向：</label>
@@ -79,11 +83,11 @@
         <div class="row cl">
             <label class="form-label col-2">可看房时间：</label>
             <div class="formControls col-4">
-                <input type="text" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'datemax\')||\'%y-%M-%d\'}'})" id="datemin" class="input-text Wdate" style="width:180px;" name="LookableDateTime" datatype="*" nullmsg="好好填写时间">
+                <input type="text" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'datemax\')||\'%y-%M-%d\'}'})" id="LookableDateTime" class="input-text Wdate" style="width:180px;" name="LookableDateTime" datatype="*" nullmsg="好好填写时间">
             </div>
             <label class="form-label col-2">入住时间：</label>
             <div class="formControls col-4">
-                <input type="text" name="CheckInDateTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'datemin\')}'})" id="datemax" class="input-text Wdate" style="width:180px;" datatype="*" nullmsg="好好填写时间">
+                <input type="text" name="CheckInDateTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'datemin\')}'})" id="CheckInDateTime" class="input-text Wdate" style="width:180px;" datatype="*" nullmsg="好好填写时间">
             </div>
         </div>
         <div class="row cl">
@@ -91,6 +95,7 @@
             <div class="formControls col-4">
                 <input type="text" class="input-text" name="OwnerName" datatype="*" nullmsg="业主叫什么">
             </div>
+
             <label class="form-label col-2">业主电话：</label>
             <div class="formControls col-4">
                 <input type="text" class="input-text" name="OwnerPhoneNum" datatype="m" nullmsg="电话不要胡写嘛">
@@ -99,7 +104,9 @@
         <div class="row cl">
             <label class="form-label col-2">房源描述：</label>
             <div class="formControls col-10">
-                <textarea class="textarea" name="Description" datatype="*" nullmsg="房源描述也要写的"></textarea>
+                <script id="Description" name="Description" type="text/plain">
+                    @*富文本*@
+                </script>
 
             </div>
         </div>
@@ -107,11 +114,11 @@
         <div class="row cl">
             <label class="form-label col-2">配置设置：</label>
             <div class="formControls col-10">
-                @{ 
+                @{
                     foreach (var item in Model)
                     {
                         <div class="col-3">
-                            <input type="checkbox" name="" value="@item.Id" />@item.Name
+                            <input type="checkbox" name="AttachmentId" value="@item.Id" />@item.Name
                         </div>
                     }
                 }
@@ -120,7 +127,7 @@
 
         <div class="row cl">
             <div class="col-10 col-offset-2">
-                <button class="btn btn-primary radius" type="button" id="btn_Save"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+                <button class="btn btn-primary radius" type="button" id="btn_Add"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
 
             </div>
         </div>
@@ -133,7 +140,7 @@
     <script src="~/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
     <script>
         // 小区下拉框，动态绑定
-        $("#RegionsId").change(function() {
+        $("#RegionsId").change(function () {
             // 获取当前的地区编号
             var regionId = $(this).val();
             // 发送请求返回数据
@@ -149,17 +156,17 @@
         })
 
         // 使用 Validform 方式验证页面表单
-        var vf = $("#addfrm").Validform({ tiptype: 2 });
+        var vf = $("#houseAddfrm").Validform({ tiptype: 2 });
 
         // 单击按钮发送请求
         $("#btn_Add").click(function () {
-            console.log($("#addfrm").serializeArray());
+            console.log($("#houseAddfrm").serializeArray());
             // 判断表单验证是否通过
             if (vf.check(false)) {
                 $.ajax({
                     type: "post",
-                    url: "/Roles/Add",
-                    data: $("#addfrm").serializeArray(),
+                    url: "/House/Add",
+                    data: $("#houseAddfrm").serializeArray(),
                     dataType: "json",
                     success: function (r) {
                         if (r.State == 1) {
@@ -177,5 +184,10 @@
                 })
             }
         })
+
+
+    </script>
+    <script type="text/javascript">
+        var ue = UE.getEditor('Description');
     </script>
 }

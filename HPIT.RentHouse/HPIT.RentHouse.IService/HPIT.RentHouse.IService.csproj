@@ -46,6 +46,7 @@
     <Compile Include="ICitysService.cs" />
     <Compile Include="ICommunitiesService.cs" />
     <Compile Include="IHouseService.cs" />
+    <Compile Include="IIdNameService.cs" />
     <Compile Include="IPermissionsService.cs" />
     <Compile Include="IRegionsService.cs" />
     <Compile Include="IRolesService.cs" />

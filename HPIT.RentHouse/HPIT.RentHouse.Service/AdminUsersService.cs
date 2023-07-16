@@ -76,8 +76,9 @@ namespace HPIT.RentHouse.Service
             FormsAuthenticationTicket tickt = new FormsAuthenticationTicket(2, "LoginName", DateTime.Now, DateTime.Now.AddDays(1), false, userData);
             // 加密
             string cookieEncrypt = FormsAuthentication.Encrypt(tickt);
-            // 创建 cookie
+            // 创建 cookie 并且命名，赋值
             HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, cookieEncrypt);
+            //  cookie 的路径 修改为 Form 身份验证相同的路径
             cookie.Path = FormsAuthentication.FormsCookiePath;
             // 设置 cookie 是否为长时间验证
             if (isRemember)

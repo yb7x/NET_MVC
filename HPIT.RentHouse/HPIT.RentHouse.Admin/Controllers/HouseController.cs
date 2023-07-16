@@ -18,12 +18,14 @@ namespace HPIT.RentHouse.Admin.Controllers
         private ICommunitiesService _communitiesService;
         private IRegionsService _regionsService;
         private IAttachmentsService _attachmentsService;
-        public HouseController(IHouseService houseService, IRegionsService regionsService, ICommunitiesService communitiesService, IAttachmentsService attachmentsService)
+        private IIdNameService _idNameService;
+        public HouseController(IHouseService houseService, IRegionsService regionsService, ICommunitiesService communitiesService, IAttachmentsService attachmentsService, IIdNameService idNameService)
         {
             _houseService = houseService;
             _regionsService = regionsService;
             _communitiesService = communitiesService;
             _attachmentsService = attachmentsService;
+            _idNameService = idNameService;
         }
 
         #endregion
@@ -32,7 +34,7 @@ namespace HPIT.RentHouse.Admin.Controllers
         /// 房屋信息主页面
         /// </summary>
         /// <returns></returns>
-        public ActionResult Index()
+        public ActionResult Index(long TypeId = 0)
         {
             return View();
         }
@@ -46,10 +48,10 @@ namespace HPIT.RentHouse.Admin.Controllers
         /// <param name="Community"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult GetHouseList(int start, int length, string Community)
+        public ActionResult GetHouseList(long TypeId, int start, int length, string Community)
         {
             int count = 0;
-            var model = _houseService.GetListHouse(start, length, ref count, Community);
+            var model = _houseService.GetListHouse(TypeId, start, length, ref count, Community);
             return Json(new { recordsTotal = count, recordsFiltered = count, data = model });
         }
 
@@ -89,7 +91,7 @@ namespace HPIT.RentHouse.Admin.Controllers
         }
 
         /// <summary>
-        /// 批量删除
+        /// 房源信息
         /// </summary>
         /// <param name="ids"></param>
         /// <returns></returns>
@@ -99,14 +101,73 @@ namespace HPIT.RentHouse.Admin.Controllers
         }
 
         /// <summary>
-        /// 添加页面
+        /// 房屋信息（户型、房屋状态、房屋类型、装修类型）
+        /// </summary>
+        /// <param name="typeName"></param>
+        /// <returns></returns>
+        public List<SelectListItem> IsName(EnumTypeName.TypeName typeName)
+        {
+            return _idNameService.GetIdName(typeName).Select(a => new SelectListItem()
+            {
+                Value = a.Id.ToString(),
+                Text = a.Name
+            }).ToList();
+        }
+
+        /// <summary>
+        /// 添加页面显示
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
+        [ValidateInput(false)]
         public ActionResult Add()
         {
             RegionsDDL(); // 区域信息
+            ViewBag.RoomTypeId = IsName(EnumTypeName.TypeName.户型);
+            ViewBag.StatusId = IsName(EnumTypeName.TypeName.房屋状态);
+            ViewBag.TypeId = IsName(EnumTypeName.TypeName.房屋类型);
+            ViewBag.DecorateStatusId = IsName(EnumTypeName.TypeName.装修状态);
             return View(_attachmentsService.GetAttachmentsList());
+        }
+
+        /// <summary>
+        /// 添加功能
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        // 标记可以识别 HTML 标记，为了能使用富文本
+        [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult Add(HouseAddDTO dto)
+        {
+            return Json(_houseService.Add(dto));
+        }
+
+        /// <summary>
+        /// 修改页面
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [ValidateInput(false)]
+        public ActionResult Edit(long id)
+        {
+            RegionsDDL();
+            ViewBag.RoomTypeIds = IsName(EnumTypeName.TypeName.户型);
+            ViewBag.StatusIds = IsName(EnumTypeName.TypeName.房屋状态);
+            ViewBag.TypeIds = IsName(EnumTypeName.TypeName.房屋类型);
+            ViewBag.DecorateStatusIds = IsName(EnumTypeName.TypeName.装修状态);
+            return View(_houseService.GetEdit(id));
+        }
+
+        /// <summary>
+        /// 修改功能
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [ValidateInput(false), HttpPost]
+        public ActionResult Edit(HouseEditDTO dto)
+        {
+            return Json(_houseService.Edit(dto));
         }
     }
 }

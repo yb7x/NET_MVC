@@ -18,7 +18,7 @@ namespace HPIT.RentHouse.IService
         /// </summary>
         /// <param name="Community"></param>
         /// <returns></returns>
-        List<HouseListDTO> GetListHouse(int start, int length, ref int count, string Community);
+        List<HouseListDTO> GetListHouse(long TypeId, int start, int length, ref int count, string Community);
 
         /// <summary>
         /// 删除房屋信息
@@ -41,5 +41,19 @@ namespace HPIT.RentHouse.IService
         /// <param name="dto"></param>
         /// <returns></returns>
         AjaxResult Add(HouseAddDTO dto);
+
+        /// <summary>
+        /// 修改前查询
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        HouseGetEditDTO GetEdit(long id);
+
+        /// <summary>
+        /// 修改功能
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        AjaxResult Edit(HouseEditDTO dto);
     }
 }

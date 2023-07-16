@@ -215,6 +215,7 @@ namespace HPIT.RentHouse.Service
                     model.T_Roles.Clear();
                     if (bs.Delete(model))
                     {
+                        db.SaveChanges();
                         return new AjaxResult(ResultState.Success, "删除成功！");
                     }
                     else

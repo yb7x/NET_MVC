@@ -96,9 +96,9 @@ public class UploadHandler : Handler
         #region 利用七牛云代替
         try
         {
-            string AccessKey = "OTpJSqbyNELXDbtQmuMp2LQ4titn_2S7RO1iz99s";
-            string SecretKey = "3SkH1Y_Oyjwi8FKpetMZw6b5DBglTa5zJWDwnral";
-            String Bucket = "hpitzszqqq";//存储空间的名字
+            string AccessKey = "d8EororU2bz7uaKYJ9uhaezcWFFNu2QiRihG79o0";
+            string SecretKey = "u0FCHhB_uKqY2UnjuhkC_MDu0I-2b47QeB8-GCov";
+            String Bucket = "yb7x";//存储空间的名字
 
 
             Mac mac = new Mac(AccessKey, SecretKey);
@@ -118,7 +118,7 @@ public class UploadHandler : Handler
             string token = Auth.CreateUploadToken(mac, putPolicy.ToJsonString());
 
             Qiniu.Storage.Config config = new Qiniu.Storage.Config();
-            config.Zone = Zone.ZONE_CN_North;// 设置上传区域
+            config.Zone = Zone.ZONE_CN_South;// 设置上传区域 ** 华东区
             config.UseHttps = true;// 设置 http 或者 https 上传
             config.UseCdnDomains = true;
             config.ChunkSize = ChunkUnit.U512K;

@@ -45,10 +45,46 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=7.0.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.7.0.1\lib\netstandard2.0\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Integration.Mvc, Version=6.1.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.Mvc5.6.1.0\lib\net472\Autofac.Integration.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.1.1.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.7.1\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.2\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -120,7 +156,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\RentHouseController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -131,11 +167,80 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="css\all.css" />
+    <Content Include="css\app.css" />
+    <Content Include="css\base.css" />
+    <Content Include="css\iconfont.svg" />
+    <Content Include="css\loaders.min.css" />
+    <Content Include="css\loading.css" />
+    <Content Include="css\mui.min.css" />
+    <Content Include="css\mui.picker.min.css" />
+    <Content Include="css\page.css" />
+    <Content Include="css\swiper.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="img\bao.png" />
+    <Content Include="img\bg.jpg" />
+    <Content Include="img\bg.png" />
+    <Content Include="img\che.png" />
+    <Content Include="img\checketwo.png" />
+    <Content Include="img\checktwo.png" />
+    <Content Include="img\chuang.png" />
+    <Content Include="img\close.png" />
+    <Content Include="img\closetwo.png" />
+    <Content Include="img\detail-iocn001.png" />
+    <Content Include="img\detail-iocn01.png" />
+    <Content Include="img\dui.png" />
+    <Content Include="img\fang.png" />
+    <Content Include="img\huangbg.png" />
+    <Content Include="img\index-banner.jpg" />
+    <Content Include="img\left.png" />
+    <Content Include="img\left2.png" />
+    <Content Include="img\lou.png" />
+    <Content Include="img\lvbg.png" />
+    <Content Include="img\map.png" />
+    <Content Include="img\people.png" />
+    <Content Include="img\right.png" />
+    <Content Include="img\right2.png" />
+    <Content Include="img\self.png" />
+    <Content Include="img\shang.png" />
+    <Content Include="img\tel.jpg" />
+    <Content Include="img\touxiang.png" />
+    <Content Include="img\water.png" />
+    <Content Include="img\woshou.png" />
+    <Content Include="img\xia.png" />
+    <Content Include="img\xiu.png" />
+    <Content Include="img\zhi.png" />
+    <Content Include="js\app.js" />
+    <Content Include="js\city.data-3.js" />
+    <Content Include="js\city.data.js" />
+    <Content Include="js\fastclick.js" />
+    <Content Include="js\global.js" />
+    <Content Include="js\hmt.js" />
+    <Content Include="js\jquery-1.8.3.min.js" />
+    <Content Include="js\jquery.leanModal.min.js" />
+    <Content Include="js\jquery.min.js" />
+    <Content Include="js\jquery.SuperSlide.2.1.js" />
+    <Content Include="js\layer_mobile\layer.js" />
+    <Content Include="js\layer_mobile\need\layer.css" />
+    <Content Include="js\menu.js" />
+    <Content Include="js\mobiscroll.2.13.2.js" />
+    <Content Include="js\mui.min.js" />
+    <Content Include="js\mui.picker.min.js" />
+    <Content Include="js\psong.js" />
+    <Content Include="js\rem.js" />
+    <Content Include="js\swiper.jquery.min.js" />
+    <Content Include="js\swiper.min.js" />
+    <Content Include="js\tchuang.js" />
+    <Content Include="js\template.js" />
+    <Content Include="js\yhq.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="css\iconfont.eot" />
+    <Content Include="css\iconfont.ttf" />
+    <Content Include="css\iconfont.woff" />
+    <Content Include="fonts\mui.ttf" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -147,6 +252,22 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="slick\ajax-loader.gif" />
+    <Content Include="slick\fonts\slick.svg" />
+    <Content Include="slick\slick.css" />
+    <Content Include="slick\slick.js" />
+    <Content Include="slick\slick.min.js" />
+    <Content Include="upload\1.jpg" />
+    <Content Include="upload\2.jpg" />
+    <Content Include="upload\3.jpg" />
+    <Content Include="upload\4.jpg" />
+    <Content Include="upload\ht.jpg" />
+    <Content Include="upload\list-img.jpg" />
+    <Content Include="upload\list-tu.jpg" />
+    <Content Include="upload\map.jpg" />
+    <Content Include="upload\room.jpg" />
+    <Content Include="upload\roomlist.jpg" />
+    <Content Include="upload\yunshu.jpg" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -158,13 +279,14 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="slick\fonts\slick.eot" />
+    <Content Include="slick\fonts\slick.ttf" />
+    <Content Include="slick\fonts\slick.woff" />
+    <Content Include="slick\slick.scss" />
+    <Content Include="Views\RentHouse\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -179,6 +301,24 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HPIT.RentHouse.Common\HPIT.RentHouse.Common.csproj">
+      <Project>{f564d8f4-0c4c-4c94-8745-496bd9e21af0}</Project>
+      <Name>HPIT.RentHouse.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HPIT.RentHouse.DTO\HPIT.RentHouse.DTO.csproj">
+      <Project>{2afe92a3-8f7b-4d7d-94ea-b4f02702d440}</Project>
+      <Name>HPIT.RentHouse.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HPIT.RentHouse.IService\HPIT.RentHouse.IService.csproj">
+      <Project>{07ad4972-feca-4e4e-b4ac-acb056fba09b}</Project>
+      <Name>HPIT.RentHouse.IService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HPIT.RentHouse.Service\HPIT.RentHouse.Service.csproj">
+      <Project>{886faca8-654f-4b50-a05e-4033bafceed2}</Project>
+      <Name>HPIT.RentHouse.Service</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
