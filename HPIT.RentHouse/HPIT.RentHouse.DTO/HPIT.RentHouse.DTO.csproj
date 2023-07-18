@@ -56,6 +56,7 @@
     <Compile Include="HouseGetEditDTO.cs" />
     <Compile Include="HouseListDTO.cs" />
     <Compile Include="CommunitiesHouseDTO.cs" />
+    <Compile Include="HousePicDTO.cs" />
     <Compile Include="IdNameListDTO.cs" />
     <Compile Include="MyFormsPrincipal.cs" />
     <Compile Include="PermissionsDTO.cs" />
@@ -64,6 +65,9 @@
     <Compile Include="RolesAddDTO.cs" />
     <Compile Include="RolesEditDTO.cs" />
     <Compile Include="RolesListDTO.cs" />
+    <Compile Include="UIDTO\CityUiListDTO.cs" />
+    <Compile Include="UIDTO\HouseUiListDTO.cs" />
+    <Compile Include="UIDTO\HouseUiLookDTO.cs" />
     <Compile Include="UserAdminAddDTO.cs" />
     <Compile Include="UserAdminEditDTO.cs" />
     <Compile Include="UserAdminGetEditDTO.cs" />

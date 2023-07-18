@@ -6,6 +6,9 @@ using System.Web;
 using System.Web.Mvc;
 using HPIT.RentHouse.Common;
 using HPIT.RentHouse.DTO;
+using CodeCarvings.Piczard.Filters.Watermarks;
+using CodeCarvings.Piczard;
+using System.IO;
 
 namespace HPIT.RentHouse.Admin.Controllers
 {
@@ -19,13 +22,15 @@ namespace HPIT.RentHouse.Admin.Controllers
         private IRegionsService _regionsService;
         private IAttachmentsService _attachmentsService;
         private IIdNameService _idNameService;
-        public HouseController(IHouseService houseService, IRegionsService regionsService, ICommunitiesService communitiesService, IAttachmentsService attachmentsService, IIdNameService idNameService)
+        private IHousePicService _housePicService;
+        public HouseController(IHouseService houseService, IRegionsService regionsService, ICommunitiesService communitiesService, IAttachmentsService attachmentsService, IIdNameService idNameService, IHousePicService housePicService)
         {
             _houseService = houseService;
             _regionsService = regionsService;
             _communitiesService = communitiesService;
             _attachmentsService = attachmentsService;
             _idNameService = idNameService;
+            _housePicService = housePicService;
         }
 
         #endregion
@@ -169,5 +174,85 @@ namespace HPIT.RentHouse.Admin.Controllers
         {
             return Json(_houseService.Edit(dto));
         }
+
+        /// <summary>
+        /// 上传图片==视图
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult UploadImg(long id)
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 上传图片==功能
+        /// </summary>
+        /// <param name="houseId"></param>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult UploadImg(long houseId, HttpPostedFileBase file)
+        {
+            //month月，minute
+            string md5 = CommonHelper.CalcMD5(file.InputStream);
+            string ext = Path.GetExtension(file.FileName);
+            // 大图路径
+            string path = "/upload/house/" + DateTime.Now.ToString("yyyy/MM/dd") + "/" + md5 + ext;// /upload/2017/07/07/afadsfa.jpg
+            // 缩略图地址
+            string thumbPath = "/upload/house/" + DateTime.Now.ToString("yyyy/MM/dd") + "/" + md5 + "_thumb" + ext;
+            string fullPath = HttpContext.Server.MapPath("~" + path);//d://22/upload/2017/07/07/afadsfa.jpg
+            string thumbFullPath = HttpContext.Server.MapPath("~" + thumbPath);
+            new FileInfo(fullPath).Directory.Create();//尝试创建可能不存在的文件夹
+
+            file.InputStream.Position = 0;//指针复位
+                                          //file.SaveAs(fullPath);//SaveAs("d:/1.jpg");
+                                          //缩略图
+            ImageProcessingJob jobThumb = new ImageProcessingJob();
+            jobThumb.Filters.Add(new FixedResizeConstraint(200, 200));//缩略图尺寸200*200
+            jobThumb.SaveProcessedImageToFileSystem(file.InputStream, thumbFullPath);
+
+            file.InputStream.Position = 0;//指针复位
+
+            //水印
+            ImageWatermark imgWatermark = new ImageWatermark(HttpContext.Server.MapPath("~/images/watermark.jpg"));
+            imgWatermark.ContentAlignment = System.Drawing.ContentAlignment.BottomRight;//水印位置
+            imgWatermark.Alpha = 50;//透明度，需要水印图片是背景透明的png图片
+            ImageProcessingJob jobNormal = new ImageProcessingJob();
+            jobNormal.Filters.Add(imgWatermark);//添加水印
+            jobNormal.Filters.Add(new FixedResizeConstraint(600, 600));
+            jobNormal.SaveProcessedImageToFileSystem(file.InputStream, fullPath);
+
+            // 图片添加到数据表中
+            HousePicDTO dto = new HousePicDTO()
+            {
+                HouseId = houseId,
+                ThumbUrl = thumbPath,
+                Url = path
+            };
+            return Json(_housePicService.AddHousePic(dto));
+        }
+
+        /// <summary>
+        /// 图片查看
+        /// </summary>
+        /// <param name="houseId"></param>
+        /// <returns></returns>
+        public ActionResult LookImg(long houseId)
+        {
+            return View(_housePicService.GetHousePicList(houseId));
+        }
+
+        /// <summary>
+        /// 批量删除图片信息
+        /// </summary>
+        /// <param name="houseId"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult LookImg(long[] houseId)
+        {
+            return Json(_housePicService.DeleteBatch(houseId)); 
+        }
+
     }
 }

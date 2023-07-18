@@ -478,3 +478,5 @@ D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Admin\obj\Debug\HP
 D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Admin\obj\Debug\HPIT.RentHouse.Admin.csproj.CopyComplete
 D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Admin\obj\Debug\HPIT.RentHouse.Admin.dll
 D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Admin\obj\Debug\HPIT.RentHouse.Admin.pdb
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Admin\bin\CodeCarvings.Piczard.dll
+D:\DaiMa\GitHub\NET MVC\NET_MVC\HPIT.RentHouse\HPIT.RentHouse.Admin\bin\CodeCarvings.Piczard.xml

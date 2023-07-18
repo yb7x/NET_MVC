@@ -55,5 +55,15 @@ namespace HPIT.RentHouse.Service
             string tn = typeName.ToString();
             return IdNameList.Where(a => a.TypeName == tn).ToList();
         }
+
+        /// <summary>
+        /// 通过 编号 获取对应名称的（户型、房屋状态、房屋类型、装修类型）
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public string GetName(long id)
+        {
+            return IdNameList.FirstOrDefault(a => a.Id == id).Name;
+        }
     }
 }

@@ -45,12 +45,15 @@
     <Compile Include="IAttachmentsService.cs" />
     <Compile Include="ICitysService.cs" />
     <Compile Include="ICommunitiesService.cs" />
+    <Compile Include="IHousePicService.cs" />
     <Compile Include="IHouseService.cs" />
     <Compile Include="IIdNameService.cs" />
     <Compile Include="IPermissionsService.cs" />
     <Compile Include="IRegionsService.cs" />
     <Compile Include="IRolesService.cs" />
     <Compile Include="IServiceSupport.cs" />
+    <Compile Include="IUIService\ICitysUiService.cs" />
+    <Compile Include="IUIService\IHouseUiService.cs" />
     <Compile Include="IUserAdminService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -64,5 +67,6 @@
       <Name>HPIT.RentHouse.DTO</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -18,5 +18,12 @@ namespace HPIT.RentHouse.IService
         /// </summary>
         /// <returns></returns>
         List<IdNameListDTO> GetIdName(EnumTypeName.TypeName typeName);
+
+        /// <summary>
+        /// 通过 编号 获取（户型、房屋状态、房屋类型、装修类型）
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        string GetName(long id);
     }
 }

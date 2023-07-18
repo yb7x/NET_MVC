@@ -67,6 +67,10 @@ namespace HPIT.RentHouse.Common
             return sb.ToString();
         }
 
+        /// <summary>
+        /// 获取地址
+        /// </summary>
+        /// <returns></returns>
         public static string GetServerIP()
         {
             return ConfigurationManager.AppSettings["picUrl"].ToString();

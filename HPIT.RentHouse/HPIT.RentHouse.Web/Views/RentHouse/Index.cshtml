@@ -1,4 +1,4 @@
-﻿
+﻿@using HPIT.RentHouse.DTO.UIDTO
 @{
     ViewBag.Title = "Index";
 }
@@ -20,9 +20,12 @@
 <!--城市-->
 <div id="city">
     <ul>
-        <li data-city="1">郑州</li>
-        <li data-city="2">洛阳</li>
-        <li data-city="3">安阳</li>
+        @{
+            foreach (var item in ViewBag.Citys as List<CityUiListDTO>)
+            {
+                <li data-city="@item.Id" onclick="ClickCity(@item.Id)">@item.Name</li>
+            }
+        }
     </ul>
 </div>
 <!--header star-->
@@ -32,7 +35,7 @@
     </div>
     <header class="mui-bar mui-bar-nav">
         <a class="btn" href="#">
-            <p>北京<i class="iconfont icon-iconfontarrowdown-copy"></i></p>
+            <p>@ViewBag.CityName<i class="iconfont icon-iconfontarrowdown-copy"></i></p>
         </a>
         <div class="top-sch-box flex-col">
             <div class="centerflex">
@@ -137,63 +140,13 @@
             <p>热门房源推荐</p>
         </div>
         <div class="content clearfloat box-s">
-            <div class="list clearfloat fl box-s">
-                <a href="house-details.html">
-                    <div class="tu clearfloat">
-                        <span></span>
-                        <img src="~/upload/list-tu.jpg" />
-                    </div>
-                    <div class="right clearfloat">
-                        <div class="tit clearfloat">
-                            <p class="fl">华府骏苑</p>
-                            <span class="fr">2500<samp>元/月</samp></span>
-                        </div>
-                        <p class="recom-jianjie">三室一厅一卫   |  125m²  |  普装</p>
-                        <div class="recom-bottom clearfloat">
-                            <span><i class="iconfont icon-duihao"></i>随时住</span>
-                            <span><i class="iconfont icon-duihao"></i>家电齐全</span>
-                        </div>
-                    </div>
-                </a>
+
+            @*这里使用模版*@
+            <div id="refreshContainer">
+                <div id="houseList"></div>
             </div>
-            <div class="list clearfloat fl box-s">
-                <a href="house-details.html">
-                    <div class="tu clearfloat">
-                        <span></span>
-                        <img src="~/upload/list-tu.jpg" />
-                    </div>
-                    <div class="right clearfloat">
-                        <div class="tit clearfloat">
-                            <p class="fl">华府骏苑</p>
-                            <span class="fr">2500<samp>元/月</samp></span>
-                        </div>
-                        <p class="recom-jianjie">三室一厅一卫   |  125m²  |  普装</p>
-                        <div class="recom-bottom clearfloat">
-                            <span><i class="iconfont icon-duihao"></i>随时住</span>
-                            <span><i class="iconfont icon-duihao"></i>家电齐全</span>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="list clearfloat fl box-s">
-                <a href="house-details.html">
-                    <div class="tu clearfloat">
-                        <span></span>
-                        <img src="~/upload/list-tu.jpg" />
-                    </div>
-                    <div class="right clearfloat">
-                        <div class="tit clearfloat">
-                            <p class="fl">华府骏苑</p>
-                            <span class="fr">2500<samp>元/月</samp></span>
-                        </div>
-                        <p class="recom-jianjie">三室一厅一卫   |  125m²  |  普装</p>
-                        <div class="recom-bottom clearfloat">
-                            <span><i class="iconfont icon-duihao"></i>随时住</span>
-                            <span><i class="iconfont icon-duihao"></i>家电齐全</span>
-                        </div>
-                    </div>
-                </a>
-            </div>
+
+
         </div>
     </div>
 </div>
@@ -228,7 +181,27 @@
 </footer>
 @section Script{
     <!--搜索点击效果-->
+    <script src="~/js/template.js"></script>
     <script>
+
+
+        // js 获取地址栏参数
+        function getQueryVariable(variable) {
+            var query = window.location.search.substring(1);
+            var vars = query.split("&");
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split("=");
+                if (pair[0] == variable) { return pair[1]; }
+            }
+            return (false);
+        }
+        // 获取
+        var cityId = getQueryVariable("cityId");
+        console.log(cityId);
+        // 页码赋值，默认从 1 开始
+        var start = 1;
+
+
         $(function () {
             var banner = new Swiper('.banner', {
                 autoplay: 5000,
@@ -259,6 +232,75 @@
                 $("#city").toggle();
             })
 
+            mui("body").on("tap", "a", function () {
+                // 逻辑代码，例如跳转详情页、ajax
+                document.location.href = this.href;
+            });
+            // 上拉刷新
+            mui.init({
+                pullRefresh: {
+                    container: refreshContainer,//待刷新区域标识，querySelector能定位的css选择器均可，比如：id、.class等
+                    up: {
+                        height: 50,//可选.默认50.触发上拉加载拖动距离
+                        auto: true,//可选,默认false.自动上拉加载一次
+                        contentrefresh: "正在加载...",//可选，正在加载状态时，上拉加载控件上显示的标题内容
+                        contentnomore: '没有更多数据了',//可选，请求完毕若没有更多数据时显示的提醒内容；
+                        callback: function () {
+                            var t = this; // 当前对象
+                            $.ajax({
+                                type: "post",
+                                url: "/RentHouse/GetHouseUi",
+                                data: {
+                                    "cityId": cityId,
+                                    "start": start
+                                },
+                                dataType: "json",
+                                success: function (data) {
+                                    start++; // 加载下一行
+                                    var html = template('houseTemplate', { house: data });
+                                    $("#houseList").append(html);
+                                    // 结束上拉加载
+                                    t.endPullupToRefresh(false);
+                                }
+                            })
+                        } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+                    }
+                }
+            })
+
+
         });
+
+        // 单击切换城市
+        function ClickCity(id) {
+            location.href = "/RentHouse/Index?cityId=" + id;
+        }
+
+
     </script>
+    <script type="text/html" id="houseTemplate">
+        {{each house as h}}
+        <div class="list clearfloat fl box-s">
+            <a href="/House/Index?houseId={{h.Id}}">
+                <div class="tu clearfloat">
+                    <span></span>
+                    <img src="{{h.ThumbUrl}}" />
+                </div>
+                <div class="right clearfloat">
+                    <div class="tit clearfloat">
+                        <p class="fl">{{h.Community}}</p>
+                        <span class="fr">{{h.MonthRent}}<samp>元/月</samp></span>
+                    </div>
+                    <p class="recom-jianjie">{{h.RoomTypeName}}   |  {{h.Area}}m²  |  {{h.DecorateStatusName}}</p>
+                    <div class="recom-bottom clearfloat">
+                        <span><i class="iconfont icon-duihao"></i>随时住</span>
+                        <span><i class="iconfont icon-duihao"></i>家电齐全</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {{/each}}
+    </script>
+
+
 }

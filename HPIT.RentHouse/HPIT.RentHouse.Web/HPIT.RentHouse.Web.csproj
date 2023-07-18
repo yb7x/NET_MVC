@@ -156,6 +156,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\HouseController.cs" />
     <Compile Include="Controllers\RentHouseController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -284,6 +285,7 @@
     <Content Include="slick\fonts\slick.woff" />
     <Content Include="slick\slick.scss" />
     <Content Include="Views\RentHouse\Index.cshtml" />
+    <Content Include="Views\House\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

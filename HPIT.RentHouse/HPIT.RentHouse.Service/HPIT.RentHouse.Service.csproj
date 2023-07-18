@@ -75,12 +75,15 @@
     <Compile Include="Entities\T_Roles.cs" />
     <Compile Include="Entities\T_Settings.cs" />
     <Compile Include="Entities\T_Users.cs" />
+    <Compile Include="HousePicService.cs" />
     <Compile Include="HouseService.cs" />
     <Compile Include="IdNameService.cs" />
     <Compile Include="PermissionsService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegionsService.cs" />
     <Compile Include="RolesService.cs" />
+    <Compile Include="UIService\CitysUiService.cs" />
+    <Compile Include="UIService\HouseUiService.cs" />
     <Compile Include="UserAdminService.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -101,5 +104,6 @@
       <Name>HPIT.RentHouse.IService</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

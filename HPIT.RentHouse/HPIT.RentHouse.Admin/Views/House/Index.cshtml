@@ -93,7 +93,7 @@
                     { "data": "Area" },
                     {
                         data: 'Id', render: function (data, type, full, callback) {
-                            return (' <a title="编辑" onclick="edits(this)" href="javascript:;"  data-id=' + data + ' class="ml-5 edit" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除"  data-id=' + data + ' onclick="del(this)" href="javascript:;"   class="ml-5 delete" style="text-decoration:none"> <i class="Hui-iconfont">&#xe6e2;</i></a>   ')
+                            return (' <a title="编辑" onclick="edits(this)" href="javascript:;"  data-id=' + data + ' class="ml-5 edit" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title = "上传" onclick = "upload(this)" href = "javascript:;"  data-id=' + data + ' class="ml-5 edit" style="text-decoration:none" > <i class="Hui-iconfont"> &#xe681;</i></a> <a title = "查看" onclick = "lookLoad(this)" href = "javascript:;"  data-id=' + data + ' class="ml-5 edit" style="text-decoration:none" > <i class="Hui-iconfont"> &#xe64a;</i></a><a title="删除"  data-id=' + data + ' onclick="del(this)" href="javascript:;" class="ml-5 delete" style="text-decoration:none"> <i class="Hui-iconfont">&#xe6e2;</i></a>   ')
                         }
                     }],
                 // 每一行创建完调用的函数
@@ -187,6 +187,17 @@
         function edits(t) {
             var id = $(t).attr("data-id");
             layer_show("修改房源", "/House/Edit/" + id, 600, 500);
+        }
+
+        // 上传图片
+        function upload(t) {
+            var id = $(t).attr("data-id");
+            layer_show("上传图片", "/House/UploadImg?id=" + id, 600, 500);
+        }
+        // 查看图片
+        function lookLoad(t) {
+            var id = $(t).attr("data-id");
+            layer_show("查看图片", "/House/LookImg?houseId=" + id, 600, 500);
         }
 
         // 删除
