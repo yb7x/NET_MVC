@@ -31,6 +31,7 @@ namespace HPIT.RentHouse.Web.Controllers
         public ActionResult Index(long cityId = 1)
         {
             ViewBag.Citys = _citysUiService.GetCityList();
+            ViewBag.cId = _citysUiService.GetCityList().FirstOrDefault().Id;
             if (cityId > 0)
             {
                 ViewBag.CityName = _citysUiService.GetCityList().FirstOrDefault(a => a.Id == cityId).Name;
@@ -65,6 +66,8 @@ namespace HPIT.RentHouse.Web.Controllers
         {
             return View();
         }
+
+
 
     }
 }

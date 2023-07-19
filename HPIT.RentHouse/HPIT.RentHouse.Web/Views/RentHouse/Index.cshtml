@@ -58,8 +58,8 @@
                 <div class="mui-bar mui-bar-nav clone poo-muitwo">
                     <div class="top-sch-box flex-col">
                         <div class="centerflex">
-                            <i class="fdj iconfont icon-sousuo"></i>
-                            <input class="sch-input mui-input-clear" type="text" name="" id="" placeholder="请输入您要搜索的内容" />
+                            <i class="fdj iconfont icon-sousuo" id="btn-search"></i>
+                            <input class="sch-input mui-input-clear" type="text" name="" id="keyword" placeholder="请输入您要搜索的内容" />
                         </div>
                     </div>
                 </div>
@@ -197,12 +197,24 @@
         }
         // 获取
         var cityId = getQueryVariable("cityId");
+        // 判断是否有 cityId 值，不存在则给他一个初始值
+        if (cityId == null || cityId == undefined || cityId == 0) {
+            cityId = @ViewBag.cId;
+        }
+
         console.log(cityId);
         // 页码赋值，默认从 1 开始
         var start = 1;
 
+        // 搜索
+        $("#btn-search").click(function () {
+            location.href = "/House/Search?keyWord=" + $("#keyword").val();
+        })
+        console.log("keyword：" + $("#keyword").val())
 
         $(function () {
+            
+
             var banner = new Swiper('.banner', {
                 autoplay: 5000,
                 pagination: '.swiper-pagination',

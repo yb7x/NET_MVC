@@ -13,7 +13,7 @@ namespace HPIT.RentHouse.IService
     public interface IRegionsService : IServiceSupport
     {
         /// <summary>
-        /// 获取所有区域信息
+        /// 获取所有区域信息（根据所在城市查询到区域）
         /// </summary>
         /// <returns></returns>
         List<RegionsHouseDTO> GetRegions(long CityId);

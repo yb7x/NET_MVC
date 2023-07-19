@@ -52,6 +52,12 @@ namespace HPIT.RentHouse.Common
             return sb.ToString().Trim('&');//去掉最后一个多余的&
         }
 
+        /// <summary>
+        /// 去掉 地址栏 条件
+        /// </summary>
+        /// <param name="nvc"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public static string RemoveQueryString(NameValueCollection nvc, string name)
         {
             NameValueCollection newNVC = new NameValueCollection(nvc);
@@ -59,6 +65,13 @@ namespace HPIT.RentHouse.Common
             return ToQueryString(newNVC);
         }
 
+        /// <summary>
+        /// 增加 地址栏 条件
+        /// </summary>
+        /// <param name="nvc"></param>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static string UpdateQueryString(NameValueCollection nvc,
             string name, string value)
         {

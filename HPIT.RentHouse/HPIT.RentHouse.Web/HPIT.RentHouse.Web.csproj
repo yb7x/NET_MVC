@@ -286,6 +286,7 @@
     <Content Include="slick\slick.scss" />
     <Content Include="Views\RentHouse\Index.cshtml" />
     <Content Include="Views\House\Index.cshtml" />
+    <Content Include="Views\House\Search.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

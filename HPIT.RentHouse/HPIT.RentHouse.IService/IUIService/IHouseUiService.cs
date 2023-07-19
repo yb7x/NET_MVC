@@ -24,5 +24,12 @@ namespace HPIT.RentHouse.IService.IUIService
         /// <param name="houseId"></param>
         /// <returns></returns>
         HouseUiLookDTO GetHouseMessage(long houseId);
+
+        /// <summary>
+        /// 房源搜索
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        List<HouseUiSearchVoidDTO> Search(HouseUiSearchDTO dto);
     }
 }

@@ -68,6 +68,8 @@
     <Compile Include="UIDTO\CityUiListDTO.cs" />
     <Compile Include="UIDTO\HouseUiListDTO.cs" />
     <Compile Include="UIDTO\HouseUiLookDTO.cs" />
+    <Compile Include="UIDTO\HouseUiSearchDTO.cs" />
+    <Compile Include="UIDTO\HouseUiSearchVoidDTO.cs" />
     <Compile Include="UserAdminAddDTO.cs" />
     <Compile Include="UserAdminEditDTO.cs" />
     <Compile Include="UserAdminGetEditDTO.cs" />

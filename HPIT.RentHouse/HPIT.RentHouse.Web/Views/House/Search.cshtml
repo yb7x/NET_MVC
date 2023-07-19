@@ -1,0 +1,102 @@
+﻿@using HPIT.RentHouse.DTO.UIDTO;
+@using HPIT.RentHouse.DTO;
+@using HPIT.RentHouse.Common;
+@model IEnumerable<HPIT.RentHouse.DTO.UIDTO.HouseUiSearchVoidDTO>
+
+@{
+    ViewBag.Title = "Search";
+}
+
+<!--loading页开始-->
+<div class="loading">
+    <div class="loader">
+        <div class="loader-inner pacman">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+<!--loading页结束-->
+
+<div class="headertwo clearfloat" id="header">
+    <a href="javascript:history.go(-1)" class="fl box-s"><i class="iconfont icon-arrow-l fl"></i></a>
+    <p class="fl">@ViewBag.CityName</p>
+    <a href="javascript:history.go(-1)" class="fr"><i class="iconfont icon-sousuo fl"></i></a>
+</div>
+<div class="clearfloat" id="main">
+    <div class="menu-list clearfloat am-sharetwo">
+        <ul class="yiji" id="oe_menu">
+            <li>
+                <a href="#" class="inactive">区域<i></i></a>
+                <ul style="display: none">
+                    <li><a href="/House/Search?@MVCHelper.RemoveQueryString(Request.QueryString, "RegionId")">全部</a></li>
+                    @foreach (var item in (ViewBag.Regin as List<RegionsHouseDTO>))
+                    {
+                        <li><a href="/House/Search?@MVCHelper.UpdateQueryString(Request.QueryString, "RegionId", item.Id.ToString())">@item.Name</a></li>
+                    }
+                </ul>
+            </li>
+            <li>
+                <a href="#" class="inactive">租金<i></i></a>
+                <ul style="display: none">
+                    <li><a href="/House/Search?@MVCHelper.RemoveQueryString(Request.QueryString, "MouthRent")">全部</a></li>
+                    <li><a href="/House/Search?@MVCHelper.UpdateQueryString(Request.QueryString, "MouthRent", "*-100")">0-100元</a></li>
+                    <li><a href="/House/Search?@MVCHelper.UpdateQueryString(Request.QueryString, "MouthRent", "101-200")">101-200元</a></li>
+                    <li><a href="/House/Search?@MVCHelper.UpdateQueryString(Request.QueryString, "MouthRent", "201-500")">201-500元</a></li>
+                    <li><a href="/House/Search?@MVCHelper.UpdateQueryString(Request.QueryString, "MouthRent", "501-800")">501-800元</a></li>
+                    <li><a href="/House/Search?@MVCHelper.UpdateQueryString(Request.QueryString, "MouthRent", "801-1000")">801-1000元</a></li>
+                    <li><a href="/House/Search?@MVCHelper.UpdateQueryString(Request.QueryString, "MouthRent", "1000-*")">1000元以上</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" class="inactive">排序<i></i></a>
+                <ul style="display: none">
+                    <li><a href="/House/Search?@MVCHelper.RemoveQueryString(Request.QueryString, "MonthRent")">全部</a></li>
+                    <li><a href="/House/Search?@MVCHelper.UpdateQueryString(Request.QueryString, "OrderBy", "MonthRentAsc")">租金从低到高</a></li>
+                    <li><a href="/House/Search?@MVCHelper.UpdateQueryString(Request.QueryString, "OrderBy", "MonthRentDesc")">租金从高到低</a></li>
+                    <li><a href="/House/Search?@MVCHelper.UpdateQueryString(Request.QueryString, "OrderBy", "AreaAsc")">面积从小到大</a></li>
+                    <li><a href="/House/Search?@MVCHelper.UpdateQueryString(Request.QueryString, "OrderBy", "AreaDesc")">面积从大到小</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div id="oe_overlay" class="oe_overlay"></div>
+
+    <div class="recom clearfloat recomtwo">
+        <div class="content clearfloat box-s">
+
+            @foreach (var item in Model)
+            {
+                <div class="list clearfloat fl box-s">
+                    <a href="house-details.html">
+                        <div class="tu clearfloat">
+                            <span></span>
+                            <img src="@ViewBag.ServerIP@item.ThumbUrl" />
+                        </div>
+                        <div class="right clearfloat">
+                            <div class="tit clearfloat">
+                                <p class="fl">@item.Community</p>
+                                <span class="fr">@item.MonthRent<samp>元/月</samp></span>
+                            </div>
+                            <p class="recom-jianjie">@item.RoomTypeName   |  @item.Area m²  |  @item.DecorateStatusName</p>
+                            <div class="recom-bottom clearfloat">
+                                <span><i class="iconfont icon-duihao"></i>随时住</span>
+                                <span><i class="iconfont icon-duihao"></i>家电齐全</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+
+
+        </div>
+    </div>
+</div>
+
+@section Script{
+    <script type="text/javascript" src="~/js/menu.js"></script>
+}
