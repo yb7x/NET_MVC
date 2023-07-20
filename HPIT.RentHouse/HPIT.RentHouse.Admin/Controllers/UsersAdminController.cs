@@ -1,4 +1,5 @@
-﻿using HPIT.RentHouse.Common;
+﻿using HPIT.RentHouse.Admin.Filters;
+using HPIT.RentHouse.Common;
 using HPIT.RentHouse.DTO;
 using HPIT.RentHouse.IService;
 using System;
@@ -9,6 +10,7 @@ using System.Web.Mvc;
 
 namespace HPIT.RentHouse.Admin.Controllers
 {
+    [Authorize, CheckPermisson("usersAdmin")]
     public class UsersAdminController : Controller
     {
         #region 依赖注入
@@ -44,6 +46,7 @@ namespace HPIT.RentHouse.Admin.Controllers
         {
             int count = 0;
             var list = _userAdminService.GetList(start, length, ref count, Name);
+            TempData["count"] = list.Count;
             return Json(new { recordsTotal = list.Count, recordsFiltered = list.Count, data = list });
         }
 

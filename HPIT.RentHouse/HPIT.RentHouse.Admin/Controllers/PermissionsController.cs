@@ -6,9 +6,11 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using HPIT.RentHouse.Common;
+using HPIT.RentHouse.Admin.Filters;
 
 namespace HPIT.RentHouse.Admin.Controllers
 {
+    [Authorize, CheckPermisson("permissionsAdmin")]
     public class PermissionsController : Controller
     {
         #region 依赖注入

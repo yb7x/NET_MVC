@@ -24,7 +24,7 @@
                 <i class="Hui-iconfont">&#xe600;</i> 添加房源
             </a>
         </span>
-        <span class="r">共有数据：<strong>54</strong> 条</span>
+        
     </div>
     <table id="tb_HouseList" class="table table-border table-bordered table-hover table-bg">
         <thead>
@@ -164,14 +164,16 @@
                             },
                             dataType: "json",
                             success: function (r) {
-                                if (r.State == 1) {
-                                    layer.msg(r.Message, { icon: 1, time: 1000 }, function () {
-                                        // 刷新，关闭当前窗体
-                                        location.reload();
-                                    })
-                                } else {
-                                    layer.msg(r.Message, { icon: 2 })
-                                }
+                                layer.msg("正在批量删除房源信息···", { icon: 1, time: 1000 }, function () {
+                                    if (r.State == 1) {
+                                        layer.msg(r.Message, { icon: 1, time: 1000 }, function () {
+                                            // 刷新，关闭当前窗体
+                                            location.reload();
+                                        })
+                                    } else {
+                                        layer.msg(r.Message, { icon: 2 })
+                                    }
+                                })
                             },
                             error: function () {
                                 layer.msg("操作异常", { icon: 2 })
@@ -209,14 +211,16 @@
                     url: "/House/Delete/" + id,
                     dataType: "json",
                     success: function (r) {
-                        if (r.State == 1) {
-                            layer.msg(r.Message, { icon: 1, time: 1000 }, function () {
-                                // 刷新，关闭当前窗体
-                                location.reload();
-                            })
-                        } else {
-                            layer.msg(r.Message, { icon: 2 })
-                        }
+                        layer.msg("正在删除房源信息···", { icon: 1, time: 1000 }, function () {
+                            if (r.State == 1) {
+                                layer.msg(r.Message, { icon: 1, time: 1000 }, function () {
+                                    // 刷新，关闭当前窗体
+                                    location.reload();
+                                })
+                            } else {
+                                layer.msg(r.Message, { icon: 2 })
+                            }
+                        })
                     },
                     error: function () {
                         layer.msg("操作异常", { icon: 2 })

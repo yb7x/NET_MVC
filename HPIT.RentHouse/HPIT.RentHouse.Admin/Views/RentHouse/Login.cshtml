@@ -66,12 +66,23 @@
                     url: "/RentHouse/Login",
                     data: $("#formLogin").serializeArray(),
                     dataType: "json",
-                    success: function (result) {
-                        if (result.State == 1) {
-                            location.href = "/RentHouse/Index"
+                    success: function (r) {
+                        if (r.State == 1) {
+                            // 假装加载
+                            layer.msg("正在加载中···", { icon: 1, time: 1000 }, function () {
+                                layer.msg(r.Message, { icon: 1, time: 1000 }, function () {
+                                    // 跳转页面
+                                    location.href = "/RentHouse/Index";
+                                })
+                            })
                         } else {
-                            // 错误
-                            alert(result.Message);
+                            layer.msg("正在加载中···", { icon: 1, time: 1000 }, function () {
+                                // 登录失败
+                                layer.msg(r.Message, { icon: 2 });
+                                // 刷新验证码，这里直接调用点击事件
+                                $("#imgVerifyCode").click();
+                                $("#imgVerifyCode").attr("src", "/RentHouse/Getvc?i=" + Math.random());
+                            })
                         }
                     },
                     error: function () {
@@ -81,5 +92,5 @@
                 })
             }
         })
-    </script>    
+    </script>
 }

@@ -1,9 +1,11 @@
-﻿using HPIT.RentHouse.DTO;
+﻿using HPIT.RentHouse.Admin.Filters;
+using HPIT.RentHouse.DTO;
 using HPIT.RentHouse.IService;
 using System.Web.Mvc;
 
 namespace HPIT.RentHouse.Admin.Controllers
 {
+    [Authorize, CheckPermisson("rolesAdmin")]
     public class RolesController : Controller
     {
         #region 依赖注入

@@ -83,6 +83,7 @@
     <Compile Include="RegionsService.cs" />
     <Compile Include="RolesService.cs" />
     <Compile Include="UIService\CitysUiService.cs" />
+    <Compile Include="UIService\HouseUiAppointmentsService.cs" />
     <Compile Include="UIService\HouseUiService.cs" />
     <Compile Include="UserAdminService.cs" />
   </ItemGroup>

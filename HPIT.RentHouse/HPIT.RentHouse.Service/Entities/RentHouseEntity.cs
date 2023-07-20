@@ -98,7 +98,7 @@ namespace HPIT.RentHouse.Service.Entities
 
             modelBuilder.Entity<T_HouseAppointments>()
                 .Property(e => e.RowVersion)
-                .IsFixedLength();
+                .IsFixedLength().IsRowVersion();
 
             modelBuilder.Entity<T_Houses>()
                 .Property(e => e.OwnerPhoneNum)

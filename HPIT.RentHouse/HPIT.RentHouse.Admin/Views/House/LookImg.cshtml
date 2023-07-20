@@ -53,14 +53,16 @@
                         },
                         dataType: "json",
                         success: function (r) {
-                            if (r.State == 1) {
-                                layer.msg(r.Message, { icon: 1, time: 1000 }, function () {
-                                    // 刷新，关闭当前窗体
-                                    location.reload();
-                                })
-                            } else {
-                                layer.msg(r.Message, { icon: 2 })
-                            }
+                            layer.msg("正在批量删除房源图片···", { icon: 1, time: 1000 }, function () {
+                                if (r.State == 1) {
+                                    layer.msg(r.Message, { icon: 1, time: 1000 }, function () {
+                                        // 刷新，关闭当前窗体
+                                        location.reload();
+                                    })
+                                } else {
+                                    layer.msg(r.Message, { icon: 2 })
+                                }
+                            })
                         },
                         error: function () {
                             layer.msg("操作异常", { icon: 2 })

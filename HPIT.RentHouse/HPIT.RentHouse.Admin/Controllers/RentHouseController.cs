@@ -90,7 +90,7 @@ namespace HPIT.RentHouse.Admin.Controllers
             // 保存信息 到 Session 以便验证验证码
             Session["code"] = code;
             // 2、图文文件流
-            MemoryStream fs = ImageFactory.GenerateImage(code, 40, 80, 16, 8);
+            MemoryStream fs = ImageFactory.GenerateImage(code, 50, 80, 16, 8);
             // 3、输出图片类型文件
             return File(fs, "image/jpeg");
         }

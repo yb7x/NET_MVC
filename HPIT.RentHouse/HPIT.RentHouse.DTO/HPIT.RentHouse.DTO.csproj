@@ -52,6 +52,7 @@
     <Compile Include="GetRolesEditDTO.cs" />
     <Compile Include="GetRolesEditPermissionDTO.cs" />
     <Compile Include="HouseAddDTO.cs" />
+    <Compile Include="HouseAppointmentsListDTO.cs" />
     <Compile Include="HouseEditDTO.cs" />
     <Compile Include="HouseGetEditDTO.cs" />
     <Compile Include="HouseListDTO.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="RolesEditDTO.cs" />
     <Compile Include="RolesListDTO.cs" />
     <Compile Include="UIDTO\CityUiListDTO.cs" />
+    <Compile Include="UIDTO\HouseUiAppointmentsAddDTO.cs" />
     <Compile Include="UIDTO\HouseUiListDTO.cs" />
     <Compile Include="UIDTO\HouseUiLookDTO.cs" />
     <Compile Include="UIDTO\HouseUiSearchDTO.cs" />

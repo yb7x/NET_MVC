@@ -17,11 +17,13 @@ namespace HPIT.RentHouse.Web.Controllers
         private IHouseUiService _houseUiService;
         private IRegionsService _regionsService;
         private ICitysService _citysService;
-        public HouseController(IHouseUiService houseUiService, IRegionsService regionsService, ICitysService citysService)
+        private IHouseUiAppointmentsService _houseUiAppointmentsService;
+        public HouseController(IHouseUiService houseUiService, IRegionsService regionsService, ICitysService citysService, IHouseUiAppointmentsService houseUiAppointmentsService)
         {
             _houseUiService = houseUiService;
             _regionsService = regionsService;
             _citysService = citysService;
+            _houseUiAppointmentsService = houseUiAppointmentsService;
         }
 
         #endregion
@@ -81,5 +83,17 @@ namespace HPIT.RentHouse.Web.Controllers
             var list = _houseUiService.Search(dto);
             return View(list);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult Add(HouseUiAppointmentsAddDTO dto)
+        {
+            return Json(_houseUiAppointmentsService.Add(dto));
+        }
+
     }
 }

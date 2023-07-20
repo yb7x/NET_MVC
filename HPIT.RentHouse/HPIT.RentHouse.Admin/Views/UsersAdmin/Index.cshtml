@@ -26,8 +26,9 @@
                 <i class="Hui-iconfont">&#xe600;</i> 添加用户
             </a>
         </span>
-        <span class="r">共有数据：<strong>54</strong> 条</span>
+        
     </div>
+    
     <table id="tb_PermissionList" class="table table-border table-bordered table-hover table-bg">
         <thead>
             <tr>
@@ -50,7 +51,10 @@
 @section footScript{
     <script src="~/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
     <script type="text/javascript">
+
         $(function () {
+
+
             var param = {};//初始化查询参数
 
             //通过DataTable渲染列表
@@ -71,9 +75,9 @@
                         // data 可以是属性名，或嵌套属性（WORKTM1.ID）,数组ArrOne[,] 用中括号中的字符连接数组后返回。
                         "data": "Id"
                     },
+                    { "data": "Name" },
                     { "data": "PhoneNum" },
                     { "data": "Email" },
-                    { "data": "Name" },
                     { "data": "LoginErrorTimes" },
                     { "data": "CityName" },
                     {
@@ -112,6 +116,7 @@
                             return '<input type="checkbox" value="' + row.Id + '" name="selectIDs">';
                         },
                     }]
+
             });
             // 查询方法
             $("#btn_Search").click(function () {
@@ -147,14 +152,16 @@
                             },
                             dataType: "json",
                             success: function (r) {
-                                if (r.State == 1) {
-                                    layer.msg(r.Message, { icon: 1, time: 1000 }, function () {
-                                        // 刷新，关闭当前窗体
-                                        location.reload();
-                                    })
-                                } else {
-                                    layer.msg(r.Message, { icon: 2 })
-                                }
+                                layer.msg("正在批量删除用户信息···", { icon: 1, time: 1000 }, function () {
+                                    if (r.State == 1) {
+                                        layer.msg(r.Message, { icon: 1, time: 1000 }, function () {
+                                            // 刷新，关闭当前窗体
+                                            location.reload();
+                                        })
+                                    } else {
+                                        layer.msg(r.Message, { icon: 2 })
+                                    }
+                                })
                             },
                             error: function () {
                                 layer.msg("操作异常", { icon: 2 })
@@ -181,14 +188,16 @@
                     url: "/UsersAdmin/Delete/" + id,
                     dataType: "json",
                     success: function (r) {
-                        if (r.State == 1) {
-                            layer.msg(r.Message, { icon: 1, time: 1000 }, function () {
-                                // 刷新，关闭当前窗体
-                                location.reload();
-                            })
-                        } else {
-                            layer.msg(r.Message, { icon: 2 })
-                        }
+                        layer.msg("正在删除用户信息···", { icon: 1, time: 1000 }, function () {
+                            if (r.State == 1) {
+                                layer.msg(r.Message, { icon: 1, time: 1000 }, function () {
+                                    // 刷新，关闭当前窗体
+                                    location.reload();
+                                })
+                            } else {
+                                layer.msg(r.Message, { icon: 2 })
+                            }
+                        })
                     },
                     error: function () {
                         layer.msg("操作异常", { icon: 2 })

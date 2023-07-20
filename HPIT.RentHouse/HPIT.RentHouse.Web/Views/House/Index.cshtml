@@ -3,6 +3,12 @@
     ViewBag.Title = "Index";
 }
 
+<style>
+    img{
+        width:100%;
+    }
+</style>
+<link href="~/css/mui.picker.min.css" rel="stylesheet" />
 <!--loading页开始-->
 <div class="loading">
     <div class="loader">
@@ -61,6 +67,7 @@
             <p>收藏</p>
         </div>
     </div>
+
 
     <div class="service-ctent clearfloat">
         <div class="recom-tit clearfloat box-s">
@@ -130,7 +137,7 @@
                     </a>
                 </div>
             }
-            
+
         </div>
     </div>
 
@@ -149,29 +156,35 @@
     <div class="top clearfloat box-s">
         填写信息
     </div>
-    <div class="bottom clearfloat box-s">
-        <ul>
-            <li class="clearfloat">
-                <i class="iconfont icon-user"></i>
-                <input type="text" name="" id="" value="" placeholder="您的姓名" />
-            </li>
-            <li class="clearfloat">
-                <i class="iconfont icon-phone"></i>
-                <input type="text" name="" id="" value="" placeholder="您的手机号码" />
-            </li>
-            <li class="clearfloat">
-                <i class="iconfont icon-calendar"></i>
-                <input type="text" name="" id="" value="" placeholder="请选择看房时间" />
-            </li>
-        </ul>
-        <input type="button" name="" id="" value="立即预约" class="btn" />
-    </div>
+    <form id="addFrm">
+        <div class="bottom clearfloat box-s">
+            @Html.Hidden("HouseId", Model.Id)  @*获取房源编号*@
+            <ul>
+                <li class="clearfloat">
+                    <i class="iconfont icon-user"></i>
+                    <input type="text" name="Name" id="" value="" placeholder="您的姓名" />
+                </li>
+                <li class="clearfloat">
+                    <i class="iconfont icon-phone"></i>
+                    <input type="text" name="PhoneNum" id="" value="" placeholder="您的手机号码" />
+                </li>
+                <li class="clearfloat">
+                    <i class="iconfont icon-calendar"></i>
+                    <input type="text" name="VisitDate" id="VisitDate" value="" placeholder="请选择看房时间" />
+                </li>
+            </ul>
+            <input type="button" name="" id="btn_add" value="立即预约" class="btn_add" />
+        </div>
+    </form>
 </div>
 <!--弹窗内容 end-->
 @section Script{
+    <script src="~/js/mui.picker.min.js"></script>
+    <script src="~/js/layer_mobile/layer.js"></script>
     <script type="text/javascript" src="~/slick/slick.min.js"></script>
     <script type="text/javascript" src="~/js/jquery.leanModal.min.js"></script>
     <script type="text/javascript" src="~/js/tchuang.js"></script>
+    
     <script type="text/javascript">
         $('.one-time').slick({
             dots: true,
@@ -181,6 +194,55 @@
             touchMove: false,
             slidesToScroll: 1
         });
+
+        // 日期控件
+        $("#VisitDate").click(function () {
+            var dtPicker = new mui.DtPicker({ type: "date" });
+
+            dtPicker.show(function (selectItems) {
+                var y = selectItems.y.text;
+                var m = selectItems.m.text;
+                var d = selectItems.d.text;
+                var visitDate = y + "-" + m + "-" + d;
+                $("#VisitDate").val(visitDate);
+            });
+        })
+
+
+        // 添加预约看房信息
+        $("#btn_add").click(function () {
+            $.ajax({
+                type: "post",
+                url: "/House/Add",
+                data: $("#addFrm").serializeArray(),
+                dataType: "json",
+                success: function (r) {
+                        if (r.State == 1) {
+                            //弹出成功提示
+                            layer.open({
+                                content: r.Message
+                                , btn: '我知道了',
+                                yes: function (index) {
+                                    //关闭窗口
+                                    $("#lean_overlay").fadeOut(200);
+                                    $("#loginmodal").hide();
+                                    layer.close(index);
+                                }
+                            });
+                        
+                    }
+                    else {
+                        //弹出错误提示
+                        layer.open({
+                            content: r.Message
+                            , btn: '我知道了'
+                        });
+                        }
+                }
+            })
+        })
+
+
     </script>
     <!--分享js-->
     <script type="text/javascript">

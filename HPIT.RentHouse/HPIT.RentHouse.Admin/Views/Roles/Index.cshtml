@@ -2,7 +2,7 @@
 
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "角色信息";
 }
 
 <nav class="breadcrumb">
@@ -26,7 +26,7 @@
                 <i class="Hui-iconfont">&#xe600;</i> 添加角色
             </a>
         </span>
-        <span class="r">共有数据：<strong>54</strong> 条</span>
+        
     </div>
     <table id="tb_PermissionList" class="table table-border table-bordered table-hover table-bg">
         <thead>
@@ -139,14 +139,16 @@
                             },
                             dataType: "json",
                             success: function (r) {
-                                if (r.State == 1) {
-                                    layer.msg(r.Message, { icon: 1, time: 1000 }, function () {
-                                        // 刷新，关闭当前窗体
-                                        location.reload();
-                                    })
-                                } else {
-                                    layer.msg(r.Message, { icon: 2 })
-                                }
+                                layer.msg("正在批量删除角色信息···", { icon: 1, time: 1000 }, function () {
+                                    if (r.State == 1) {
+                                        layer.msg(r.Message, { icon: 1, time: 1000 }, function () {
+                                            // 刷新，关闭当前窗体
+                                            location.reload();
+                                        })
+                                    } else {
+                                        layer.msg(r.Message, { icon: 2 })
+                                    }
+                                })
                             },
                             error: function () {
                                 layer.msg("操作异常", { icon: 2 })
@@ -173,14 +175,16 @@
                         url: "/Roles/Delete/" + id,
                         dataType: "json",
                         success: function (r) {
-                            if (r.State == 1) {
-                                layer.msg(r.Message, { icon: 1, time: 1000 }, function () {
-                                    // 刷新，关闭当前窗体
-                                    location.reload();
-                                })
-                            } else {
-                                layer.msg(r.Message, { icon: 2 })
-                            }
+                            layer.msg("正在删除角色信息···", { icon: 1, time: 1000 }, function () {
+                                if (r.State == 1) {
+                                    layer.msg(r.Message, { icon: 1, time: 1000 }, function () {
+                                        // 刷新，关闭当前窗体
+                                        location.reload();
+                                    })
+                                } else {
+                                    layer.msg(r.Message, { icon: 2 })
+                                }
+                            })
                         },
                         error: function () {
                             layer.msg("操作异常", { icon: 2 })

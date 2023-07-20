@@ -53,6 +53,7 @@
     <Compile Include="IRolesService.cs" />
     <Compile Include="IServiceSupport.cs" />
     <Compile Include="IUIService\ICitysUiService.cs" />
+    <Compile Include="IUIService\IHouseUiAppointmentsService.cs" />
     <Compile Include="IUIService\IHouseUiService.cs" />
     <Compile Include="IUserAdminService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

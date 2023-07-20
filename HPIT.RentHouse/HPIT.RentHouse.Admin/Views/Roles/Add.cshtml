@@ -49,14 +49,16 @@
                     data: $("#addfrm").serializeArray(),
                     dataType: "json",
                     success: function (r) {
-                        if (r.State == 1) {
-                            layer.msg(r.Message, { icon: 1, time: 2000 }, function () {
-                                // 刷新
-                                parent.location.reload();
-                            })
-                        } else {
-                            layer.msg(r.Message, { icon: 2 })
-                        }
+                        layer.msg("正在添加角色信息···", { icon: 1, time: 1000 }, function () {
+                            if (r.State == 1) {
+                                layer.msg(r.Message, { icon: 1, time: 2000 }, function () {
+                                    // 刷新
+                                    parent.location.reload();
+                                })
+                            } else {
+                                layer.msg(r.Message, { icon: 2 })
+                            }
+                        })
                     },
                     error: function () {
                         layer.msg("操作异常", { icon: 2 })

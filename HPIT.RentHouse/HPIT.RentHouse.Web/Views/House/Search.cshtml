@@ -71,16 +71,19 @@
 
             @foreach (var item in Model)
             {
-                <div class="list clearfloat fl box-s">
-                    <a href="house-details.html">
+                
+                    <div class="list clearfloat fl box-s">
+
                         <div class="tu clearfloat">
                             <span></span>
                             <img src="@ViewBag.ServerIP@item.ThumbUrl" />
                         </div>
                         <div class="right clearfloat">
-                            <div class="tit clearfloat">
-                                <p class="fl">@item.Community</p>
-                                <span class="fr">@item.MonthRent<samp>元/月</samp></span>
+                            <div class="tit clearfloat" id="tap">
+                                <a href="/House/Index?houseId=" + @item.Id>
+                                    @item.Community
+                                </a>
+                                    <span class="fr">@item.MonthRent<samp>元/月</samp></span>
                             </div>
                             <p class="recom-jianjie">@item.RoomTypeName   |  @item.Area m²  |  @item.DecorateStatusName</p>
                             <div class="recom-bottom clearfloat">
@@ -88,8 +91,9 @@
                                 <span><i class="iconfont icon-duihao"></i>家电齐全</span>
                             </div>
                         </div>
-                    </a>
-                </div>
+
+                    </div>
+               
             }
 
 
@@ -99,4 +103,11 @@
 
 @section Script{
     <script type="text/javascript" src="~/js/menu.js"></script>
+
+    <script>
+        mui("body").on("tap", "a", function () {
+            // 逻辑代码，例如跳转详情页、ajax
+            document.location.href = this.href;
+        });
+    </script>
 }
