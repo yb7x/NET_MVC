@@ -1,0 +1,243 @@
+﻿
+@{
+    ViewBag.Title = "房源管理";
+}
+
+
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 系统管理 <span class="c-gray en">&gt;</span> 房源管理 <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="pd-20">
+    <table id="tb_HouseList" class="table table-border table-bordered table-bg">
+        <thead>
+            <tr>
+                <th scope="col" colspan="9">房源列表</th>
+            </tr>
+            <tr class="text-c">
+                <th width="200">姓名</th>
+                <th width="200">电话</th>
+                <th width="200">预约时间</th>
+                <th width="200">看房时间</th>
+                <th width="200">小区</th>
+                <th width="200">地址</th>
+                <th width="200">状态</th>
+                <th width="200">跟进员工</th>
+                <th width="200">操作</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+@section footScript
+{
+    <script src="~/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+    <script>
+        //通过datatalbe渲染列表
+        $(function () {
+            var param = {};
+            var table = $("#tb_HouseList").DataTable({
+                info: false, //是否显示情报 就是"当前显示1/100记录"这个信息
+                pagingType: "full_numbers",//显示首页尾页
+                processing: true, //显示加载中提示....
+                ordering: false,//是否排序
+                paging: true,//是否显示分页
+                searching: false,//是否显示默认的搜索
+                //使用对象数组，一定要配置columns，告诉 DataTables 每列对应的属性
+                columns: [
+                    { data: 'Name' },
+                    { data: 'PhoneNum' },
+                    {
+                        data: 'CreateDateTime', render: function (data, type, full, callback) {
+                            return FormatJsonTime(data);
+                        }
+                    },
+                    {
+                        data: 'VisitDate', render: function (data, type, full, callback) {
+                            return FormatJsonTime(data);
+                        }
+                    },
+                    { data: 'CommunityName' },
+                    { data: 'HouseAddress' },
+                    { data: 'Status' }, 
+                    { data: 'FollowAdminUserName' },
+                    {
+                        data: 'Id', render: function (data, type, full, callback) {
+                            return ('<a title="抢单" onclick="follow(this)" href="javascript:;" data-id="' + data + '" class="ml-5 follow" style="text-decoration:none"><i class="Hui-iconfont">&#xe6d0;</i></a>')                          }
+                    }
+
+                ],
+                createdRow: function (row, data, index) {
+                    /* 设置表格中的内容居中 */
+                    $('td', row).attr("class", "text-c");
+                },
+                //开启服务器模式
+                serverSide: true,
+                //使用ajax异步请求
+                ajax: {
+                    type: 'post',
+                    url: '/HouseAppointment/GetList',
+                    data: function (d) {
+                        param.start = d.start;//开始的序号
+                        param.length = d.length;//要取的数据的条数
+                        return param;//自定义需要传递的参数。
+                    }
+                },
+              
+            });
+
+            //格式化JSON时间
+            function FormatJsonTime(date) {
+                if (date != null) {
+                    var de = new Date(parseInt(date.replace("/Date(", "").replace(")/", "").split("+")[0]));
+                    var y = de.getFullYear();
+                    var m = de.getMonth() + 1;
+                    var d = de.getDate();
+                    var h = de.getHours();
+                    var mi = de.getMinutes();
+                    var s = de.getSeconds();
+                    return y + '-' + (m < 10 ? ('0' + m) : m) + '-' + (d < 10 ? ('0' + d) : d) + ' ' + (h < 10 ? ('0' + h) : h) + ':' + (mi < 10 ? ('0' + mi) : mi) + ':' + (s < 10 ? ('0' + s) : s);
+                }
+                else {
+                    return "";
+                }
+            }
+            //搜索权限
+            $("#btn_Search").click(function () {
+                //获取输入的关键字
+                var name = $("#txt_Name").val();
+
+                //为请求参数赋值，datatable进行重新渲染的时候会提交此参数
+                param.name = name;
+
+                //使datatable重新请求
+                table.ajax.reload();
+
+            });
+
+            //添加房源
+            $("#btn_AddHouse").click(function () {
+                //填出遮罩层
+                layer_show("添加房源", "/House/Add", 800, 500);
+            });
+
+            //批量删除权限
+            $("#btn_DeleteBatch").click(function () {
+                //判断用户选择的项的个数
+                //如果用户没有选择，则提示用户先选择要删除的项
+                //将用户选择的权限id放到一个数组中保存，在向服务端发送ajax请求的时候当作参数传输
+
+                //定义一个空数组
+                var arr = [];
+
+                //获取页面中所有打勾的复选框，获取到复选框的value值，存入数组
+                $(":checkbox[name='selectIDs']:checked").each(function (k, v) {
+                    arr.push($(v).val());
+                });
+
+                //当用户没有选择的时候给出提示
+                if (arr.length == 0) {
+                    layer.msg('请选择您要批量删除的房源', { icon: 5 });
+                    return;
+                }
+
+                //弹出确认框
+                layer.confirm('您确定要批量删除选择的房源吗？', { icon: 3, title: '温馨提示' }, function (index) {
+
+                    //向服务端发送ajax请求
+                    $.ajax({
+                        type: "post",
+                        url: "/House/DeleteBatch",
+                        data:
+                        {
+                            "ids":arr
+                        },
+                        dataType: "json",
+                        success: function (r) {
+                            if (r.State == 1) {
+                                layer.msg(r.ErrorMessage, { icon: 1 });
+                                location.reload();
+                            }
+                            else {
+                                layer.msg(r.ErrorMessage, { icon: 2 });
+                            }
+                        }
+                    })
+                });
+
+            });
+
+        });
+
+        //编辑角色
+        //获取所有的编辑按钮
+        //当页面加载在这个位置的时候，因为编辑列是通过datatable动态渲染出来的，所以执行到这个位置的时候
+        //页面中还不存在编辑按钮，不能直接通过类选择器获取到，可以通过live()或者livequery.js或者定义函数在行内调用来实现
+        function edits(t) {
+            var id = $(t).attr("data-id");
+            //模态框
+            layer_show("编辑房源", "/House/Edit/" + id, 600, 500);
+
+        }
+        //上传图片
+        function upload(t) {
+            var id = $(t).attr("data-id");
+            //模态框
+            layer_show("上传图片", "/House/UploadPic?id=" + id, 800, 500);
+        }
+        //查看图片
+        function lookPic(t) {
+            var id = $(t).attr("data-id");
+            //模态框
+            layer_show("上传图片", "/House/LookPic?id=" + id, 800, 500);
+        }
+        //删除权限
+        function del(t) {
+            layer.confirm('您确定要删除该该用户吗?', { icon: 3, title: '提示' }, function (index) {
+                //do something
+                //向服务器端发送ajax请求
+                var id = $(t).attr("data-id");
+                $.ajax({
+                    type: "post",
+                    url: "/House/Delete/" + id,
+                    dataType: "json",
+                    success: function (r) {
+                        if (r.State == 1) {
+                            layer.msg(r.ErrorMessage, { icon: 1 });
+                            location.reload();
+                        }
+                        else {
+                            layer.msg(r.ErrorMessage, { icon: 2 });
+                        }
+                    }
+                })
+                layer.close(index);
+            });
+
+        }
+
+        //抢单
+        function follow(t) {
+                //do something
+                //向服务器端发送ajax请求
+                var id = $(t).attr("data-id");
+                $.ajax({
+                    type: "post",
+                    url: "/HouseAppointment/Follow/" + id,
+                    dataType: "json",
+                    success: function (r) {
+                        if (r.State == 1) {
+                            layer.msg(r.Message, { icon: 1,time:2000 }, function () {
+                                location.reload();
+                            });
+                          
+                        }
+                        else {
+                            layer.msg(r.Message, { icon: 2,time:2000 });
+                        }
+                    }
+                })
+                layer.close(index);
+
+        }
+
+    </script>
+
+}

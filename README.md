@@ -2872,6 +2872,770 @@ namespace HPIT.RentHouse.DTO
             })
 ```
 
+---
+
+# 房源管理模块
+
+## 页面显示
+
+### 先创建页面显示需要的 DTO
+
+```
+namespace HPIT.RentHouse.DTO
+{
+    /// <summary>
+    /// 房屋管理页面
+    /// </summary>
+    public class HouseListDTO
+    {
+        /// <summary>
+        /// 房屋编号
+        /// </summary>
+        public long Id { get; set; }
+
+        /// <summary>
+        /// 区域
+        /// </summary>
+        public string RegionsName { get; set; }
+
+        /// <summary>
+        /// 小区名
+        /// </summary>
+        public string Community { get; set; }
+
+        /// <summary>
+        /// 地段
+        /// </summary>
+        public string Address { get; set; }
+
+        /// <summary>
+        /// 租金
+        /// </summary>
+        public int MonthRent { get; set; }
+
+        /// <summary>
+        /// 房型
+        /// </summary>
+        public string RoomTypeName { get; set; }
+
+        /// <summary>
+        /// 装修
+        /// </summary>
+        public string DecorateStatusName { get; set; }
+
+        /// <summary>
+        /// 房屋面积
+        /// </summary>
+        public decimal Area { get; set; }
+
+        /// <summary>
+        /// 小区编号
+        /// </summary>
+        public long DecorateStatusId { get; set; }
+
+        /// <summary>
+        /// 户型类型
+        /// </summary>
+        public long RoomTypeId { get; set; }
+    }
+}
+```
+
+### IService 层新创建一个接口 IHouseService
+
+```
+namespace HPIT.RentHouse.IService
+{
+    /// <summary>
+    /// 房屋管理接口
+    /// </summary>
+    public interface IHouseService : IServiceSupport
+    {
+        /// <summary>
+        /// 所有房屋信息
+        /// </summary>
+        /// <param name="Community"></param>
+        /// <returns></returns>
+        List<HouseListDTO> GetListHouse(int start, int length, ref int count, string Community);
+    }
+}
+```
+
+### Service 层
+
+```
+namespace HPIT.RentHouse.Service
+{
+    /// <summary>
+    /// 房屋管理
+    /// </summary>
+    public class HouseService : IHouseService
+    {
+        /// <summary>
+        /// 所有房屋信息==查询
+        /// </summary>
+        /// <param name="Community"></param>
+        /// <returns></returns>
+        public List<HouseListDTO> GetListHouse(int start,int length, ref int count, string Community)
+        {
+            using (RentHouseEntity db = new RentHouseEntity())
+            {
+                BaseService<T_Houses> bs = new BaseService<T_Houses>(db);
+                BaseService<T_IdNames> ibs = new BaseService<T_IdNames>(db);
+                // 查询所有数据
+                var where = PredicateExtensions.True<T_Houses>();
+                // 判断有无参数
+                if (!string.IsNullOrWhiteSpace(Community))
+                {
+                    where = where.And(a => a.T_Communities.Name.Contains(Community));
+                }
+                // 查询并返回数据
+                List<HouseListDTO> model = bs.GetPageList(start, length, ref count, where, a => a.Id, false).Select(a => new HouseListDTO()
+                {
+                    Id = a.Id,
+                    RegionsName = a.T_Communities.T_Regions.Name,
+                    Community = a.T_Communities.Name,
+                    Address = a.Address,
+                    MonthRent = a.MonthRent,
+                    Area = a.Area,
+                    DecorateStatusId = a.DecorateStatusId,
+                    RoomTypeId = a.RoomTypeId
+                }).ToList();
+                // 查询 DecorationId RoomTypeId
+                var IdNameList = ibs.GetList(a => true);
+                // 遍历找到数据并赋值
+                foreach (var item in model)
+                {
+                    item.DecorateStatusName = IdNameList.FirstOrDefault(a => a.Id == item.DecorateStatusId).Name;
+                    item.RoomTypeName = IdNameList.FirstOrDefault(a => a.Id == item.RoomTypeId).Name;
+                }
+                return model;
+            }
+        }
+    }
+}
+```
+
+**注意这里有一个分页功能**
+
+### 控制器以及前台页面
+
+#### 控制器
+
+```
+namespace HPIT.RentHouse.Admin.Controllers
+{
+    public class HouseController : Controller
+    {
+        #region 依赖注入
+
+        private IHouseService _houseService;
+        public HouseController(IHouseService houseService)
+        {
+            _houseService = houseService;
+        }
+
+        #endregion
+
+        /// <summary>
+        /// 房屋信息主页面
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 房屋信息查询
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="length"></param>
+        /// <param name="count"></param>
+        /// <param name="Community"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult GetHouseList(int start, int length, string Community)
+        {
+            int count = 0;
+            var model = _houseService.GetListHouse(start, length, ref count, Community);
+            return Json(new { recordsTotal = count, recordsFiltered = count, data = model });
+        }
+    }
+}
+```
+
+### 页面上
+
+```
+            var param = {};//初始化查询参数
+
+            //通过DataTable渲染列表
+            var table = $("#tb_HouseList").DataTable({
+                // 是否显示情报 就是"当前显示1/100记录"这个信息
+                info: false,//设置分页
+                pagingType: "full_numbers",//分页样式效果  当前列表未启用分页，所以写什么格式都可以
+                // 是否表示 "processing" 加载中的信息，这个信息可以修改
+**  paging: true, // 分页
+                processing: true,//显示加载中……的样式效果
+                // 是否允许排序
+                ordering: false,//是否启用列表排序 false：不启用
+                // 是否允许检索
+                searching: false,//我们自己实现的搜索功能，dataTable自带的设置了false
+                // 列定义
+                columns: [
+                    {
+                        // data 可以是属性名，或嵌套属性（WORKTM1.ID）,数组ArrOne[,] 用中括号中的字符连接数组后返回。
+                        "data": "Id"
+                    },
+                    { "data": "RegionsName" },
+                    { "data": "Community" },
+                    { "data": "Address" },
+                    { "data": "MonthRent" },
+                    { "data": "RoomTypeName" },
+                    { "data": "DecorateStatusName" },
+                    { "data": "Area" },
+                    {
+                        data: 'Id', render: function (data, type, full, callback) {
+                            return (' <a title="编辑" onclick="edits(this)" href="javascript:;"  data-id=' + data + ' class="ml-5 edit" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除"  data-id=' + data + ' onclick="del(this)" href="javascript:;"   class="ml-5 delete" style="text-decoration:none"> <i class="Hui-iconfont">&#xe6e2;</i></a>   ')
+                        }
+                    }],
+                // 每一行创建完调用的函数
+                createdRow: function (row, data, dataIndex) {
+                    $('td', row).attr('class', "text-c");
+                },
+                serverSide: true,//启用服务器模式
+                // ajax选项 可以直接简单指定成请求的文件
+                //"ajax": "data.json",
+                // 也可以用对象来配置，更加灵活
+                ajax: {
+                    type: 'POST',
+                    // url可以直接指定远程的json文件，或是MVC的请求地址 /Controller/Action
+                    url: "/House/GetHouseList",
+
+                    // 传给服务器的数据，可以添加我们自己的查询参数
+                    data: function (d) {//参数
+                        // 这里需要传递分页的数据
+**  param.start = d.start;
+**  param.length = d.length;
+                        return param;
+                    }
+
+                },
+                //自定义列
+                columnDefs: [
+                    {
+                        targets: 0,//在第一列的位置输出自定义的列
+                        //列中输出的内容
+                        render: function (data, type, row, meta) {
+                            //显示复选框
+                            return '<input type="checkbox" value="' + row.Id + '" name="selectIDs">';
+                        },
+                    }]
+```
+
+**注意带 ** 号的**
+
+## 添加房源信息
+
+### 需要用到的DTO有以下
+
+#### HouseDTO
+
+```
+namespace HPIT.RentHouse.DTO
+{
+    /// <summary>
+    /// 房源添加 DTO
+    /// </summary>
+    public class HouseAddDTO
+    {
+        /// <summary>
+        /// 区域
+        /// </summary>
+        public long RegionsId { get; set; }
 
 
-# 新的
+        /// <summary>
+        /// 小区名
+        /// </summary>
+        public long CommunityId { get; set; }
+
+
+        /// <summary>
+        /// 房型
+        /// </summary>
+        public long RoomTypeId { get; set; }
+
+
+        /// <summary>
+        /// 地段
+        /// </summary>
+        public string Address { get; set; }
+
+
+        /// <summary>
+        /// 月租金
+        /// </summary>
+        public int MonthRent { get; set; }
+
+        /// <summary>
+        /// 房屋状态
+        /// </summary>
+        public long StatusId { get; set; }
+
+
+        /// <summary>
+        /// 面积
+        /// </summary>
+        public decimal Area { get; set; }
+
+        /// <summary>
+        /// 装修状态
+        /// </summary>
+        public long DecorateStatusId { get; set; }
+
+        /// <summary>
+        /// 总楼层数
+        /// </summary>
+        public int TotalFloorCount { get; set; }
+
+        /// <summary>
+        /// 楼层
+        /// </summary>
+        public int FloorIndex { get; set; }
+
+        /// <summary>
+        /// 房屋类别
+        /// </summary>
+        public long TypeId { get; set; }
+
+        /// <summary>
+        /// 朝向
+        /// </summary>
+        public string Direction { get; set; }
+
+        /// <summary>
+        /// 可看房时间
+        /// </summary>
+        public DateTime LookableDateTime { get; set; }
+
+        /// <summary>
+        /// 可入住时间
+        /// </summary>
+        public DateTime CheckInDateTime { get; set; }
+
+        /// <summary>
+        /// 业主姓名
+        /// </summary>
+        public string OwnerName { get; set; }
+
+        /// <summary>
+        /// 业主电话
+        /// </summary>
+        public string OwnerPhoneNum { get; set; }
+
+        /// <summary>
+        /// 房源描述
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
+        /// 房屋配置编号
+        /// </summary>
+        public long[] AttachmentId { get; set; }
+    }
+}
+```
+
+#### CommunitiesHouseDTO
+
+```
+namespace HPIT.RentHouse.DTO
+{
+    /// <summary>
+    /// 添加房源所需要的小区信息
+    /// </summary>
+    public class CommunitiesHouseDTO
+    {
+        public long Id { get; set; }
+
+
+        public string Name { get; set; }
+
+
+        public long RegionId { get; set; }
+    }
+}
+```
+
+#### RegionsHouseDTO
+
+```
+namespace HPIT.RentHouse.DTO
+{
+    /// <summary>
+    /// 区域信息DTO
+    /// </summary>
+    public class RegionsHouseDTO
+    {
+        public long Id { get; set; }
+        public string Name { get; set; }
+
+        public long CityId { get; set; }
+    }
+}
+```
+
+#### AttachmentsHouseDTO
+
+```
+namespace HPIT.RentHouse.DTO
+{
+    /// <summary>
+    /// 所有的房屋配置
+    /// </summary>
+    public class AttachmentsHouseDTO
+    {
+        public long Id { get; set; }
+        public string Name { get; set; }
+        public string IconName { get; set; }
+
+    }
+}
+```
+
+### Service 层中创建各个
+
+**House**
+
+```
+        /// <summary>
+        ///  添加房源信息
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        public AjaxResult Add(HouseAddDTO dto)
+        {
+            using(RentHouseEntity db = new RentHouseEntity())
+            {
+                BaseService<T_Houses> bs = new BaseService<T_Houses>(db);
+                BaseService<T_Attachments> abs = new BaseService<T_Attachments>(db);
+                // 要添加的信息
+                T_Houses model = new T_Houses()
+                {
+                    CommunityId = dto.CommunityId,
+                    RoomTypeId = dto.RoomTypeId,
+                    Address = dto.Address,
+                    MonthRent = dto.MonthRent,
+                    StatusId = dto.StatusId,
+                    Area = dto.Area,
+                    DecorateStatusId = dto.DecorateStatusId,
+                    TotalFloorCount = dto.TotalFloorCount,
+                    FloorIndex = dto.FloorIndex,
+                    TypeId = dto.TypeId,
+                    Direction = dto.Direction,
+                    LookableDateTime = dto.LookableDateTime,
+                    CheckInDateTime = dto.CheckInDateTime,
+                    OwnerName = dto.OwnerName,
+                    OwnerPhoneNum = dto.OwnerPhoneNum,
+                    Description = dto.Description,
+                };
+                // 复选框数据选中 房屋配置编号 的
+                if (bs.Add(model) > 0)
+                {
+                    for (int i = 0; i < dto.AttachmentId.Length; i++)
+                    {
+                        long id = dto.AttachmentId[i];
+                        T_Attachments ac = abs.Get(a => a.Id == id);
+                        if (ac != null)
+                        {
+                            model.T_Attachments.Add(ac);
+                        }
+                    }
+                    db.SaveChanges(); // 保存操作
+                    return new AjaxResult(ResultState.Success, "添加成功");
+                }
+                else
+                {
+                    return new AjaxResult(ResultState.Error, "添加失败");
+                }
+            }
+        }
+```
+
+```
+namespace HPIT.RentHouse.Service
+{
+    /// <summary>
+    /// 小区
+    /// </summary>
+    public class CommunitiesService : ICommunitiesService
+    {
+        /// <summary>
+        /// 通过当前区域获取小区
+        /// </summary>
+        /// <param name="RegionId">区域Id</param>
+        /// <returns></returns>
+        public List<CommunitiesHouseDTO> GetCommunities(long RegionId)
+        {
+            using(RentHouseEntity db = new RentHouseEntity())
+            {
+                BaseService<T_Communities> bs = new BaseService<T_Communities>(db);
+                // 根据区域Id查询小区信息
+                return bs.GetOrderBy(a => a.RegionId == RegionId, a => a.Id, false).Select(a => new CommunitiesHouseDTO()
+                {
+                    Id = a.Id,
+                    RegionId = a.RegionId,
+                    Name = a.Name
+                }).ToList();
+            }
+        }
+    }
+}
+```
+
+```
+namespace HPIT.RentHouse.Service
+{
+    /// <summary>
+    /// 区域
+    /// </summary>
+    public class RegionsService : IRegionsService
+    {
+        /// <summary>
+        /// 区域信息
+        /// </summary>
+        /// <returns></returns>
+        public List<RegionsHouseDTO> GetRegions(long CityId)
+        {
+            using (RentHouseEntity db = new RentHouseEntity())
+            {
+                BaseService<T_Regions> bs = new BaseService<T_Regions>(db);
+                // 通过城市编号获取当前区域信息
+                return bs.GetList(a => a.CityId == CityId).Select(a => new RegionsHouseDTO()
+                {
+                 Id = a.Id,
+                 Name = a.Name,
+                 CityId = a.CityId
+                }).ToList();
+            }
+        }
+    }
+}
+```
+
+```
+namespace HPIT.RentHouse.Service
+{
+    /// <summary>
+    /// 房屋配置
+    /// </summary>
+    public class AttachmentsService : IAttachmentsService
+    {
+        public List<AttachmentsHouseDTO> GetAttachmentsList()
+        {
+            using(RentHouseEntity db = new RentHouseEntity())
+            {
+                BaseService<T_Attachments> bs = new BaseService<T_Attachments>(db);
+                return bs.GetOrderBy(a => true, a => a.Id, false).Select(a => new AttachmentsHouseDTO()
+                {
+                    Id = a.Id,
+                    Name = a.Name,
+                    IconName = a.IconName
+                }).ToList();
+            }
+        }
+    }
+}
+```
+
+### IService 层创建
+
+```
+/// <summary>
+        /// 添加
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        AjaxResult Add(HouseAddDTO dto);
+```
+
+---
+
+## 修改房源信息
+
+### **修改前查询**
+
+#### DTO
+
+```
+
+```
+
+#### IService
+
+```
+
+```
+
+#### Service
+
+```
+
+```
+
+### **修改功能**
+
+#### DTO
+
+```
+
+```
+
+#### IService
+
+```
+
+```
+
+#### Service
+
+```
+
+```
+
+---
+
+## 删除房源
+
+### 单个删除
+
+#### IService
+
+```
+        /// <summary>
+        /// 删除房屋信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        AjaxResult Delete(long id);
+```
+
+#### Service
+
+```
+        /// <summary>
+        /// 删除房源信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public AjaxResult Delete(long id)
+        {
+            using(RentHouseEntity db = new RentHouseEntity())
+            {
+                BaseService<T_Houses> bs = new BaseService<T_Houses>(db);
+                // 先删除有当前这个表的外键关系
+                T_Houses model = bs.Get(a => a.Id == id);
+                if (model != null)
+                {
+                    // 清除外键关系
+                    model.T_Attachments.Clear();
+                    // 判断删除成功
+                    if (bs.Delete(model))
+                    {
+                        return new AjaxResult(ResultState.Success, "删除成功");
+                    }
+                    else
+                    {
+                        return new AjaxResult(ResultState.Error, "删除失败！");
+                    }
+                }
+                else
+                {
+                    return new AjaxResult(ResultState.Error, "该房源已删除");
+                }
+            }
+        }
+```
+
+#### 控制器上
+
+```
+        /// <summary>
+        /// 删除房源信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult Delete(long id)
+        {
+            return Json(_houseService.Delete(id));
+        }
+```
+
+---
+
+### 多个删除
+
+#### IService
+
+```
+         /// <summary>
+        /// 批量删除
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        AjaxResult DeleteBatch(long[] ids);
+```
+
+#### Service
+
+```
+        /// <summary>
+        /// 批量删除房源信息
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        public AjaxResult DeleteBatch(long[] ids)
+        {
+            using (RentHouseEntity db = new RentHouseEntity())
+            {
+                BaseService<T_Houses> bs = new BaseService<T_Houses> (db);
+                // 循环遍历所有
+                for(int i = 0; i < ids.Length; i++)
+                {
+                    long id = ids[i];
+                    T_Houses model = bs.Get(a => a.Id == id);
+                    model.T_Attachments.Clear();
+                    bs.Delete(model);
+                }
+                return new AjaxResult(ResultState.Success, "批量删除成功");
+            }
+        }
+```
+
+#### 控制器上
+
+```
+        /// <summary>
+        /// 房源信息
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        public ActionResult DeleteBatch(long[] ids)
+        {
+            return Json(_houseService.DeleteBatch(ids));
+        }
+```
+
+# *后台页面到此结束
+
+---
+
+# 客户端配置
+
+## 配置依赖注入，安装NuGet程序包（Autofac）
+
+**详情请查看 依赖注入配置.md 文件**
+
+IsRowVersion()：乐观锁

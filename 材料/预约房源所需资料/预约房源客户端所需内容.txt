@@ -1,0 +1,49 @@
+<link href="~/css/mui.picker.min.css" rel="stylesheet" />    
+<script src="~/js/mui.picker.min.js"></script>
+    <script src="~/js/layer_mobile/layer.js"></script>
+        //单击预约时间，弹出日历控件
+        $("#VisitDate").click(function () {
+            var dtPicker = new mui.DtPicker({ type: "date" });
+
+            dtPicker.show(function (selectItems) {
+                var y = selectItems.y.text;
+                var m = selectItems.m.text;
+                var d = selectItems.d.text;
+                var visitDate = y + "-" + m + "-" + d;
+                $("#VisitDate").val(visitDate);
+            });
+        })
+   
+
+        //预约看房
+        $("#btnadd").click(function () {
+            $.ajax({
+                type: "post",
+                url: "/House/Add",
+                data: $("#addfrm").serializeArray(),
+                dataType: "json",
+                success: function (r) {
+                    if (r.State == 1) {
+                        //弹出成功提示
+                        layer.open({
+                            content: r.Message
+                            , btn: '我知道了',
+                            yes: function (index) {
+                                //关闭窗口
+                                $("#lean_overlay").fadeOut(200);
+                                $("#loginmodal").hide();
+                                layer.close(index);
+                            }
+                        });
+
+                    }
+                    else {
+                        //弹出错误提示
+                        layer.open({
+                            content: r.Message
+                            , btn: '我知道了'
+                        });
+                    }
+                }
+            })
+        })
