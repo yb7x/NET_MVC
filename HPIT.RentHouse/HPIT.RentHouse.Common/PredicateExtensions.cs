@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace HPIT.RentHouse.Common
 {
     /// <summary>
-    /// ParameterExpression
+    /// ParameterExpression 这个类是 Lambda 表达式扩展
     /// </summary>
     internal class ParameterReplacer : ExpressionVisitor
     {
@@ -40,6 +40,7 @@ namespace HPIT.RentHouse.Common
         {
             var candidateExpr = Expression.Parameter(typeof(T), "candidate");
             var parameterReplacer = new ParameterReplacer(candidateExpr);
+
 
             var left = parameterReplacer.Replace(exp_left.Body);
             var right = parameterReplacer.Replace(exp_right.Body);

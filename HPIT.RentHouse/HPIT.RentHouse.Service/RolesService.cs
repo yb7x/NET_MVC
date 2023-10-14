@@ -40,7 +40,7 @@ namespace HPIT.RentHouse.Service
         }
 
         /// <summary>
-        /// 
+        /// 查询所有角色
         /// </summary>
         /// <returns></returns>
         public List<RolesListDTO> GetRolesList()
